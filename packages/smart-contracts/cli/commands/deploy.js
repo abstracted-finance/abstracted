@@ -55,25 +55,26 @@ async function deploy({ deploymentDirectory, noToggleDeploy }) {
       );
 
       // Write to config.json
-      updatedDeploymentConfig[contractName].deploy = false;
-      fs.writeFileSync(
-        deploymentFilePath,
-        JSON.stringify(updatedDeploymentConfig, null, 4)
-      );
-
-      // Write to deployed.json
       if (!noToggleDeploy) {
-        deployedConfig[contractName] = deployedContract.address;
+        updatedDeploymentConfig[contractName].deploy = false;
         fs.writeFileSync(
-          deployedFilePath,
-          JSON.stringify(deployedConfig, null, 4)
+          deploymentFilePath,
+          JSON.stringify(updatedDeploymentConfig, null, 4)
         );
       }
+
+      // Write to deployed.json
+      deployedConfig[contractName] = deployedContract.address;
+      fs.writeFileSync(
+        deployedFilePath,
+        JSON.stringify(deployedConfig, null, 4)
+      );
     }
   }
 }
 
 module.exports = {
+  deploy,
   cmd: (program) =>
     program
       .command("deploy")

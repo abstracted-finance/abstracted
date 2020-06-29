@@ -1,0 +1,11 @@
+{
+  "ProxyFactory": {
+    "deploy": true
+  },
+  "AaveFlashloanActions": {
+    "deploy": true
+  },
+  "TokenActions": {
+    "deploy": true
+  }
+}

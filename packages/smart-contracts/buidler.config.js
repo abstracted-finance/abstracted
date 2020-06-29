@@ -1,4 +1,19 @@
+const { task } = require("@nomiclabs/buidler/config");
+const chalk = require("chalk");
+
 usePlugin("@nomiclabs/buidler-ethers");
+
+task("deploy-for-testing", "Deploys contracts for testing").setAction(
+  async () => {
+    const { deploy } = require("./cli/commands/deploy");
+
+    console.log(chalk.blue("Deploying contracts for testing"));
+    await deploy({
+      deploymentDirectory: "deployments/localhost",
+      noToggleDeploy: true,
+    });
+  }
+);
 
 // You have to export an object to set up your config
 // This object can have the following optional entries:
@@ -7,7 +22,7 @@ usePlugin("@nomiclabs/buidler-ethers");
 module.exports = {
   // This is a sample solc configuration that specifies which version of solc to use
   solc: {
-    version: "0.6.8",
+    version: "0.6.6",
   },
   networks: {
     localhost: {
