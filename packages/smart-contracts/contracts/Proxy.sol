@@ -15,6 +15,9 @@ contract Proxy is Auth {
 
     receive() external payable {}
 
+    // Nested calls without prematurely forbidding arbitrary callbacks
+    mapping(address => uint256) entries;
+
     function execute(address _target, bytes memory _data)
         public
         payable
@@ -25,8 +28,14 @@ contract Proxy is Auth {
 
         Guard g = Guard(authority);
 
+        // How nested is this?
+        // For example, flashloan, I would like to be able
+        // to nest flashloan of ETH, DAI, and SNX from Aave
         // Permits contract to perform some arbitrary callback
-        g.permit(bytes32(bytes20(_target)), g.ANY(), g.ANY());
+        if (entries[_target] == 0) {
+            g.permit(bytes32(bytes20(_target)), g.ANY(), g.ANY());
+        }
+        entries[_target] = entries[_target] + 1;
 
         // call contract in current context
         assembly {
@@ -56,7 +65,10 @@ contract Proxy is Auth {
         }
 
         // Forbids contract to perform arbitrary callback
-        g.forbid(bytes32(bytes20(_target)), g.ANY(), g.ANY());
+        entries[_target] = entries[_target] - 1;
+        if (entries[_target] == 0) {
+            g.forbid(bytes32(bytes20(_target)), g.ANY(), g.ANY());
+        }
     }
 
     function executes(address[] memory _targets, bytes[] memory _data)

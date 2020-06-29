@@ -17,5 +17,8 @@
     "commander": "^5.1.0",
     "ethers": "^5.0.0",
     "ora": "^4.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.3.1"
   }
 }

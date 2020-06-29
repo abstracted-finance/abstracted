@@ -14,32 +14,7 @@ abstract contract AaveFlashloanBase {
     using SafeERC20 for IERC20;
     using SafeMath for uint256;
 
-    ILendingPoolAddressesProvider
-        public addressesProvider = ILendingPoolAddressesProvider(
-        0x24a42fD28C976A61Df5D00D0599C34c4f90748c8
-    );
-
     receive() external payable {}
-
-    function _transferFundsBackToPool(address _reserve, uint256 _amount)
-        internal
-    {
-        address payable core = addressesProvider.getLendingPoolCore();
-        _transfer(core, _reserve, _amount);
-    }
-
-    function _transfer(
-        address payable _destination,
-        address _reserve,
-        uint256 _amount
-    ) internal {
-        if (_reserve == Constants.ETH_ADDRESS) {
-            (bool success, ) = _destination.call{value: _amount}("");
-            require(success, "Couldn't transfer ETH");
-            return;
-        }
-        IERC20(_reserve).safeTransfer(_destination, _amount);
-    }
 
     function _getBalance(address _target, address _reserve)
         internal
@@ -62,14 +37,13 @@ contract AaveFlashloanActions is AaveFlashloanBase {
 
     // Flashloan initiation call
     function flashLoan(
-        address _aaveFlashloanActionAddress,
-        address _reserve,
-        uint256 _amount,
-        bytes calldata _params
+        address _aaveLendingPool,            // aaveAddressProvider.getLendingPool()
+        address _aaveFlashloanActionAddress, // address of this contract
+        address _reserve,                    // erc20 address
+        uint256 _amount,                     // amount in wei
+        bytes calldata _params               // ProxyTargetData
     ) external payable {
-        // TODO: Figure out why this fails
-        // address lp = addressesProvider.getLendingPool();
-        ILendingPool(0x398eC7346DcD622eDc5ae82352F02bE94C62d119).flashLoan(
+        ILendingPool(_aaveLendingPool).flashLoan(
             _aaveFlashloanActionAddress,
             _reserve,
             _amount,
@@ -97,7 +71,7 @@ contract AaveFlashloanActions is AaveFlashloanBase {
         if (_reserve == Constants.ETH_ADDRESS) {
             proxy.executes{value: _amount}(ptd.targets, ptd.data);
         } else {
-            _transfer(_reserve, ptd.proxy, _amount);
+            IERC20(_reserve).safeTransfer(ptd.proxy, _amount);
             proxy.executes(ptd.targets, ptd.data);
         }
     }
