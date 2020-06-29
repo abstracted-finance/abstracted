@@ -55,7 +55,7 @@ describe("Aave", function () {
       .div(ethers.BigNumber.from("10000"));
     const fee = refundAmount.sub(amount);
 
-    // Encode _params for flashloan
+    // Postloan we need to refund
     const postloanAddress = tokenActions.address;
     const postloanActionData = ITokens.encodeFunctionData("transfer", [
       aaveLendingPoolCoreAddress,

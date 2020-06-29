@@ -22,7 +22,10 @@ task("deploy-for-testing", "Deploys contracts for testing").setAction(
 module.exports = {
   // This is a sample solc configuration that specifies which version of solc to use
   solc: {
-    version: "0.6.6",
+    version: "0.6.10",
+  },
+  mocha: {
+    timeout: 240000,
   },
   networks: {
     localhost: {

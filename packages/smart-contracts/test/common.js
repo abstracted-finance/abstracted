@@ -1,3 +1,4 @@
+const { assert } = require("chai");
 const { ethers } = require("@nomiclabs/buidler");
 const localhostDeployments = require("../deployments/localhost/deployed.json");
 
@@ -42,12 +43,44 @@ const getProxyContract = async ({ signer }) => {
 const getContractEthersInterface = async ({ name }) => {
   const contract = await ethers.getContractFactory(name);
 
-  return contract.interface
+  return contract.interface;
+};
+
+const assertBNGreaterThan = (aBN, bBN) => {
+  assert.ok(
+    aBN.gt(bBN),
+    `${aBN.toString()} is not greater than ${bBN.toString()}`
+  );
+};
+
+const assertBNGreaterEqualThan = (aBN, bBN) => {
+  assert.ok(
+    aBN.gte(bBN),
+    `${aBN.toString()} is not greater than or equal to ${bBN.toString()}`
+  );
+};
+
+const assertBNLessThan = (aBN, bBN) => {
+  assert.ok(
+    aBN.lt(bBN),
+    `${aBN.toString()} is not less than ${bBN.toString()}`
+  );
+};
+
+const assertBNLessEqualThan = (aBN, bBN) => {
+  assert.ok(
+    aBN.lte(bBN),
+    `${aBN.toString()} is not less than or equal to ${bBN.toString()}`
+  );
 };
 
 module.exports = {
   getNamedAccounts,
   getContract,
   getProxyContract,
-  getContractEthersInterface
+  getContractEthersInterface,
+  assertBNGreaterEqualThan,
+  assertBNGreaterThan,
+  assertBNLessEqualThan,
+  assertBNLessThan,
 };

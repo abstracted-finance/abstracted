@@ -55,7 +55,7 @@ contract AaveFlashloanActions is AaveFlashloanBase {
     function executeOperation(
         address payable _reserve,
         uint256 _amount,
-        uint256 _,
+        uint256 _fee,
         bytes calldata _params
     ) external payable {
         require(
