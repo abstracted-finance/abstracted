@@ -1,0 +1,8 @@
+{
+    "ProxyFactory": {
+        "deploy": false
+    },
+    "AaveFlashloanAction": {
+        "deploy": false
+    }
+}

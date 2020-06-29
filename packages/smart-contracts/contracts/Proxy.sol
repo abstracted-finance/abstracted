@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.0;
+pragma solidity >=0.6.0 <0.7.0;
 pragma experimental ABIEncoderV2;
 
 import "./Auth.sol";
@@ -10,7 +10,7 @@ import "./Guard.sol";
 // useful to execute a sequence of atomic actions. Since the owner of
 // the proxy can be changed, this allows for dynamic ownership models
 // i.e. a multisig
-contract Proxy is Guard {
+contract Proxy is Auth {
     constructor() public {}
 
     receive() external payable {}
