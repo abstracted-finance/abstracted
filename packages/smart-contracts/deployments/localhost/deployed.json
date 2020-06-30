@@ -1,6 +1,6 @@
 {
-    "ProxyFactory": "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab",
-    "AaveFlashloanActions": "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
-    "TokenActions": "0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B",
-    "CompoundActions": "0xCfEB869F69431e42cdB54A4F4f105C19C080A601"
+    "ProxyFactory": "0x2D8BE6BF0baA74e0A907016679CaE9190e80dD0A",
+    "AaveFlashloanActions": "0x970e8f18ebfEa0B08810f33a5A40438b9530FBCF",
+    "TokenActions": "0xaf5C4C6C7920B4883bC6252e9d9B8fE27187Cf68",
+    "CompoundActions": "0x5b9b42d6e4B2e4Bf8d42Eba32D46918e10899B66"
 }

@@ -18,7 +18,7 @@ contract Proxy is Auth {
     // Nested calls without prematurely forbidding arbitrary callbacks
     mapping(address => uint256) entries;
 
-    function execute(address _target, bytes memory _data)
+    function execute(address payable _target, bytes memory _data)
         public
         payable
         auth
@@ -71,20 +71,25 @@ contract Proxy is Auth {
         }
     }
 
-    function executes(address[] memory _targets, bytes[] memory _data)
-        public
-        payable
-        auth
-        returns (bytes memory response)
-    {
+    function executes(
+        address payable[] memory _targets,
+        bytes[] memory _data,
+        uint256[] memory _msgValues
+    ) public payable auth returns (bytes memory response) {
         require(
-            _targets.length == _data.length,
+            _targets.length == _data.length &&
+                _data.length == _msgValues.length,
             "proxy-target-data-invalid-length"
         );
 
         // Only return last response
         for (uint256 i = 0; i < _targets.length; i++) {
-            response = execute(_targets[i], _data[i]);
+            // Sometimes we want to send specific number of ETH
+            // on a specific transaction. This allows us to do that
+            response = Proxy(address(this)).execute{value: _msgValues[i]}(
+                _targets[i],
+                _data[i]
+            );
         }
     }
 }

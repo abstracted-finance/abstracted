@@ -1,5 +1,5 @@
 {
-  "name": "smart-contracts",
+  "name": "@abstracted/smart-contracts",
   "version": "0.0.1",
   "description": "Abstracted finance smart contracts",
   "scripts": {

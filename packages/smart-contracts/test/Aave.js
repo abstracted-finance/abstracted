@@ -63,12 +63,13 @@ describe("Aave", function () {
       refundAmount, // Aave has 0.09% fee
     ]);
 
-    const callDataTargets = [postloanAddress];
-    const callDataData = [postloanActionData];
+    const targets = [postloanAddress];
+    const data = [postloanActionData];
+    const msgValues = [ethers.constants.Zero]
 
     const proxyTargetData = ethers.utils.defaultAbiCoder.encode(
-      ["tuple(address,address[],bytes[])"],
-      [[userProxy.address, callDataTargets, callDataData]]
+      ["tuple(address,address[],bytes[],uint256[])"],
+      [[userProxy.address, targets, data, msgValues]]
     );
 
     // Call "flashLoan" via proxy
@@ -83,6 +84,7 @@ describe("Aave", function () {
     const flashLoanTx = await userProxy.executes(
       [aaveFlashloanActions.address],
       [flashloanCalldata],
+      [fee],
       { value: fee, gasLimit: 6000000 }
     );
     await flashLoanTx.wait();

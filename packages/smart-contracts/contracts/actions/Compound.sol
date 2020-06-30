@@ -7,6 +7,8 @@ import "../interfaces/Compound.sol";
 import "../Constants.sol";
 
 contract CompoundActions {
+    receive() external payable {}
+
     // ---- Helper Functions ---- //
 
     function _approveCToken(address _cToken, uint256 _amount) internal {

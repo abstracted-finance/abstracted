@@ -31,17 +31,18 @@ abstract contract AaveFlashloanBase {
 contract AaveFlashloanActions is AaveFlashloanBase {
     struct ProxyTargetData {
         address payable proxy;
-        address[] targets;
+        address payable[] targets;
         bytes[] data;
+        uint256[] msgValues;
     }
 
     // Flashloan initiation call
     function flashLoan(
-        address _aaveLendingPool,            // aaveAddressProvider.getLendingPool()
+        address _aaveLendingPool, // aaveAddressProvider.getLendingPool()
         address _aaveFlashloanActionAddress, // address of this contract
-        address _reserve,                    // erc20 address
-        uint256 _amount,                     // amount in wei
-        bytes calldata _params               // ProxyTargetData
+        address _reserve, // erc20 address
+        uint256 _amount, // amount in wei
+        bytes calldata _params // ProxyTargetData
     ) external payable {
         ILendingPool(_aaveLendingPool).flashLoan(
             _aaveFlashloanActionAddress,
@@ -69,10 +70,14 @@ contract AaveFlashloanActions is AaveFlashloanBase {
 
         // Executes sequence of transactions
         if (_reserve == Constants.ETH_ADDRESS) {
-            proxy.executes{value: _amount}(ptd.targets, ptd.data);
+            proxy.executes{value: _amount}(
+                ptd.targets,
+                ptd.data,
+                ptd.msgValues
+            );
         } else {
             IERC20(_reserve).safeTransfer(ptd.proxy, _amount);
-            proxy.executes(ptd.targets, ptd.data);
+            proxy.executes(ptd.targets, ptd.data, ptd.msgValues);
         }
     }
 }
