@@ -8,6 +8,7 @@ import {
   Spacer,
   Input,
   AutoComplete,
+  Tooltip,
 } from "@zeit-ui/react";
 import * as Icon from "@zeit-ui/react-icons";
 import styled from "styled-components";
@@ -34,7 +35,7 @@ export default () => {
     <Card width="100%">
       <>
         <Tag type="default" invert>
-          Supply
+          Repay
         </Tag>
         &nbsp;&nbsp;&nbsp;
         <Text size="1.5rem" b>
@@ -61,12 +62,6 @@ export default () => {
           <Text type="secondary" small>
             10 ETH
           </Text>
-          <Spacer x={1} />
-
-          <Icon.ArrowUp size={16} />
-          <Text type="secondary" small>
-            10 ETH
-          </Text>
         </div>
       ) : null}
       {showSettings ? (
@@ -89,10 +84,12 @@ export default () => {
           </Row>
           <Row align="middle" justify="center">
             <Col span={2}>
-              <Icon.ArrowLeft />
+              <Icon.Package />
             </Col>
             <Col span={14}>
-              <Input disabled placeholder="0" width="100%" />
+              <Tooltip text={"Amount to repay"} style={{ width: "100%" }}>
+                <Input disabled placeholder="0" width="100%" />
+              </Tooltip>
             </Col>
             <Col span={8}>
               <AutoComplete

@@ -3,6 +3,9 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Row, Col } from "@zeit-ui/react";
 
 import CompoundSupply from "./compound/Supply";
+import CompoundWithdraw from "./compound/Withdraw";
+import CompoundBorrow from "./compound/Borrow";
+import CompoundRepay from "./compound/Repay";
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -13,11 +16,12 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const initialItems: any[] = Array(3)
-  .fill(0)
-  .map((x, i) => {
-    return { id: `item-${i}`, content: `item ${i}` };
-  });
+const initialItems: any[] = [
+  { id: "CompoundSupply-1", name: "CompoundSupply" },
+  { id: "CompoundBorrow-1", name: "CompoundBorrow" },
+  { id: "CompoundWithdraw-1", name: "CompoundWithdraw" },
+  { id: "CompoundRepay-1", name: "CompoundRepay" },
+];
 
 export default () => {
   const [items, setItems] = useState(initialItems);
@@ -35,6 +39,19 @@ export default () => {
     );
 
     setItems(newItems);
+  };
+
+  const getLegoComponent = (name) => {
+    if (name === "CompoundSupply") {
+      return <CompoundSupply />;
+    } else if (name === "CompoundBorrow") {
+      return <CompoundBorrow />;
+    } else if (name === "CompoundWithdraw") {
+      return <CompoundWithdraw />;
+    } else if (name === "CompoundRepay") {
+      return <CompoundRepay />;
+    }
+    return <>Unknown</>;
   };
 
   return (
@@ -61,7 +78,7 @@ export default () => {
                           ...provided.draggableProps.style,
                         }}
                       >
-                        <CompoundSupply />
+                        {getLegoComponent(item.name)}
                       </div>
                     )}
                   </Draggable>
