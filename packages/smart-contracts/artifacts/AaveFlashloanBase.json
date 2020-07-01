@@ -1,0 +1,13 @@
+{
+  "contractName": "AaveFlashloanBase",
+  "abi": [
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

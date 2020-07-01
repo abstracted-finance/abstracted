@@ -1,0 +1,35 @@
+{
+  "contractName": "Constants",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "CETH_ADDRESS",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "ETH_ADDRESS",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x61013f610026600b82828239805160001a60731461001957fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106100405760003560e01c80634ab45d3314610045578063a734f06e1461008f575b600080fd5b61004d6100d9565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100976100f1565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b734ddc2d193948926d02f9b1fe9e1daa0718270ed581565b73eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee8156fea26469706673582212206c8dae0cb52f97112a5ae0b20bb523c8f33def72ebd8e3b99d80d1a025731b0364736f6c634300060a0033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600436106100405760003560e01c80634ab45d3314610045578063a734f06e1461008f575b600080fd5b61004d6100d9565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100976100f1565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b734ddc2d193948926d02f9b1fe9e1daa0718270ed581565b73eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee8156fea26469706673582212206c8dae0cb52f97112a5ae0b20bb523c8f33def72ebd8e3b99d80d1a025731b0364736f6c634300060a0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
