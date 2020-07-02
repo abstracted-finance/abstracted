@@ -2,7 +2,6 @@
   "name": "@abstracted/smart-contracts",
   "version": "0.0.1",
   "description": "Abstracted finance smart contracts",
-  "main": "index.js",
   "scripts": {
     "clean": "buidler clean",
     "compile": "buidler compile",

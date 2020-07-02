@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "DEBUG=1 next dev",
     "build": "next build",
     "start": "next start"
   },
@@ -11,6 +11,7 @@
     "@abstracted/smart-contracts": "^0.0.1",
     "@zeit-ui/react": "^1.8.0-canary.2",
     "@zeit-ui/react-icons": "^1.3.0",
+    "ethers": "5.0.0",
     "next": "9.4.4",
     "react": "16.13.1",
     "react-beautiful-dnd": "^13.0.0",

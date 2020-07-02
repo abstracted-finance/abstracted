@@ -1,16 +1,17 @@
 const { ethers } = require("ethers");
-const fs = require("fs");
 const path = require("path");
 
-const getContract = ({ name, network }) => {
+const getContract = ({ name, network = "mainnet" }) => {
   const deployedFilePath = path.join(
-    __dirname,
     "deployments",
     network,
     "deployed.json"
   );
 
-  if (!fs.existsSync(deployedFilePath)) {
+  let artifact, deployed
+  try {
+    deployed = require(`./${deployedFilePath}`)
+  } catch(e) {
     throw new Error(
       `Network not found in deployment path! (${deployedFilePath})`
     );
@@ -22,7 +23,7 @@ const getContract = ({ name, network }) => {
   }
 
   const abi = JSON.parse(fs.readFileSync(artifactFilePath, "utf-8")).abi;
-  const address = JSON.parse(fs.readFileSync(deployedFilePath, "utf-8"))[name];
+  const address = deployed[name];
 
   if (address === undefined) {
     throw new Error(`${name} has not been deployed to ${network}!`);
@@ -31,6 +32,11 @@ const getContract = ({ name, network }) => {
   return new ethers.Contract(address, abi);
 };
 
+const getContractInterface = ({ name, network = "mainnet" }) => {
+  return getContract({ name, network })
+}
+
 module.exports = {
   getContract,
+  getContractInterface
 };
