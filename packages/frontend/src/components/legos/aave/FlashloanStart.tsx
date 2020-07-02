@@ -5,22 +5,18 @@ import * as Icon from "@zeit-ui/react-icons";
 import useLego from "../../../containers/legos/useLegos";
 import { CenterFlexDiv } from "../../common/Divs";
 import GenericLego from "../GenericLego";
-import { CompoundInputOptions } from "./InputOptions";
+import { AaveInputOptions } from "./InputOptions";
 
 import { partialSearchHandler } from "../../../utils/search";
 
 export default (props) => {
-  const legoArgs = props.lego.args[0];
-
   const { updateLego } = useLego.useContainer();
+  const legoArgs = props.lego.args[0];
 
   const [inputAmount, setInputAmount] = useState(legoArgs.amount);
   const [selectedOption, setSelectedOption] = useState(legoArgs.asset);
-  const [inputOptions, setInputOptions] = useState(CompoundInputOptions);
-  const searchHandler = partialSearchHandler(
-    CompoundInputOptions,
-    setInputOptions
-  );
+  const [inputOptions, setInputOptions] = useState(AaveInputOptions);
+  const searchHandler = partialSearchHandler(AaveInputOptions, setInputOptions);
 
   useEffect(() => {
     const curLego = props.lego;
@@ -51,7 +47,7 @@ export default (props) => {
         </Col>
         <Col span={13}>
           <Tooltip
-            text={"Available balance to withdraw"}
+            text={"Available balance to flashloan"}
             style={{ width: "100%" }}
           >
             <Input disabled placeholder="0" width="100%" />
@@ -60,6 +56,7 @@ export default (props) => {
         <Col span={8}>
           <AutoComplete
             disabled
+            initialValue={selectedOption}
             width="100%"
             options={inputOptions}
             onSearch={searchHandler}
@@ -73,10 +70,10 @@ export default (props) => {
         </Col>
         <Col span={13}>
           <Input
-            value={inputAmount}
             onChange={(e) => setInputAmount(e.target.value)}
             placeholder="0"
             width="100%"
+            value={inputAmount}
           />
         </Col>
         <Col span={8}>
@@ -94,8 +91,8 @@ export default (props) => {
 
   return (
     <GenericLego
-      tagText="Withdraw"
-      title="Compound"
+      tagText={`Flashloan - ${selectedOption} (Start)`}
+      title="Aave"
       secondaryDisplay={secondaryDisplay}
       primaryDisplay={primaryDisplay}
       {...props}

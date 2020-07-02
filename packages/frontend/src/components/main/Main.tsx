@@ -18,7 +18,7 @@ export default ({ themeType, switchThemes }) => {
         minHeight: "calc(100vh - 20px)",
         marginTop: "20px",
       }}
-      size="large"
+      size="medium"
     >
       <Page.Header>
         <Text h2>Abstracted</Text>
@@ -29,7 +29,9 @@ export default ({ themeType, switchThemes }) => {
       <Page.Footer style={{ height: "40px" }}>
         <>
           <Text small>Abstracted &copy; 2020</Text>
-          <div style={{ float: "right" }}>
+          <div
+            style={{ float: "right", marginRight: "44px", marginTop: "3px" }}
+          >
             {themeType === "dark" ? (
               <MoonIcon size={16} onClick={switchThemes} />
             ) : (

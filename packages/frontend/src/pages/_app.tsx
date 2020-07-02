@@ -2,6 +2,8 @@ import { AppProps } from "next/app";
 import { CssBaseline, ZeitProvider } from "@zeit-ui/react";
 import useLocalStorageState from "use-local-storage-state";
 
+import LegoContainer from "../containers/legos/useLegos";
+
 function App({ Component, pageProps }: AppProps) {
   const [themeType, setThemeType] = useLocalStorageState("theme", "dark");
   const switchThemes = () => {
@@ -13,11 +15,13 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <ZeitProvider theme={{ type: themeType }}>
       <CssBaseline>
-        <Component
-          {...pageProps}
-          themeType={themeType}
-          switchThemes={switchThemes}
-        />
+        <LegoContainer.Provider>
+          <Component
+            {...pageProps}
+            themeType={themeType}
+            switchThemes={switchThemes}
+          />
+        </LegoContainer.Provider>
       </CssBaseline>
     </ZeitProvider>
   );

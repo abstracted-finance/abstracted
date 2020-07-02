@@ -65,7 +65,7 @@ describe("Aave", function () {
 
     const targets = [postloanAddress];
     const data = [postloanActionData];
-    const msgValues = [ethers.constants.Zero]
+    const msgValues = [fee]
 
     const proxyTargetData = ethers.utils.defaultAbiCoder.encode(
       ["tuple(address,address[],bytes[],uint256[])"],
@@ -84,7 +84,7 @@ describe("Aave", function () {
     const flashLoanTx = await userProxy.executes(
       [aaveFlashloanActions.address],
       [flashloanCalldata],
-      [fee],
+      [ethers.constants.Zero],
       { value: fee, gasLimit: 6000000 }
     );
     await flashLoanTx.wait();

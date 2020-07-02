@@ -1,110 +1,106 @@
-import { useState } from "react";
-import {
-  Card,
-  Row,
-  Col,
-  Tag,
-  Text,
-  Spacer,
-  Input,
-  AutoComplete,
-  Tooltip,
-} from "@zeit-ui/react";
+import { useState, useEffect } from "react";
+import { Row, Col, Text, Input, AutoComplete, Tooltip } from "@zeit-ui/react";
 import * as Icon from "@zeit-ui/react-icons";
-import { ChevronUpIcon, ChevronDownIcon } from "../../common/Icons";
 
-export default () => {
-  const [showSettings, setShowSettings] = useState(true);
+import useLego from "../../../containers/legos/useLegos";
 
-  const allInputOptions = [
-    { label: "ETH", value: "ETH" },
-    { label: "DAI", value: "DAI" },
-    { label: "USDC", value: "USDC" },
-  ];
-  const [inputOptions, setInputOptions] = useState(allInputOptions);
-  const searchHandler = (currentValue) => {
-    if (!currentValue) return setInputOptions(allInputOptions);
-    const relatedOptions = allInputOptions.filter((item) =>
-      item.value.toLowerCase().includes(currentValue.toLowerCase())
-    );
-    setInputOptions(relatedOptions);
-  };
+import { CenterFlexDiv } from "../../common/Divs";
+import GenericLego from "../GenericLego";
+import { CompoundInputOptions } from "./InputOptions";
+
+import { partialSearchHandler } from "../../../utils/search";
+
+export default (props) => {
+  const legoArgs = props.lego.args[0];
+
+  const { updateLego } = useLego.useContainer();
+
+  const [inputAmount, setInputAmount] = useState(legoArgs.amount);
+  const [selectedOption, setSelectedOption] = useState(legoArgs.asset);
+  const [inputOptions, setInputOptions] = useState(CompoundInputOptions);
+  const searchHandler = partialSearchHandler(
+    CompoundInputOptions,
+    setInputOptions
+  );
+
+  useEffect(() => {
+    const curLego = props.lego;
+    updateLego({
+      ...curLego,
+      args: [
+        {
+          asset: selectedOption,
+          amount: inputAmount,
+        },
+      ],
+    });
+  }, [inputAmount, selectedOption]);
+
+  const secondaryDisplay = (
+    <CenterFlexDiv>
+      <Text type="secondary" small>
+        +{inputAmount} {selectedOption}
+      </Text>
+    </CenterFlexDiv>
+  );
+
+  const primaryDisplay = (
+    <>
+      <Row align="middle" justify="center">
+        <Col span={3}>
+          <Icon.Package />
+        </Col>
+        <Col span={13}>
+          <Tooltip
+            text={"Available balance to borrow"}
+            style={{ width: "100%" }}
+          >
+            <Input disabled placeholder="0" width="100%" />
+          </Tooltip>
+        </Col>
+        <Col span={8}>
+          <AutoComplete
+            disabled
+            initialValue={selectedOption}
+            width="100%"
+            options={inputOptions}
+            onSearch={searchHandler}
+            value={selectedOption}
+          />
+        </Col>
+      </Row>
+      <Row align="middle" justify="center">
+        <Col span={3}>
+          <Icon.ArrowLeft />
+        </Col>
+        <Col span={13}>
+          <Input
+            value={inputAmount}
+            onChange={(e) => setInputAmount(e.target.value)}
+            placeholder="0"
+            width="100%"
+          />
+        </Col>
+        <Col span={8}>
+          <AutoComplete
+            initialValue={selectedOption}
+            width="100%"
+            options={inputOptions}
+            onSearch={searchHandler}
+            onSelect={setSelectedOption}
+          />
+        </Col>
+      </Row>
+    </>
+  );
 
   return (
-    <Card width="100%">
-      <>
-        <Tag type="default" invert>
-          Borrow
-        </Tag>
-        &nbsp;&nbsp;&nbsp;
-        <Text size="1.5rem" b>
-          Compound
-        </Text>
-      </>
-      <div style={{ float: "right" }}>
-        {showSettings ? (
-          <ChevronUpIcon onClick={() => setShowSettings(!showSettings)} />
-        ) : (
-          <ChevronDownIcon onClick={() => setShowSettings(!showSettings)} />
-        )}
-      </div>
-
-      <Spacer y={1} />
-      {!showSettings ? (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <Icon.ArrowUp size={16} />
-          <Text type="secondary" small>
-            10 ETH
-          </Text>
-        </div>
-      ) : null}
-      {showSettings ? (
-        <>
-          <Row align="middle" justify="center">
-            <Col span={2}>
-              <Icon.Package />
-            </Col>
-            <Col span={14}>
-              <Tooltip
-                text={"Available balance to borrow"}
-                style={{ width: "100%" }}
-              >
-                <Input disabled placeholder="0" width="100%" />
-              </Tooltip>
-            </Col>
-            <Col span={8}>
-              <AutoComplete
-                disabled
-                initialValue="ETH"
-                width="100%"
-                options={inputOptions}
-                onSearch={searchHandler}
-              />
-            </Col>
-          </Row>
-          <Row align="middle" justify="center">
-            <Col span={2}>
-              <Icon.ArrowLeft />
-            </Col>
-            <Col span={14}>
-              <Input placeholder="0" width="100%" />
-            </Col>
-            <Col span={8}>
-              <AutoComplete
-                initialValue="ETH"
-                width="100%"
-                options={inputOptions}
-                onSearch={searchHandler}
-              />
-            </Col>
-          </Row>
-        </>
-      ) : null}
-    </Card>
+    <GenericLego
+      tagText="Borrow"
+      title="Compound"
+      secondaryDisplay={secondaryDisplay}
+      primaryDisplay={primaryDisplay}
+      {...props}
+    />
   );
 };

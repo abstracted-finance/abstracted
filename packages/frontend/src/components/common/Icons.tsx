@@ -8,3 +8,7 @@ export const ChevronUpIcon = styled(Icon.ChevronUp)`
 export const ChevronDownIcon = styled(Icon.ChevronDown)`
   cursor: pointer;
 `;
+
+export const XIcon = styled(Icon.X)`
+  cursor: pointer;
+`;
