@@ -48,7 +48,7 @@ export default ({ themeType, switchThemes }) => {
                   <>
                     {`Address: ${ethAddress}`}
                     <br />
-                    {`Proxy: ${proxyAddress || "Not found"}`}
+                    {`Smart Wallet: ${proxyAddress || "Not found"}`}
                   </>
                 }
               >

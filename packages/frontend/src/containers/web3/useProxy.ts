@@ -1,6 +1,6 @@
 import { createContainer } from "unstated-next";
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
+import { useToasts } from "@zeit-ui/react";
 
 import useWeb3 from "./useWeb3";
 
@@ -9,10 +9,11 @@ import { getContract, network } from "../../utils/common";
 function useProxy() {
   const { ethAddress, signer } = useWeb3.useContainer();
 
+  const [, setToasts] = useToasts();
+  const [isCreatingProxy, setIsCreatingProxy] = useState(false);
   const [proxy, setProxy] = useState(null);
   const [proxyFactory, setProxyFactory] = useState(null);
   const [proxyAddress, setProxyAddress] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const hasProxy =
     proxyAddress &&
@@ -31,6 +32,10 @@ function useProxy() {
           address: proxyAddress,
         }).connect(signer)
       );
+      setToasts({
+        text: "Smart wallet created!",
+        type: "success",
+      });
     }
   };
 
@@ -39,13 +44,13 @@ function useProxy() {
     const tx = await proxyFactory["build(address)"](ethAddress);
     await tx.wait();
 
-    setLoading(true);
+    setIsCreatingProxy(true);
     try {
       await fetchProxyAddress();
     } catch (e) {
       console.log("ERROR!!!");
     }
-    setLoading(false);
+    setIsCreatingProxy(false);
   };
 
   // fetch proxy address
@@ -72,9 +77,9 @@ function useProxy() {
     proxyAddress,
     proxy,
     fetchProxyAddress,
-    loading,
     hasProxy,
     createProxy,
+    isCreatingProxy,
   };
 }
 

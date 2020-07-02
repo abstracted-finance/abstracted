@@ -1,5 +1,5 @@
 import { createContainer } from "unstated-next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
 type Provider = ethers.providers.Provider;

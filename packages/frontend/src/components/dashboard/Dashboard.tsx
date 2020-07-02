@@ -4,7 +4,7 @@ import Legos from "../legos/Legos";
 
 export default () => {
   return (
-    <Tabs initialValue="legos">
+    <Tabs initialValue="wallet">
       <Tabs.Item label="Wallet" value="wallet">
         <Wallet />
       </Tabs.Item>

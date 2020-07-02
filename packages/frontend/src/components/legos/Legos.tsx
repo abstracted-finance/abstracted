@@ -185,8 +185,6 @@ export default () => {
                 userProxy: proxyAddress,
               });
 
-              console.log(parseResults);
-
               if (!parseResults.valid) {
                 setToast({
                   text:
@@ -201,7 +199,7 @@ export default () => {
               const msgValues = parseResults.serialized.map((x) => x.msgValue);
 
               const tx = await proxy.executes(targets, data, msgValues, {
-                gasLimit: 6000000
+                gasLimit: 6000000,
               });
               await tx.wait();
             }}
