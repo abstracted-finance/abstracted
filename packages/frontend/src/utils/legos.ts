@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { Lego, LegoType } from "../containers/legos/useLegos";
-import { getContractInterface, getContract } from "../utils/common";
+import { getContractInterface, getContract, network } from "../utils/common";
 import {
   AaveAddresses,
   AddressMapping,
@@ -21,9 +21,6 @@ type SerializedLego = {
 };
 
 type Address = string;
-
-const network =
-  process.env.NODE_ENV === "development" ? "localhost" : "mainnet";
 
 const CompoundActions = getContract({ name: "CompoundActions", network });
 const ICompoundActions = getContractInterface({

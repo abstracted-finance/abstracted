@@ -12,24 +12,20 @@ export const randomId = () => {
 };
 
 export const getContract = ({ name, network = "mainnet" }) => {
-  const deployedFilePath = path.join(
-    "deployments",
-    network,
-    "deployed.json"
-  );
+  const deployedFilePath = path.join("deployments", network, "deployed.json");
 
-  let artifact, deployed
+  let artifact, deployed;
   try {
-    deployed = require(`@abstracted/smart-contracts/deployments/${network}/deployed.json`)
-  } catch(e) {
+    deployed = require(`@abstracted/smart-contracts/deployments/${network}/deployed.json`);
+  } catch (e) {
     throw new Error(
       `Network not found in deployment path! (${deployedFilePath})`
     );
   }
 
   try {
-    artifact = require(`@abstracted/smart-contracts/artifacts/${name}.json`)
-  } catch(e) {
+    artifact = require(`@abstracted/smart-contracts/artifacts/${name}.json`);
+  } catch (e) {
     throw new Error(`Contract name not found in artifacts path! (${name})`);
   }
 
@@ -44,5 +40,8 @@ export const getContract = ({ name, network = "mainnet" }) => {
 };
 
 export const getContractInterface = ({ name, network = "mainnet" }) => {
-  return getContract({ name, network }).interface
-}
+  return getContract({ name, network }).interface;
+};
+
+export const network =
+  process.env.NODE_ENV === "development" ? "localhost" : "mainnet";
