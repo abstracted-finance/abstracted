@@ -1,11 +1,15 @@
-import { Text, Button, Link, Loading } from "@zeit-ui/react";
+import { Text, Table, Link, Loading } from "@zeit-ui/react";
 
 import useWeb3 from "../../containers/web3/useWeb3";
 import useProxy from "../../containers/web3/useProxy";
+import useCompoundBalances from "../../containers/balances/useCompoundBalances";
 
 export default () => {
   const { connect, signer, ethAddress } = useWeb3.useContainer();
   const { isCreatingProxy, createProxy, hasProxy } = useProxy.useContainer();
+  const { compoundBalances } = useCompoundBalances.useContainer();
+
+  console.log("compoundBalances", compoundBalances);
 
   if (signer === null || ethAddress === null) {
     return (
@@ -55,5 +59,10 @@ export default () => {
     );
   }
 
-  return <Text blockquote>Connected!</Text>;
+  return (
+    <Table data={compoundBalances}>
+      <Table.Column prop="label" label="Asset" />
+      <Table.Column prop="amount" label="Amount" />
+    </Table>
+  );
 };
