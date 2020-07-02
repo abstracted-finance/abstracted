@@ -2,6 +2,7 @@ import { AppProps } from "next/app";
 import { CssBaseline, ZeitProvider } from "@zeit-ui/react";
 import useLocalStorageState from "use-local-storage-state";
 
+import ContractsContainer from "../containers/web3/useContracts";
 import ProxyContainer from "../containers/web3/useProxy";
 import Web3Container from "../containers/web3/useWeb3";
 import LegoContainer from "../containers/legos/useLegos";
@@ -18,15 +19,17 @@ function App({ Component, pageProps }: AppProps) {
     <ZeitProvider theme={{ type: themeType }}>
       <CssBaseline>
         <Web3Container.Provider>
-          <ProxyContainer.Provider>
-            <LegoContainer.Provider>
-              <Component
-                {...pageProps}
-                themeType={themeType}
-                switchThemes={switchThemes}
-              />
-            </LegoContainer.Provider>
-          </ProxyContainer.Provider>
+          <ContractsContainer.Provider>
+            <ProxyContainer.Provider>
+              <LegoContainer.Provider>
+                <Component
+                  {...pageProps}
+                  themeType={themeType}
+                  switchThemes={switchThemes}
+                />
+              </LegoContainer.Provider>
+            </ProxyContainer.Provider>
+          </ContractsContainer.Provider>
         </Web3Container.Provider>
       </CssBaseline>
     </ZeitProvider>

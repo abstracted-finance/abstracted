@@ -3,16 +3,19 @@ import { useState, useEffect } from "react";
 import { useToasts } from "@zeit-ui/react";
 
 import useWeb3 from "./useWeb3";
+import useContracts from "./useContracts";
 
 import { getContract, network } from "../../utils/common";
 
 function useProxy() {
   const { ethAddress, signer } = useWeb3.useContainer();
+  const { contracts } = useContracts.useContainer();
+
+  const { ProxyFactory } = contracts;
 
   const [, setToasts] = useToasts();
   const [isCreatingProxy, setIsCreatingProxy] = useState(false);
   const [proxy, setProxy] = useState(null);
-  const [proxyFactory, setProxyFactory] = useState(null);
   const [proxyAddress, setProxyAddress] = useState(null);
 
   const hasProxy =
@@ -21,19 +24,21 @@ function useProxy() {
 
   // get proxy address
   const fetchProxyAddress = async () => {
-    const proxyAddress = await proxyFactory.proxies(ethAddress);
+    const newProxyAddress = await ProxyFactory.proxies(ethAddress);
 
-    if (proxyAddress !== "0x0000000000000000000000000000000000000000") {
-      setProxyAddress(proxyAddress);
+    if (newProxyAddress === proxyAddress) return;
+
+    if (newProxyAddress !== "0x0000000000000000000000000000000000000000") {
+      setProxyAddress(newProxyAddress);
       setProxy(
         getContract({
           name: "Proxy",
           network,
-          address: proxyAddress,
+          address: newProxyAddress,
         }).connect(signer)
       );
       setToasts({
-        text: "Smart wallet created!",
+        text: "Smart wallet connected!",
         type: "success",
       });
     }
@@ -41,14 +46,17 @@ function useProxy() {
 
   // Creates a proxy
   const createProxy = async () => {
-    const tx = await proxyFactory["build(address)"](ethAddress);
+    const tx = await ProxyFactory["build(address)"](ethAddress);
     await tx.wait();
 
     setIsCreatingProxy(true);
     try {
       await fetchProxyAddress();
     } catch (e) {
-      console.log("ERROR!!!");
+      setToasts({
+        text: "Error fetching smart wallet address",
+        type: "error",
+      });
     }
     setIsCreatingProxy(false);
   };
@@ -57,21 +65,10 @@ function useProxy() {
   useEffect(() => {
     if (signer === null) return;
     if (ethAddress === null) return;
+    if (ProxyFactory === null) return;
 
-    // Update proxy factory
-    if (proxyFactory === null && signer !== null) {
-      setProxyFactory(
-        getContract({
-          name: "ProxyFactory",
-          network,
-        }).connect(signer)
-      );
-    }
-
-    if (proxyFactory !== null) {
-      fetchProxyAddress();
-    }
-  }, [signer, ethAddress, proxyFactory]);
+    fetchProxyAddress();
+  }, [signer, ethAddress, ProxyFactory]);
 
   return {
     proxyAddress,

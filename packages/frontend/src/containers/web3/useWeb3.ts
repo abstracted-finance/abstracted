@@ -19,7 +19,7 @@ function useWeb3() {
 
     // get provider and signer
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    const signer = provider.getSigner()
+    const signer = provider.getSigner();
     const network = await provider.getNetwork();
 
     // get address
@@ -36,6 +36,9 @@ function useWeb3() {
     try {
       setError(null);
       await attemptConnection();
+      window.ethereum.on("accountsChanged", () => {
+        attemptConnection();
+      });
     } catch (error) {
       setError(error);
     }

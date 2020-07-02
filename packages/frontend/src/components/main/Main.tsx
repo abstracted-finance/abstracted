@@ -28,20 +28,17 @@ export default ({ themeType, switchThemes }) => {
       size="medium"
     >
       <Page.Header>
-        <MiddleFlexDiv>
-          <Text h2 style={{ display: "inline-block" }}>
+        <>
+          <Text b size={24}>
             Abstracted
           </Text>
-          <Spacer x={1} />
 
-          {signer === null || ethAddress === null ? (
-            <div style={{ marginTop: "8px" }}>
+          <div style={{ float: "right", marginTop: "5px" }}>
+            {signer === null || ethAddress === null ? (
               <Button onClick={connect} auto>
                 Connect
               </Button>
-            </div>
-          ) : (
-            <div style={{ marginTop: "14px" }}>
+            ) : (
               <Tooltip
                 placement="bottom"
                 text={
@@ -54,9 +51,9 @@ export default ({ themeType, switchThemes }) => {
               >
                 <Tag>Connected: {ethAddress.slice(0, 6)}...</Tag>
               </Tooltip>
-            </div>
-          )}
-        </MiddleFlexDiv>
+            )}
+          </div>
+        </>
       </Page.Header>
       <Page.Content style={{ padding: "10px 0 40px 0" }}>
         <Dashboard />
