@@ -17,7 +17,7 @@ interface LegoResults {
 type SerializedLego = {
   target: string;
   data: string;
-  msgValue: string;
+  msgValue: ethers.BigNumber;
 };
 
 type Address = string;
@@ -46,7 +46,7 @@ export const serializeLego = (lego: Lego): SerializedLego => {
   const amountWei = ethers.utils.parseUnits(amount, decimals);
   const cTokenAsset = CTokenMapping[asset];
   const cTokenAddress = cTokenAsset ? AddressMapping[cTokenAsset] : null;
-  const msgValue = asset === Assets.ETH ? amountWei : amount;
+  const msgValue = asset === Assets.ETH ? amountWei : ethers.constants.Zero;
 
   // Just for convinience
   const partialSerializedCompoundActions = {
@@ -136,7 +136,8 @@ export const serializeLegos = ({
         const refundAmountWei = amountWei
           .mul(ethers.BigNumber.from("10009"))
           .div(ethers.BigNumber.from("10000"));
-        const msgValue = asset === Assets.ETH ? amountWei : amount;
+        const msgValue =
+          asset === Assets.ETH ? refundAmountWei : ethers.constants.Zero;
 
         const postloanAddress = TokenActions.address;
         const postloanData = ITokenActions.encodeFunctionData("transfer", [
@@ -171,9 +172,9 @@ export const serializeLegos = ({
         );
 
         serialized.push({
-          msgValue,
-          data: flashloanSerialized,
           target: AaveFlashloanActions.address,
+          data: flashloanSerialized,
+          msgValue: ethers.constants.Zero,
         });
       }
 
@@ -187,7 +188,13 @@ export const serializeLegos = ({
   return serialized;
 };
 
-export const parseLegos = (legos: Lego[]): LegoResults => {
+export const parseLegos = ({
+  legos,
+  userProxy,
+}: {
+  legos: Lego[];
+  userProxy: Address;
+}): LegoResults => {
   // Empty legos is valid legos
   if (legos.length === 0) {
     return {
@@ -214,7 +221,10 @@ export const parseLegos = (legos: Lego[]): LegoResults => {
       }
 
       // Checks to see if inner block is valid
-      const parsed = parseLegos(legos.slice(i + 1, endingIndex));
+      const parsed = parseLegos({
+        legos: legos.slice(i + 1, endingIndex),
+        userProxy,
+      });
 
       if (!parsed.valid) {
         return {
@@ -229,7 +239,7 @@ export const parseLegos = (legos: Lego[]): LegoResults => {
     valid: true,
     serialized: serializeLegos({
       legos,
-      userProxy: "0x42da91be491e4101f348b9a746183dad9a6f92a2",
+      userProxy,
     }),
   };
 };

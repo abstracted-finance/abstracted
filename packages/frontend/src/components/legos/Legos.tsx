@@ -1,3 +1,5 @@
+import { ethers } from "ethers";
+
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useToasts, Button, Row, Col, Spacer, Note } from "@zeit-ui/react";
@@ -17,6 +19,7 @@ import {
   LegoType,
   default as useLego,
 } from "../../containers/legos/useLegos";
+import useProxy from "../../containers/web3/useProxy";
 
 import { parseLegos } from "../../utils/legos";
 
@@ -34,6 +37,8 @@ export default () => {
   const { legos, setLegos } = useLego.useContainer();
 
   const [addPageVisisble, setAddPageVisible] = useState(false);
+
+  const { proxy, proxyAddress } = useProxy.useContainer();
 
   const onDragEnd = (result) => {
     // Dropped outside the list
@@ -174,9 +179,31 @@ export default () => {
           </Button>
           <Spacer y={1} />
           <Button
-            onClick={() => {
-              const parseResults = parseLegos(legos);
+            onClick={async () => {
+              const parseResults = parseLegos({
+                legos,
+                userProxy: proxyAddress,
+              });
+
               console.log(parseResults);
+
+              if (!parseResults.valid) {
+                setToast({
+                  text:
+                    "Invalid lego configuration (likely flashloan overlapping one another)",
+                  type: "error",
+                });
+                return;
+              }
+
+              const targets = parseResults.serialized.map((x) => x.target);
+              const data = parseResults.serialized.map((x) => x.data);
+              const msgValues = parseResults.serialized.map((x) => x.msgValue);
+
+              const tx = await proxy.executes(targets, data, msgValues, {
+                gasLimit: 6000000
+              });
+              await tx.wait();
             }}
             style={{ width: "100%" }}
             type="secondary"

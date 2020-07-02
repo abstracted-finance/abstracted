@@ -21,23 +21,21 @@ function useProxy() {
   // get proxy address
   const fetchProxyAddress = async () => {
     const proxyAddress = await proxyFactory.proxies(ethAddress);
-    setProxyAddress(proxyAddress);
 
     if (proxyAddress !== "0x0000000000000000000000000000000000000000") {
+      setProxyAddress(proxyAddress);
       setProxy(
         getContract({
           name: "Proxy",
           network,
-        })
-          .attach(proxyAddress)
-          .connect(signer)
+          address: proxyAddress,
+        }).connect(signer)
       );
     }
   };
 
   // Creates a proxy
   const createProxy = async () => {
-    console.log(proxyFactory);
     const tx = await proxyFactory["build(address)"](ethAddress);
     await tx.wait();
 
@@ -53,9 +51,10 @@ function useProxy() {
   // fetch proxy address
   useEffect(() => {
     if (signer === null) return;
+    if (ethAddress === null) return;
 
     // Update proxy factory
-    if (proxyFactory === null) {
+    if (proxyFactory === null && signer !== null) {
       setProxyFactory(
         getContract({
           name: "ProxyFactory",
@@ -67,7 +66,7 @@ function useProxy() {
     if (proxyFactory !== null) {
       fetchProxyAddress();
     }
-  }, [signer, proxyFactory]);
+  }, [signer, ethAddress, proxyFactory]);
 
   return {
     proxyAddress,

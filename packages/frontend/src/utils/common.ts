@@ -11,7 +11,11 @@ export const randomId = () => {
   return s4() + s4();
 };
 
-export const getContract = ({ name, network = "mainnet" }) => {
+export const getContract = ({
+  name,
+  address = undefined,
+  network = "mainnet",
+}) => {
   const deployedFilePath = path.join("deployments", network, "deployed.json");
 
   let artifact, deployed;
@@ -30,17 +34,18 @@ export const getContract = ({ name, network = "mainnet" }) => {
   }
 
   const abi = artifact.abi;
-  const address = deployed[name];
+  const aAddress = address || deployed[name];
 
-  if (address === undefined) {
+  if (aAddress === undefined) {
     throw new Error(`${name} has not been deployed to ${network}!`);
   }
 
-  return new ethers.Contract(address, abi);
+  return new ethers.Contract(aAddress, abi);
 };
 
 export const getContractInterface = ({ name, network = "mainnet" }) => {
-  return getContract({ name, network }).interface;
+  return getContract({ name, address: ethers.constants.AddressZero, network })
+    .interface;
 };
 
 export const network =

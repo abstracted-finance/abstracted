@@ -5,6 +5,7 @@ import Dashboard from "../dashboard/Dashboard";
 
 import { MiddleFlexDiv } from "../common/Divs";
 import useWeb3 from "../../containers/web3/useWeb3";
+import useProxy from "../../containers/web3/useProxy";
 
 const MoonIcon = styled(Icon.Moon)`
   cursor: pointer;
@@ -16,6 +17,7 @@ const SunIcon = styled(Icon.Sun)`
 
 export default ({ themeType, switchThemes }) => {
   const { connect, signer, ethAddress } = useWeb3.useContainer();
+  const { proxyAddress } = useProxy.useContainer();
 
   return (
     <Page
@@ -40,7 +42,16 @@ export default ({ themeType, switchThemes }) => {
             </div>
           ) : (
             <div style={{ marginTop: "14px" }}>
-              <Tooltip placement="bottom" text={`Address: ${ethAddress}`}>
+              <Tooltip
+                placement="bottom"
+                text={
+                  <>
+                    {`Address: ${ethAddress}`}
+                    <br />
+                    {`Proxy: ${proxyAddress || "Not found"}`}
+                  </>
+                }
+              >
                 <Tag>Connected: {ethAddress.slice(0, 6)}...</Tag>
               </Tooltip>
             </div>

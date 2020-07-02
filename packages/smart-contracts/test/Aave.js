@@ -49,7 +49,7 @@ describe("Aave", function () {
 
   it("Flashloan (ETH)", async function () {
     const reserve = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-    const amount = ethers.utils.parseEther("5.0");
+    const amount = ethers.utils.parseEther("10.0");
     const refundAmount = amount
       .mul(ethers.BigNumber.from("10009"))
       .div(ethers.BigNumber.from("10000"));
@@ -65,7 +65,7 @@ describe("Aave", function () {
 
     const targets = [postloanAddress];
     const data = [postloanActionData];
-    const msgValues = [fee]
+    const msgValues = [refundAmount];
 
     const proxyTargetData = ethers.utils.defaultAbiCoder.encode(
       ["tuple(address,address[],bytes[],uint256[])"],
