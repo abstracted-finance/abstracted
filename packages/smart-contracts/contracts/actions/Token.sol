@@ -38,4 +38,15 @@ contract TokenActions {
             _transferERC20(recipient, token, amount);
         }
     }
+
+    function approve(
+        address recipient,
+        address token,
+        uint256 amount
+    ) external {
+        if (token == Constants.ETH_ADDRESS) {
+            return;
+        }
+        IERC20(token).approve(recipient, amount);
+    }
 }

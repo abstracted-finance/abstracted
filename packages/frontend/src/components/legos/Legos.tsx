@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { useToasts, Button, Row, Col, Spacer } from "@zeit-ui/react";
+import { useToasts, Button, Row, Col, Spacer, Note } from "@zeit-ui/react";
 
 import CompoundSupply from "./compound/Supply";
 import CompoundWithdraw from "./compound/Withdraw";
@@ -17,6 +17,8 @@ import {
   LegoType,
   default as useLego,
 } from "../../containers/legos/useLegos";
+
+import { parseLegos } from "../../utils/parser";
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -106,50 +108,80 @@ export default () => {
     <>
       <Row justify="center">
         <Col span={24} style={{ maxWidth: "500px" }}>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-              {(provided, snapshot) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {legos.map((lego, index) => (
-                    <Draggable
-                      key={lego.id}
-                      draggableId={lego.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          // snapshot.isDragging to get isDragging
-                          style={{
-                            // some basic styles to make the items look a bit nicer
-                            userSelect: "none",
-                            margin: "0 0 8px 0",
+          <Row gap={0.8}>
+            <Col span={12}>
+              <Button type="secondary" auto style={{ width: "100%" }}>
+                Import
+              </Button>
+            </Col>
+            <Col span={12}>
+              <Button type="secondary" auto style={{ width: "100%" }}>
+                Export
+              </Button>
+            </Col>
+          </Row>
+          <Spacer y={1} />
 
-                            // styles we need to apply on draggables
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {getLegoComponent(lego)}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+          {legos.length === 0 ? (
+            <Note label={false}>
+              Click on the add button below to get started!
+            </Note>
+          ) : (
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {legos.map((lego, index) => (
+                      <Draggable
+                        key={lego.id}
+                        draggableId={lego.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            // snapshot.isDragging to get isDragging
+                            style={{
+                              // some basic styles to make the items look a bit nicer
+                              userSelect: "none",
+                              margin: "0 0 8px 0",
+
+                              // styles we need to apply on draggables
+                              ...provided.draggableProps.style,
+                            }}
+                          >
+                            {getLegoComponent(lego)}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          )}
 
           <Spacer y={1} />
           <Button
             onClick={() => setAddPageVisible(true)}
             style={{ width: "100%" }}
-            shadow
             type="secondary"
           >
             Add
+          </Button>
+          <Spacer y={1} />
+          <Button
+            onClick={() => {
+              const parseResults = parseLegos(legos);
+              console.log(parseResults);
+            }}
+            style={{ width: "100%" }}
+            type="secondary"
+          >
+            Execute
           </Button>
         </Col>
       </Row>
