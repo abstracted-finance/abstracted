@@ -1,8 +1,15 @@
-import { ethers } from "ethers";
-
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { useToasts, Button, Row, Col, Spacer, Note } from "@zeit-ui/react";
+import {
+  useToasts,
+  Button,
+  Row,
+  Col,
+  Spacer,
+  Note,
+  useModal,
+  Card,
+} from "@zeit-ui/react";
 
 import CompoundSupply from "./compound/Supply";
 import CompoundWithdraw from "./compound/Withdraw";
@@ -13,6 +20,10 @@ import AaveFlashloanStart from "./aave/FlashloanStart";
 import AaveFlashloanEnd from "./aave/FlashloanEnd";
 
 import AddLegoPage from "./AddLegoPage";
+import GenericLego from "./GenericLego";
+
+import ImportModal from "./ImportModal";
+import ExportModal from "./ExportModal";
 
 import {
   Lego,
@@ -35,10 +46,19 @@ const reorder = (list, startIndex, endIndex) => {
 export default () => {
   const [, setToast] = useToasts();
   const { legos, setLegos } = useLego.useContainer();
-
-  const [addPageVisisble, setAddPageVisible] = useState(false);
-
   const { proxy, proxyAddress } = useProxy.useContainer();
+
+  const {
+    visible: importModalVisible,
+    setVisible: setImportModalVisible,
+    bindings: importModalBindings,
+  } = useModal();
+  const {
+    visible: exportModalVisible,
+    setVisible: setExportModalVisible,
+    bindings: exportModalBindings,
+  } = useModal();
+  const [addPageVisible, setAddPageVisible] = useState(false);
 
   const onDragEnd = (result) => {
     // Dropped outside the list
@@ -95,7 +115,7 @@ export default () => {
     setLegos(newItems);
   };
 
-  const toLegoComponent = {
+  const LegoComponentMapping = {
     [LegoType.CompoundBorrow]: <CompoundBorrow />,
     [LegoType.CompoundRepay]: <CompoundRepay />,
     [LegoType.CompoundSupply]: <CompoundSupply />,
@@ -105,12 +125,18 @@ export default () => {
   };
 
   const getLegoComponent = (lego: Lego) => {
-    const lc = toLegoComponent[lego.type] || <></>;
+    const lc = LegoComponentMapping[lego.type] || (
+      <GenericLego
+        tagText="Unknown config"
+        title="Unknown"
+        secondaryDisplay={<></>}
+        primaryDisplay={<></>}
+        isLoading={false}
+        lego={{}}
+      />
+    );
     return React.cloneElement(lc, { lego });
   };
-
-  if (proxy === null) {
-  }
 
   return (
     <>
@@ -118,12 +144,22 @@ export default () => {
         <Col span={24} style={{ maxWidth: "500px" }}>
           <Row gap={0.8}>
             <Col span={12}>
-              <Button type="secondary" auto style={{ width: "100%" }}>
+              <Button
+                onClick={() => setImportModalVisible(true)}
+                type="secondary"
+                auto
+                style={{ width: "100%" }}
+              >
                 Import
               </Button>
             </Col>
             <Col span={12}>
-              <Button type="secondary" auto style={{ width: "100%" }}>
+              <Button
+                onClick={() => setExportModalVisible(true)}
+                type="secondary"
+                auto
+                style={{ width: "100%" }}
+              >
                 Export
               </Button>
             </Col>
@@ -214,7 +250,12 @@ export default () => {
         </Col>
       </Row>
 
-      <AddLegoPage visible={addPageVisisble} setVisible={setAddPageVisible} />
+      <AddLegoPage visible={addPageVisible} setVisible={setAddPageVisible} />
+      <ImportModal
+        setVisible={setImportModalVisible}
+        {...importModalBindings}
+      />
+      <ExportModal {...exportModalBindings} />
     </>
   );
 };
