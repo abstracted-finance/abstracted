@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 
 import useWeb3 from "./useWeb3";
 import { getContract, network } from "../../utils/common";
+import { CompoundAddresses } from "../../utils/constants";
 
 // Contracts that has dynamic address
 const initialNoAddressContractNames = ["IERC20", "Proxy"];
@@ -17,6 +18,18 @@ const initialNoAddressContracts = initialNoAddressContractNames
         address: ethers.constants.AddressZero,
       }),
     ];
+  })
+  .reduce((acc, [k, v]) => {
+    return { ...acc, [k]: v };
+  }, {});
+
+// Contracts with manual address
+const initialManualAddressContractsConfig = [
+  { name: "IComptroller", address: CompoundAddresses.Comptroller },
+];
+const initialManualAddressContracts = initialManualAddressContractsConfig
+  .map(({ name, address }) => {
+    return [name, getContract({ name, network, address })];
   })
   .reduce((acc, [k, v]) => {
     return { ...acc, [k]: v };
@@ -45,6 +58,7 @@ const initialAddressedContracts = initialAddressedContractNames
 
 const initialContracts: any = {
   ...initialNoAddressContracts,
+  ...initialManualAddressContracts,
   ...initialAddressedContracts,
 };
 

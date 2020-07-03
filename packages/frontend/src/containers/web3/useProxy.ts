@@ -6,6 +6,7 @@ import useWeb3 from "./useWeb3";
 import useContracts from "./useContracts";
 
 import { getContract, network } from "../../utils/common";
+import { ethers } from "ethers";
 
 function useProxy() {
   const { ethAddress, signer } = useWeb3.useContainer();
@@ -20,7 +21,7 @@ function useProxy() {
 
   const hasProxy =
     proxyAddress &&
-    proxyAddress !== "0x0000000000000000000000000000000000000000";
+    proxyAddress !== ethers.constants.AddressZero;
 
   // get proxy address
   const fetchProxyAddress = async () => {
@@ -28,7 +29,7 @@ function useProxy() {
 
     if (newProxyAddress === proxyAddress) return;
 
-    if (newProxyAddress !== "0x0000000000000000000000000000000000000000") {
+    if (newProxyAddress !== ethers.constants.AddressZero) {
       setProxyAddress(newProxyAddress);
       setProxy(
         getContract({
@@ -41,6 +42,11 @@ function useProxy() {
         text: "Smart wallet connected!",
         type: "success",
       });
+    }
+
+    if (newProxyAddress === ethers.constants.AddressZero) {
+      setProxyAddress(newProxyAddress);
+      setProxy(null);
     }
   };
 

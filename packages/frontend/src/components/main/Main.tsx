@@ -3,7 +3,6 @@ import * as Icon from "@zeit-ui/react-icons";
 import styled from "styled-components";
 import Dashboard from "../dashboard/Dashboard";
 
-import { MiddleFlexDiv } from "../common/Divs";
 import useWeb3 from "../../containers/web3/useWeb3";
 import useProxy from "../../containers/web3/useProxy";
 
@@ -33,9 +32,9 @@ export default ({ themeType, switchThemes }) => {
             Abstracted
           </Text>
 
-          <div style={{ float: "right", marginTop: "5px" }}>
+          <div style={{ float: "right" }}>
             {signer === null || ethAddress === null ? (
-              <Button onClick={connect} auto>
+              <Button size="small" onClick={connect} auto>
                 Connect
               </Button>
             ) : (
@@ -58,7 +57,7 @@ export default ({ themeType, switchThemes }) => {
       <Page.Content style={{ padding: "10px 0 40px 0" }}>
         <Dashboard />
       </Page.Content>
-      <Page.Footer style={{ height: "40px" }}>
+      <Page.Footer style={{ height: "40px", paddingTop: '10px' }}>
         <>
           <Text small>Abstracted &copy; 2020</Text>
           <div

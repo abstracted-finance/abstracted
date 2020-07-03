@@ -30,7 +30,7 @@ const getProxyContract = async ({ signer }) => {
 
   let proxyAddress = await proxyFactory.proxies(signer._address);
 
-  if (proxyAddress === "0x0000000000000000000000000000000000000000") {
+  if (proxyAddress === ethers.constants.AddressZero) {
     const tx = await proxyFactory["build(address)"](signer._address);
     await tx.wait();
 

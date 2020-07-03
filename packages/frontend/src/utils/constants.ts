@@ -16,6 +16,9 @@ export enum Assets {
   WBTC = "WBTC",
   ZRX = "ZRX",
   DAI = "DAI",
+}
+
+export enum CompoundAssets {
   cETH = "cETH",
   cBAT = "cBAT",
   cUSDC = "cUSDC",
@@ -44,24 +47,25 @@ export const AddressMapping = {
   [Assets.WBTC]: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
   [Assets.ZRX]: "0xE41d2489571d322189246DaFA5ebDe1F4699F498",
   [Assets.DAI]: "0x6b175474e89094c44da98b954eedeac495271d0f",
-  [Assets.cETH]: "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
-  [Assets.cBAT]: "0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e",
-  [Assets.cUSDC]: "0x39aa39c021dfbae8fac545936693ac917d5e7563",
-  [Assets.cUSDT]: "0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9",
-  [Assets.cDAI]: "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643",
-  [Assets.cWBTC]: "0xc11b1268c1a384e55c48c2391d8d480264a3a7f4",
-  [Assets.cREP]: "0x158079ee67fce2f58472a96584a73c7ab9ac95c1",
-  [Assets.cZRX]: "0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407",
+  [CompoundAssets.cETH]: "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
+  [CompoundAssets.cBAT]: "0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e",
+  [CompoundAssets.cUSDC]: "0x39aa39c021dfbae8fac545936693ac917d5e7563",
+  [CompoundAssets.cUSDT]: "0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9",
+  [CompoundAssets.cDAI]: "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643",
+  [CompoundAssets.cWBTC]: "0xc11b1268c1a384e55c48c2391d8d480264a3a7f4",
+  [CompoundAssets.cREP]: "0x158079ee67fce2f58472a96584a73c7ab9ac95c1",
+  [CompoundAssets.cZRX]: "0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407",
 };
 
 export const CTokenMapping = {
-  [Assets.ETH]: [Assets.cETH],
-  [Assets.USDC]: [Assets.cUSDC],
-  [Assets.USDT]: [Assets.cUSDT],
-  [Assets.DAI]: [Assets.cDAI],
-  [Assets.WBTC]: [Assets.cWBTC],
-  [Assets.REP]: [Assets.cREP],
-  [Assets.ZRX]: [Assets.cZRX],
+  [Assets.ETH]: [CompoundAssets.cETH],
+  [Assets.USDC]: [CompoundAssets.cUSDC],
+  [Assets.USDT]: [CompoundAssets.cUSDT],
+  [Assets.DAI]: [CompoundAssets.cDAI],
+  [Assets.WBTC]: [CompoundAssets.cWBTC],
+  [Assets.BAT]: [CompoundAssets.cBAT],
+  [Assets.REP]: [CompoundAssets.cREP],
+  [Assets.ZRX]: [CompoundAssets.cZRX],
 };
 
 export const DecimalMapping = {
@@ -82,14 +86,14 @@ export const DecimalMapping = {
   [Assets.WBTC]: 8,
   [Assets.ZRX]: 18,
   [Assets.DAI]: 18,
-  [Assets.cETH]: 8,
-  [Assets.cBAT]: 8,
-  [Assets.cUSDC]: 8,
-  [Assets.cUSDT]: 8,
-  [Assets.cDAI]: 8,
-  [Assets.cWBTC]: 8,
-  [Assets.cREP]: 8,
-  [Assets.cZRX]: 8,
+  [CompoundAssets.cETH]: 8,
+  [CompoundAssets.cBAT]: 8,
+  [CompoundAssets.cUSDC]: 8,
+  [CompoundAssets.cUSDT]: 8,
+  [CompoundAssets.cDAI]: 8,
+  [CompoundAssets.cWBTC]: 8,
+  [CompoundAssets.cREP]: 8,
+  [CompoundAssets.cZRX]: 8,
 };
 
 export const AaveAddresses = {
@@ -97,3 +101,101 @@ export const AaveAddresses = {
   LendingPool: "0x398ec7346dcd622edc5ae82352f02be94c62d119",
   LendingPoolCore: "0x3dfd23a6c5e8bbcfc9581d2e864a68feb6a076d3",
 };
+
+export const CompoundAddresses = {
+  Comptroller: "0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b",
+};
+
+// https://api.coingecko.com/api/v3/coins/list
+export const CoinGeckoIdMapping = {
+  [Assets.ETH]: "ethereum",
+  [Assets.USDC]: "usd-coin",
+  [Assets.TUSD]: "true-usd",
+  [Assets.USDT]: "tether",
+  [Assets.sUSD]: "nusd",
+  [Assets.BUSD]: "binance-usd",
+  [Assets.LEND]: "ethlend",
+  [Assets.BAT]: "basic-attention-token",
+  [Assets.KNC]: "kyber-network",
+  [Assets.LINK]: "link",
+  [Assets.MANA]: "decentraland",
+  [Assets.MKR]: "maker",
+  [Assets.REP]: "augur",
+  [Assets.SNX]: "havven",
+  [Assets.WBTC]: "wrapped-bitcoin",
+  [Assets.ZRX]: "0x",
+  [Assets.DAI]: "dai",
+};
+
+export const CoinGeckoIdReverseMapping = Object.keys(CoinGeckoIdMapping)
+  .map((k) => [CoinGeckoIdMapping[k], k])
+  .reduce((acc, [k, v]) => {
+    return {
+      ...acc,
+      [k]: v,
+    };
+  }, {});
+
+// https://api.coingecko.com/api/v3/simple/supported_vs_currencies
+export enum CoinGeckoSupportedCurrencies {
+  BTC = "btc",
+  ETH = "eth",
+  LTC = "ltc",
+  BCH = "bch",
+  BNB = "bnb",
+  EOS = "eos",
+  XRP = "xrp",
+  XLM = "xlm",
+  USD = "usd",
+  AED = "aed",
+  ARS = "ars",
+  AUD = "aud",
+  BDT = "bdt",
+  BHD = "bhd",
+  BMD = "bmd",
+  BRL = "brl",
+  CAD = "cad",
+  CHF = "chf",
+  CLP = "clp",
+  CNY = "cny",
+  CZK = "czk",
+  DKK = "dkk",
+  EUR = "eur",
+  GBP = "gbp",
+  HKD = "hkd",
+  HUF = "huf",
+  IDR = "idr",
+  ILS = "ils",
+  INR = "inr",
+  JPY = "jpy",
+  KRW = "krw",
+  KWD = "kwd",
+  LKR = "lkr",
+  MMK = "mmk",
+  MXN = "mxn",
+  MYR = "myr",
+  NOK = "nok",
+  NZD = "nzd",
+  PHP = "php",
+  PKR = "pkr",
+  PLN = "pln",
+  RUB = "rub",
+  SAR = "sar",
+  SEK = "sek",
+  SGD = "sgd",
+  THB = "thb",
+  TRY = "try",
+  TWD = "twd",
+  UAH = "uah",
+  VEF = "vef",
+  VND = "vnd",
+  ZAR = "zar",
+  XDR = "xdr",
+  XAG = "xag",
+  XAU = "xau",
+}
+
+export enum OperationType {
+  Deposit = "Deposit",
+  Withdraw = "Withdraw",
+}

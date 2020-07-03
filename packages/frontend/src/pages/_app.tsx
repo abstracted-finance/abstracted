@@ -2,7 +2,10 @@ import { AppProps } from "next/app";
 import { CssBaseline, ZeitProvider } from "@zeit-ui/react";
 import useLocalStorageState from "use-local-storage-state";
 
-import CompoundBalanceContainer from "../containers/balances/useCompoundBalances";
+import WithdrawContainer from "../containers/balances/useWithdraw";
+import CompoundEnteredContainer from "../containers/compound/useCompoundEntered";
+import SettingsContainer from "../containers/settings/useSettings";
+import BalancesContainer from "../containers/balances/useBalances";
 import ContractsContainer from "../containers/web3/useContracts";
 import ProxyContainer from "../containers/web3/useProxy";
 import Web3Container from "../containers/web3/useWeb3";
@@ -19,21 +22,27 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <ZeitProvider theme={{ type: themeType }}>
       <CssBaseline>
-        <Web3Container.Provider>
-          <ContractsContainer.Provider>
-            <ProxyContainer.Provider>
-              <CompoundBalanceContainer.Provider>
-                <LegoContainer.Provider>
-                  <Component
-                    {...pageProps}
-                    themeType={themeType}
-                    switchThemes={switchThemes}
-                  />
-                </LegoContainer.Provider>
-              </CompoundBalanceContainer.Provider>
-            </ProxyContainer.Provider>
-          </ContractsContainer.Provider>
-        </Web3Container.Provider>
+        <SettingsContainer.Provider>
+          <Web3Container.Provider>
+            <ContractsContainer.Provider>
+              <ProxyContainer.Provider>
+                <CompoundEnteredContainer.Provider>
+                  <BalancesContainer.Provider>
+                    <WithdrawContainer.Provider>
+                      <LegoContainer.Provider>
+                        <Component
+                          {...pageProps}
+                          themeType={themeType}
+                          switchThemes={switchThemes}
+                        />
+                      </LegoContainer.Provider>
+                    </WithdrawContainer.Provider>
+                  </BalancesContainer.Provider>
+                </CompoundEnteredContainer.Provider>
+              </ProxyContainer.Provider>
+            </ContractsContainer.Provider>
+          </Web3Container.Provider>
+        </SettingsContainer.Provider>
       </CssBaseline>
     </ZeitProvider>
   );

@@ -114,7 +114,6 @@ export default () => {
 
   return (
     <>
-      <Spacer y={1} />
       <Row justify="center">
         <Col span={24} style={{ maxWidth: "500px" }}>
           <Row gap={0.8}>

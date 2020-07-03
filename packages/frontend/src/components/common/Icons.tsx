@@ -12,3 +12,7 @@ export const ChevronDownIcon = styled(Icon.ChevronDown)`
 export const XIcon = styled(Icon.X)`
   cursor: pointer;
 `;
+
+export const RefreshIcon = styled(Icon.RefreshCcw)`
+  cursor: pointer;
+`;

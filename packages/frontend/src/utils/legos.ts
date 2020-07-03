@@ -136,6 +136,8 @@ export const serializeLegos = ({
         const refundAmountWei = amountWei
           .mul(ethers.BigNumber.from("10009"))
           .div(ethers.BigNumber.from("10000"));
+        const msgValue =
+          asset === Assets.ETH ? refundAmountWei : ethers.constants.Zero;
 
         const postloanAddress = TokenActions.address;
         const postloanData = ITokenActions.encodeFunctionData("transfer", [
@@ -151,10 +153,7 @@ export const serializeLegos = ({
 
         const data = [...innerSerialized.map((x) => x.data), postloanData];
 
-        const msgValues = [
-          ...innerSerialized.map((x) => x.msgValue),
-          refundAmountWei,
-        ];
+        const msgValues = [...innerSerialized.map((x) => x.msgValue), msgValue];
 
         const proxyTargetData = ethers.utils.defaultAbiCoder.encode(
           ["tuple(address,address[],bytes[],uint256[])"],
@@ -175,7 +174,7 @@ export const serializeLegos = ({
         serialized.push({
           target: AaveFlashloanActions.address,
           data: flashloanSerialized,
-          msgValue: ethers.constants.Zero, // Zero amount wei as we're loaning from Aave
+          msgValue: ethers.constants.Zero,
         });
       }
 

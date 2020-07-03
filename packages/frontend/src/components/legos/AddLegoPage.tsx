@@ -1,4 +1,15 @@
-import { useTheme, Page, Text, Button, Spacer } from "@zeit-ui/react";
+import {
+  useTheme,
+  Page,
+  Text,
+  Button,
+  Spacer,
+  Toggle,
+  Spinner,
+  Link,
+  Loading,
+  Row,
+} from "@zeit-ui/react";
 
 import { randomId } from "../../utils/common";
 import { LegoType, default as useLego } from "../../containers/legos/useLegos";
@@ -7,6 +18,8 @@ import styled from "styled-components";
 import { AaveInputOptions } from "./aave/InputOptions";
 import { CompoundInputOptions } from "./compound/InputOptions";
 
+import useCompoundEntered from "../../containers/compound/useCompoundEntered";
+
 const MButton = styled(Button)`
   margin: 2.5px;
 `;
@@ -14,6 +27,13 @@ const MButton = styled(Button)`
 export default ({ visible, setVisible }) => {
   const theme = useTheme();
   const { appendLego, appendLegos } = useLego.useContainer();
+
+  const {
+    compoundEntered,
+    enterCompoundMarkets,
+    isCheckingCompoundEntered,
+    isEnteringCompoundMarkets,
+  } = useCompoundEntered.useContainer();
 
   const addToCompoundLego = (l: LegoType) => {
     appendLego({
@@ -26,20 +46,74 @@ export default ({ visible, setVisible }) => {
         },
       ],
     });
+    setVisible(false);
   };
 
   return (
-    <section
-      onClick={() => setVisible(false)}
-      className={visible ? "active" : ""}
-    >
+    <section className={visible ? "active" : ""}>
       <Page size="large">
-        <Text h2>Compound</Text>
+        <div style={{ float: "right", margin: "-25px 10px 0 0" }}>
+          <Button
+            onClick={() => {
+              setVisible(false);
+            }}
+            auto
+            type="secondary"
+            ghost
+          >
+            Close
+          </Button>
+        </div>
+
+        <Text h2>
+          Compound&nbsp;&nbsp;
+          {isCheckingCompoundEntered ? (
+            <Spinner style={{ display: "inline-block" }} />
+          ) : null}
+          {!isCheckingCompoundEntered && !compoundEntered ? (
+            <Toggle
+              checked={compoundEntered}
+              disabled={isEnteringCompoundMarkets}
+              onChange={(e) => {
+                // Enter markets
+                if (e.target.checked) {
+                  enterCompoundMarkets();
+                }
+              }}
+              size="large"
+            />
+          ) : null}
+        </Text>
+
+        {!isEnteringCompoundMarkets &&
+        !isCheckingCompoundEntered &&
+        !compoundEntered ? (
+          <Text type="secondary">
+            You need to{" "}
+            <Link
+              color
+              onClick={(e) => {
+                e.preventDefault();
+                enterCompoundMarkets();
+              }}
+              href="#"
+            >
+              enable
+            </Link>{" "}
+            Compound before you can use these lego pieces
+          </Text>
+        ) : null}
+        {isEnteringCompoundMarkets ? (
+          <Row style={{ padding: "10px 0", width: "50px" }}>
+            <Loading />
+          </Row>
+        ) : null}
 
         <MButton
           onClick={() => addToCompoundLego(LegoType.CompoundSupply)}
           auto
           type="secondary"
+          disabled={!compoundEntered}
         >
           Supply
         </MButton>
@@ -47,6 +121,7 @@ export default ({ visible, setVisible }) => {
           onClick={() => addToCompoundLego(LegoType.CompoundWithdraw)}
           auto
           type="secondary"
+          disabled={!compoundEntered}
         >
           Withdraw
         </MButton>
@@ -54,6 +129,7 @@ export default ({ visible, setVisible }) => {
           onClick={() => addToCompoundLego(LegoType.CompoundBorrow)}
           auto
           type="secondary"
+          disabled={!compoundEntered}
         >
           Borrow
         </MButton>
@@ -61,6 +137,7 @@ export default ({ visible, setVisible }) => {
           onClick={() => addToCompoundLego(LegoType.CompoundRepay)}
           auto
           type="secondary"
+          disabled={!compoundEntered}
         >
           Repay
         </MButton>
@@ -93,6 +170,7 @@ export default ({ visible, setVisible }) => {
                 ],
               },
             ]);
+            setVisible(false);
           }}
           auto
           type="secondary"
