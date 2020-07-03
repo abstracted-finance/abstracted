@@ -49,7 +49,7 @@ export default (props) => {
     <>
       <Row align="middle" justify="center">
         <Col span={3}>
-          <Icon.ArrowRight />
+          <Icon.LogOut />
         </Col>
         <Col span={13}>
           <Input
@@ -66,26 +66,6 @@ export default (props) => {
             options={inputOptions}
             onSelect={setSelectedOption}
             onSearch={searchHandler}
-          />
-        </Col>
-      </Row>
-      <Row align="middle" justify="center">
-        <Col span={3}>
-          <Icon.Package />
-        </Col>
-        <Col span={13}>
-          <Tooltip text={"Amount to repay"} style={{ width: "100%" }}>
-            <Input disabled placeholder="0" width="100%" />
-          </Tooltip>
-        </Col>
-        <Col span={8}>
-          <AutoComplete
-            disabled
-            initialValue={selectedOption}
-            width="100%"
-            options={inputOptions}
-            onSearch={searchHandler}
-            value={selectedOption}
           />
         </Col>
       </Row>

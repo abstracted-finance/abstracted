@@ -21,8 +21,9 @@ export default (props) => {
 
   let flashloanRefundAmount = "0";
   try {
+    const flashloanStartAmount = parseFloat(flashloanStartArgs.amount);
     flashloanRefundAmount = (
-      parseFloat(flashloanStartArgs.amount) * 1.0009
+      (isNaN(flashloanStartAmount) ? 0 : flashloanStartAmount) * 1.0009
     ).toFixed(2);
   } catch (e) {}
 
@@ -53,7 +54,7 @@ export default (props) => {
     <>
       <Row align="middle" justify="center">
         <Col span={3}>
-          <Icon.ArrowRight />
+          <Icon.LogOut />
         </Col>
         <Col span={13}>
           <Tooltip

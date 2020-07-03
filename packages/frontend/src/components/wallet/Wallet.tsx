@@ -23,6 +23,8 @@ import { RefreshIcon } from "../common/Icons";
 import { OperationType } from "../../utils/constants";
 import WithdrawDepositModal, { SelectedRow } from "./WithdrawDepositModal";
 
+import useLocalStorageState from "use-local-storage-state";
+
 export default () => {
   const { connect, signer, ethAddress } = useWeb3.useContainer();
   const { isCreatingProxy, createProxy, hasProxy } = useProxy.useContainer();
@@ -38,7 +40,10 @@ export default () => {
   });
   const { visible, setVisible, bindings } = useModal();
 
-  const [showZeroBal, setShowZeroBal] = useState(true);
+  const [showZeroBal, setShowZeroBal] = useLocalStorageState<boolean>(
+    "showZeroBal",
+    true
+  );
 
   const filteredBal = showZeroBal
     ? balances

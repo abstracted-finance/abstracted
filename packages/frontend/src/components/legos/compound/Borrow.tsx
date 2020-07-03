@@ -48,30 +48,7 @@ export default (props) => {
     <>
       <Row align="middle" justify="center">
         <Col span={3}>
-          <Icon.Package />
-        </Col>
-        <Col span={13}>
-          <Tooltip
-            text={"Available balance to borrow"}
-            style={{ width: "100%" }}
-          >
-            <Input disabled placeholder="0" width="100%" />
-          </Tooltip>
-        </Col>
-        <Col span={8}>
-          <AutoComplete
-            disabled
-            initialValue={selectedOption}
-            width="100%"
-            options={inputOptions}
-            onSearch={searchHandler}
-            value={selectedOption}
-          />
-        </Col>
-      </Row>
-      <Row align="middle" justify="center">
-        <Col span={3}>
-          <Icon.ArrowLeft />
+          <Icon.LogIn />
         </Col>
         <Col span={13}>
           <Input

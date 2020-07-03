@@ -237,10 +237,21 @@ export default () => {
               const data = parseResults.serialized.map((x) => x.data);
               const msgValues = parseResults.serialized.map((x) => x.msgValue);
 
-              const tx = await proxy.executes(targets, data, msgValues, {
-                gasLimit: 6000000,
-              });
-              await tx.wait();
+              try {
+                const tx = await proxy.executes(targets, data, msgValues, {
+                  gasLimit: 6000000,
+                });
+                await tx.wait();
+                setToast({
+                  text: "Transaction successful",
+                  type: "success",
+                });
+              } catch (e) {
+                setToast({
+                  text: "Transaction failed",
+                  type: "error",
+                });
+              }
             }}
             style={{ width: "100%" }}
             type="secondary"

@@ -22,15 +22,8 @@ export default (props) => {
 
   const { updateLego } = useLego.useContainer();
 
-  // Don't wanna get invalid pricing (due to async nature)
-  const [timeoutId, setTimeoutId] = useState(null);
-
-  // Are we retrieving the output price?
-  const [isRetrieving, setIsRetrieving] = useState(false);
-
   // Value of asset
   const [inputAmount, setInputAmount] = useState(legoArgs.amount);
-  const [outputAmount, setOutputAmount] = useState("0");
 
   // Asset type
   const [selectedOption, setSelectedOption] = useState(legoArgs.asset);
@@ -40,26 +33,7 @@ export default (props) => {
     setInputOptions
   );
 
-  // Just for convinience
-  const nominatedOutput = `c${selectedOption}`;
-
-  const updateOutputPrice = async () => {
-    setIsRetrieving(true);
-    clearTimeout(timeoutId);
-
-    setTimeoutId(
-      setTimeout(() => {
-        setIsRetrieving(false);
-        setOutputAmount(inputAmount);
-      }, 2000)
-    );
-  };
-
   useEffect(() => {
-    if (inputAmount === "0") return;
-
-    updateOutputPrice();
-
     const curLego = props.lego;
     updateLego({
       ...curLego,
@@ -78,10 +52,6 @@ export default (props) => {
         -{inputAmount} {selectedOption}
       </Text>
       <Spacer x={1} />
-
-      <Text type="secondary" small>
-        +{outputAmount} {nominatedOutput}
-      </Text>
     </CenterFlexDiv>
   );
 
@@ -89,7 +59,7 @@ export default (props) => {
     <>
       <Row align="middle" justify="center">
         <Col span={3}>
-          <Icon.ArrowRight />
+          <Icon.LogOut />
         </Col>
         <Col span={13}>
           <Input
@@ -109,38 +79,12 @@ export default (props) => {
           />
         </Col>
       </Row>
-      <Row align="middle" justify="center">
-        <Col span={3}>
-          <Icon.ArrowLeft />
-        </Col>
-        <Col span={13}>
-          <Tooltip
-            text={`Amount of ${nominatedOutput} you will receive`}
-            style={{ width: "100%" }}
-          >
-            <Input
-              value={isRetrieving ? "..." : outputAmount}
-              disabled
-              placeholder="0"
-              width="100%"
-            />
-          </Tooltip>
-        </Col>
-        <Col span={8}>
-          <AutoComplete
-            disabled
-            initialValue={nominatedOutput}
-            width="100%"
-            value={nominatedOutput}
-          />
-        </Col>
-      </Row>
     </>
   );
 
   return (
     <GenericLego
-      isLoading={isRetrieving}
+      isLoading={false}
       tagText="Supply"
       title="Compound"
       secondaryDisplay={secondaryDisplay}
