@@ -20,12 +20,20 @@ function useProxy() {
   const [proxyAddress, setProxyAddress] = useState(null);
 
   const hasProxy =
-    proxyAddress &&
-    proxyAddress !== ethers.constants.AddressZero;
+    proxyAddress && proxyAddress !== ethers.constants.AddressZero;
 
   // get proxy address
   const fetchProxyAddress = async () => {
-    const newProxyAddress = await ProxyFactory.proxies(ethAddress);
+    let newProxyAddress;
+    try {
+      newProxyAddress = await ProxyFactory.proxies(ethAddress);
+    } catch (e) {
+      setToasts({
+        text: "Unable to fetch contracts, are you on mainnet?",
+        type: "error",
+      });
+      return;
+    }
 
     if (newProxyAddress === proxyAddress) return;
 
