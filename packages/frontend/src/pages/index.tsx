@@ -1,5 +1,6 @@
 import Head from "next/head";
-import Main from "../components/main/Main";
+// import Main from "../components/main/Main";
+import Layout from "../components/layout";
 
 const Home = (props) => {
   return (
@@ -11,7 +12,7 @@ const Home = (props) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <Main {...props} />
+      <Layout meta={{ title: "Abstracted" }} {...props} />
     </>
   );
 };

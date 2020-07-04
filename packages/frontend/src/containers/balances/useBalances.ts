@@ -7,6 +7,8 @@ import useProxy from "../web3/useProxy";
 import useContracts from "../web3/useContracts";
 import useSettings from "../settings/useSettings";
 
+import useLocalStorageState from "use-local-storage-state";
+
 import {
   CoinGeckoIdMapping,
   AddressMapping,
@@ -42,7 +44,7 @@ function useBalances() {
   const { currency } = settings;
 
   const [isRetrievingBal, setIsRetrievingBal] = useState(false);
-  const [balances, setBalances] = useState(initialBalances);
+  const [balances, setBalances] = useLocalStorageState('balances', initialBalances);
 
   const getBalances = async () => {
     setIsRetrievingBal(true);

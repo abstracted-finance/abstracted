@@ -42,7 +42,7 @@ export default () => {
 
   const [showZeroBal, setShowZeroBal] = useLocalStorageState<boolean>(
     "showZeroBal",
-    true
+    false
   );
 
   const filteredBal = showZeroBal
@@ -235,6 +235,7 @@ export default () => {
           <Table.Column prop="depositOperation" label="Deposit" width={200} />
         </Table>
       </div>
+      <Button auto>Add</Button>
       <WithdrawDepositModal
         {...bindings}
         visible={visible}
