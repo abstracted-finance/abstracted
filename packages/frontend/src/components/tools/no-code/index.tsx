@@ -7,6 +7,7 @@ import {
   Col,
   Spacer,
   Note,
+  Text,
   useModal,
 } from '@zeit-ui/react'
 
@@ -139,126 +140,122 @@ export default () => {
 
   return (
     <>
-      <Row justify="center">
-        <Col span={24} style={{ maxWidth: '500px' }}>
-          <Row gap={0.8}>
-            <Col span={12}>
-              <Button
-                onClick={() => setImportModalVisible(true)}
-                type="secondary"
-                auto
-                style={{ width: '100%' }}
-              >
-                Import
-              </Button>
-            </Col>
-            <Col span={12}>
-              <Button
-                onClick={() => setExportModalVisible(true)}
-                type="secondary"
-                auto
-                style={{ width: '100%' }}
-              >
-                Export
-              </Button>
-            </Col>
-          </Row>
-          <Spacer y={1} />
+      <Text h3>No Code</Text>
+      <Text type="secondary" size={14}>
+        Build and share DeFi combinations!
+      </Text>
+      <Spacer y={1} />
 
-          {legos.length === 0 ? (
-            <Note label={false}>
-              Click on the add button below to get started!
-            </Note>
-          ) : (
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {legos.map((lego, index) => (
-                      <Draggable
-                        key={lego.id}
-                        draggableId={lego.id}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            // snapshot.isDragging to get isDragging
-                            style={{
-                              // some basic styles to make the items look a bit nicer
-                              userSelect: 'none',
-                              margin: '0 0 8px 0',
-
-                              // styles we need to apply on draggables
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            {getLegoComponent(lego)}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          )}
-
-          <Spacer y={1} />
+      <Row gap={0.8}>
+        <Col span={12}>
           <Button
-            onClick={() => setAddPageVisible(true)}
-            style={{ width: '100%' }}
+            onClick={() => setImportModalVisible(true)}
             type="secondary"
+            auto
+            style={{ width: '100%' }}
           >
-            Add
+            Import
           </Button>
-          <Spacer y={1} />
+        </Col>
+        <Col span={12}>
           <Button
-            onClick={async () => {
-              const parseResults = parseLegos({
-                legos,
-                userProxy: proxyAddress,
-              })
-
-              if (!parseResults.valid) {
-                setToast({
-                  text:
-                    'Invalid lego configuration (likely flashloan overlapping one another)',
-                  type: 'error',
-                })
-                return
-              }
-
-              const targets = parseResults.serialized.map((x) => x.target)
-              const data = parseResults.serialized.map((x) => x.data)
-              const msgValues = parseResults.serialized.map((x) => x.msgValue)
-
-              try {
-                const tx = await proxy.executes(targets, data, msgValues, {
-                  gasLimit: 6000000,
-                })
-                await tx.wait()
-                setToast({
-                  text: 'Transaction successful',
-                  type: 'success',
-                })
-              } catch (e) {
-                setToast({
-                  text: 'Transaction failed',
-                  type: 'error',
-                })
-              }
-            }}
-            style={{ width: '100%' }}
+            onClick={() => setExportModalVisible(true)}
             type="secondary"
+            auto
+            style={{ width: '100%' }}
           >
-            Execute
+            Export
           </Button>
         </Col>
       </Row>
+      <Spacer y={1} />
+
+      {legos.length === 0 ? (
+        <Note label={false}>Click on the add button below to get started!</Note>
+      ) : (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided, snapshot) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {legos.map((lego, index) => (
+                  <Draggable key={lego.id} draggableId={lego.id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        // snapshot.isDragging to get isDragging
+                        style={{
+                          // some basic styles to make the items look a bit nicer
+                          userSelect: 'none',
+                          margin: '0 0 8px 0',
+
+                          // styles we need to apply on draggables
+                          ...provided.draggableProps.style,
+                        }}
+                      >
+                        {getLegoComponent(lego)}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
+
+      <Spacer y={1} />
+      <Button
+        onClick={() => setAddPageVisible(true)}
+        style={{ width: '100%' }}
+        type="secondary"
+      >
+        Add
+      </Button>
+      <Spacer y={1} />
+      <Button
+        onClick={async () => {
+          const parseResults = parseLegos({
+            legos,
+            userProxy: proxyAddress,
+          })
+
+          if (!parseResults.valid) {
+            setToast({
+              text:
+                'Invalid lego configuration (likely flashloan overlapping one another)',
+              type: 'error',
+            })
+            return
+          }
+
+          const targets = parseResults.serialized.map((x) => x.target)
+          const data = parseResults.serialized.map((x) => x.data)
+          const msgValues = parseResults.serialized.map((x) => x.msgValue)
+
+          try {
+            const tx = await proxy.executes(targets, data, msgValues, {
+              gasLimit: 6000000,
+            })
+            await tx.wait()
+            setToast({
+              text: 'Transaction successful',
+              type: 'success',
+            })
+          } catch (e) {
+            setToast({
+              text: 'Transaction failed',
+              type: 'error',
+            })
+          }
+        }}
+        style={{ width: '100%' }}
+        type="secondary"
+      >
+        Execute
+      </Button>
 
       <AddLegoPage visible={addPageVisible} setVisible={setAddPageVisible} />
       <ImportModal
