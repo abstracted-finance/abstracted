@@ -1,33 +1,33 @@
-import { useToasts, Modal, Textarea } from "@zeit-ui/react";
+import { useToasts, Modal, Textarea } from '@zeit-ui/react'
 
-import useLegos from "../../containers/legos/use-legos";
-import { useState } from "react";
+import useLegos from '../../containers/legos/use-legos'
+import { useState } from 'react'
 
 export default (props) => {
-  const { setVisible } = props;
-  const [, setToasts] = useToasts();
-  const { setLegos } = useLegos.useContainer();
-  const [legoConfig, setLegoConfig] = useState("");
+  const { setVisible } = props
+  const [, setToasts] = useToasts()
+  const { setLegos } = useLegos.useContainer()
+  const [legoConfig, setLegoConfig] = useState('')
 
   const importLegoConfig = () => {
-    let legoJsonConfig;
+    let legoJsonConfig
     try {
-      legoJsonConfig = JSON.parse(legoConfig);
+      legoJsonConfig = JSON.parse(legoConfig)
     } catch (e) {
-      setVisible(false);
+      setVisible(false)
       setToasts({
-        text: "Failed to parse config",
-        type: "error",
-      });
-      return;
+        text: 'Failed to parse config',
+        type: 'error',
+      })
+      return
     }
-    setLegos(legoJsonConfig);
-    setVisible(false);
+    setLegos(legoJsonConfig)
+    setVisible(false)
     setToasts({
-      text: "Successfully loaded lego config",
-      type: "success",
-    });
-  };
+      text: 'Successfully loaded lego config',
+      type: 'success',
+    })
+  }
 
   return (
     <Modal width="40rem" {...props}>
@@ -46,5 +46,5 @@ export default (props) => {
       </Modal.Action>
       <Modal.Action onClick={importLegoConfig}>Import</Modal.Action>
     </Modal>
-  );
-};
+  )
+}

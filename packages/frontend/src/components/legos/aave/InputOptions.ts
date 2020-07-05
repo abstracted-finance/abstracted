@@ -1,4 +1,4 @@
-import { Assets } from "../../../utils/constants";
+import { Assets } from '../../../utils/constants'
 
 export const AaveInputOptions = [
   { label: Assets.ETH, value: Assets.ETH },
@@ -18,4 +18,4 @@ export const AaveInputOptions = [
   { label: Assets.WBTC, value: Assets.WBTC },
   { label: Assets.ZRX, value: Assets.ZRX },
   { label: Assets.DAI, value: Assets.DAI },
-];
+]

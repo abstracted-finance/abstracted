@@ -1,17 +1,17 @@
 import Head from 'next/head'
-import { AppProps } from "next/app";
+import { AppProps } from 'next/app'
 import { useState, useEffect } from 'react'
-import { CssBaseline, ZeitProvider, useTheme } from "@zeit-ui/react";
+import { CssBaseline, ZeitProvider, useTheme } from '@zeit-ui/react'
 
-import AppContextContainer from "../containers/settings/use-app-context";
-import WithdrawContainer from "../containers/balances/use-withdraw";
-import CompoundEnteredContainer from "../containers/compound/use-compound-entered";
-import SettingsContainer from "../containers/settings/use-settings";
-import BalancesContainer from "../containers/balances/use-balances";
-import ContractsContainer from "../containers/web3/use-contracts";
-import ProxyContainer from "../containers/web3/use-proxy";
-import Web3Container from "../containers/web3/use-web3";
-import LegoContainer from "../containers/legos/use-legos";
+import AppContextContainer from '../containers/settings/use-app-context'
+import WithdrawContainer from '../containers/balances/use-withdraw'
+import CompoundEnteredContainer from '../containers/compound/use-compound-entered'
+import SettingsContainer from '../containers/settings/use-settings'
+import BalancesContainer from '../containers/balances/use-balances'
+import ContractsContainer from '../containers/web3/use-contracts'
+import ProxyContainer from '../containers/web3/use-proxy'
+import Web3Container from '../containers/web3/use-web3'
+import LegoContainer from '../containers/legos/use-legos'
 
 import Menu from '../components/menu'
 
@@ -50,9 +50,7 @@ function App({ Component, pageProps }: AppProps) {
                             <title>Abstracted</title>
                           </Head>
                           <Menu />
-                          <Component
-                            {...pageProps}
-                          />
+                          <Component {...pageProps} />
                         </LegoContainer.Provider>
                       </WithdrawContainer.Provider>
                     </BalancesContainer.Provider>
@@ -64,7 +62,7 @@ function App({ Component, pageProps }: AppProps) {
         </AppContextContainer.Provider>
       </CssBaseline>
     </ZeitProvider>
-  );
+  )
 }
 
-export default App;
+export default App

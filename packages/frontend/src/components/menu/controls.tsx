@@ -1,15 +1,15 @@
-import React, { useMemo } from "react";
-import { Button, Spacer, useTheme } from "@zeit-ui/react";
-import MoonIcon from "@zeit-ui/react-icons/moon";
-import SunIcon from "@zeit-ui/react-icons/sun";
+import React, { useMemo } from 'react'
+import { Button, Spacer, useTheme } from '@zeit-ui/react'
+import MoonIcon from '@zeit-ui/react-icons/moon'
+import SunIcon from '@zeit-ui/react-icons/sun'
 
-import ConnectWeb3 from './buttons/connect-web3'
-import useAppContext from "../containers/settings/use-app-context";
+import ConnectWeb3 from '../buttons/connect-web3'
+import useAppContext from '../../containers/settings/use-app-context'
 
 export default () => {
-  const theme = useTheme();
-  const { themeChangeHandler } = useAppContext.useContainer();
-  const isDark = useMemo(() => theme.type === "dark", [theme.type]);
+  const theme = useTheme()
+  const { themeChangeHandler } = useAppContext.useContainer()
+  const isDark = useMemo(() => theme.type === 'dark', [theme.type])
   const switchThemes = (type: 'dark' | 'light') => {
     themeChangeHandler({ type })
     if (typeof window === 'undefined' || !window.localStorage) return
@@ -21,12 +21,11 @@ export default () => {
       <div className="tools">
         <ConnectWeb3 />
         <Spacer x={1} />
-        <span className="theme-toggler" onClick={() => switchThemes(isDark ? 'light' : 'dark')}>
-          {
-            isDark ?
-              <MoonIcon size={14} /> :
-              <SunIcon size={14} />
-          }
+        <span
+          className="theme-toggler"
+          onClick={() => switchThemes(isDark ? 'light' : 'dark')}
+        >
+          {isDark ? <MoonIcon size={14} /> : <SunIcon size={14} />}
         </span>
       </div>
       <style jsx>{`
@@ -68,5 +67,5 @@ export default () => {
         }
       `}</style>
     </div>
-  );
+  )
 }

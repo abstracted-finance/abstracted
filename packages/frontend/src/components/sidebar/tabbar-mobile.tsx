@@ -1,18 +1,18 @@
-import React from "react";
-import { Button, useTheme } from "@zeit-ui/react";
+import React from 'react'
+import { Button, useTheme } from '@zeit-ui/react'
 
 import ConnectWeb3 from '../buttons/connect-web3'
 import MenuIcon from '@zeit-ui/react-icons/menu'
 
 interface Props {
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export default ({ onClick }: Props) => {
-  const theme = useTheme();
+  const theme = useTheme()
   const handler = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onClick && onClick(event);
-  };
+    onClick && onClick(event)
+  }
 
   return (
     <div className="tabbar">
@@ -59,5 +59,5 @@ export default ({ onClick }: Props) => {
         }
       `}</style>
     </div>
-  );
-};
+  )
+}

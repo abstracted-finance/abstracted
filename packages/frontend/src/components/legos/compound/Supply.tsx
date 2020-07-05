@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 import {
   Row,
   Col,
@@ -7,34 +7,34 @@ import {
   AutoComplete,
   Spacer,
   Tooltip,
-} from "@zeit-ui/react";
-import * as Icon from "@zeit-ui/react-icons";
+} from '@zeit-ui/react'
+import * as Icon from '@zeit-ui/react-icons'
 
-import useLego from "../../../containers/legos/use-legos";
-import { CenterFlexDiv } from "../../common/Divs";
-import GenericLego from "../GenericLego";
-import { CompoundInputOptions } from "./InputOptions";
+import useLego from '../../../containers/legos/use-legos'
+import { CenterFlexDiv } from '../../common/Divs'
+import GenericLego from '../GenericLego'
+import { CompoundInputOptions } from './InputOptions'
 
-import { partialSearchHandler } from "../../../utils/search";
+import { partialSearchHandler } from '../../../utils/search'
 
 export default (props) => {
-  const legoArgs = props.lego.args[0];
+  const legoArgs = props.lego.args[0]
 
-  const { updateLego } = useLego.useContainer();
+  const { updateLego } = useLego.useContainer()
 
   // Value of asset
-  const [inputAmount, setInputAmount] = useState(legoArgs.amount);
+  const [inputAmount, setInputAmount] = useState(legoArgs.amount)
 
   // Asset type
-  const [selectedOption, setSelectedOption] = useState(legoArgs.asset);
-  const [inputOptions, setInputOptions] = useState(CompoundInputOptions);
+  const [selectedOption, setSelectedOption] = useState(legoArgs.asset)
+  const [inputOptions, setInputOptions] = useState(CompoundInputOptions)
   const searchHandler = partialSearchHandler(
     CompoundInputOptions,
     setInputOptions
-  );
+  )
 
   useEffect(() => {
-    const curLego = props.lego;
+    const curLego = props.lego
     updateLego({
       ...curLego,
       args: [
@@ -43,8 +43,8 @@ export default (props) => {
           amount: inputAmount,
         },
       ],
-    });
-  }, [inputAmount, selectedOption]);
+    })
+  }, [inputAmount, selectedOption])
 
   const secondaryDisplay = (
     <CenterFlexDiv>
@@ -53,7 +53,7 @@ export default (props) => {
       </Text>
       <Spacer x={1} />
     </CenterFlexDiv>
-  );
+  )
 
   const primaryDisplay = (
     <>
@@ -80,7 +80,7 @@ export default (props) => {
         </Col>
       </Row>
     </>
-  );
+  )
 
   return (
     <GenericLego
@@ -91,5 +91,5 @@ export default (props) => {
       primaryDisplay={primaryDisplay}
       {...props}
     />
-  );
-};
+  )
+}

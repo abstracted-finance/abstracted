@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Card, Tag, Text, Spacer, Row, Col, Spinner } from "@zeit-ui/react";
-import { XIcon, ChevronUpIcon, ChevronDownIcon } from "../common/Icons";
-import useLego from "../../containers/legos/use-legos";
+import { useState } from 'react'
+import { Card, Tag, Text, Spacer, Row, Col, Spinner } from '@zeit-ui/react'
+import { XIcon, ChevronUpIcon, ChevronDownIcon } from '../common/Icons'
+import useLego from '../../containers/legos/use-legos'
 
 export default ({
   tagText,
@@ -11,8 +11,8 @@ export default ({
   isLoading,
   lego,
 }) => {
-  const { legos, setLegos, removeLego } = useLego.useContainer();
-  const [showSettings, setShowSettings] = useState(true);
+  const { legos, setLegos, removeLego } = useLego.useContainer()
+  const [showSettings, setShowSettings] = useState(true)
 
   return (
     <Card width="100%">
@@ -28,15 +28,15 @@ export default ({
         </Col>
         <Col span={3}>{isLoading ? <Spinner /> : null}</Col>
         <Col span={1}>
-          <div style={{ float: "right" }}>
+          <div style={{ float: 'right' }}>
             <XIcon
               onClick={() => {
                 // Remove start and end of flashloan
-                if (lego.id.startsWith("flashloan")) {
-                  const id = lego.id.split("-").slice(-1)[0];
-                  setLegos(legos.filter((x) => !x.id.includes(id)));
+                if (lego.id.startsWith('flashloan')) {
+                  const id = lego.id.split('-').slice(-1)[0]
+                  setLegos(legos.filter((x) => !x.id.includes(id)))
                 } else {
-                  removeLego(lego);
+                  removeLego(lego)
                 }
               }}
               size={18}
@@ -50,7 +50,7 @@ export default ({
           {!showSettings ? secondaryDisplay : null}
         </Col>
         <Col span={1}>
-          <div style={{ float: "right", marginTop: "15px" }}>
+          <div style={{ float: 'right', marginTop: '15px' }}>
             {showSettings ? (
               <ChevronUpIcon onClick={() => setShowSettings(!showSettings)} />
             ) : (
@@ -62,5 +62,5 @@ export default ({
 
       {showSettings ? primaryDisplay : null}
     </Card>
-  );
-};
+  )
+}

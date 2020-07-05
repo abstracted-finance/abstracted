@@ -1,4 +1,4 @@
-import { Assets } from "../../../utils/constants";
+import { Assets } from '../../../utils/constants'
 
 export const CompoundInputOptions = [
   { label: Assets.ETH, value: Assets.ETH },
@@ -9,4 +9,4 @@ export const CompoundInputOptions = [
   { label: Assets.WBTC, value: Assets.WBTC },
   { label: Assets.REP, value: Assets.REP },
   { label: Assets.ZRX, value: Assets.ZRX },
-];
+]

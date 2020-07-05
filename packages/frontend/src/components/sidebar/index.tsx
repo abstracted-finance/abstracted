@@ -1,41 +1,41 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import Router from "next/router";
-import { useTheme, Spacer } from "@zeit-ui/react";
-import SideItem, { Sides } from "./side-item";
-import Metadata from "../data";
-import useAppContext from "../../containers/settings/use-app-context";
+import React, { useEffect, useMemo, useRef } from 'react'
+import Router from 'next/router'
+import { useTheme, Spacer } from '@zeit-ui/react'
+import SideItem, { Sides } from './side-item'
+import Metadata from '../data'
+import useAppContext from '../../containers/settings/use-app-context'
 
 export interface Props {}
 
-export type SideChildren = Sides | Array<Sides>;
+export type SideChildren = Sides | Array<Sides>
 
 export const SideGroup: React.FC<{ sides?: SideChildren }> = React.memo(
   ({ sides }) => {
-    if (!sides) return null;
-    sides = Array.isArray(sides) ? sides : [sides];
+    if (!sides) return null
+    sides = Array.isArray(sides) ? sides : [sides]
     return (
       <SideItem sides={sides}>
         <SideGroup />
       </SideItem>
-    );
+    )
   }
-);
+)
 
 export const Sidebar: React.FC<Props> = React.memo(() => {
-  const theme = useTheme();
-  const boxRef = useRef<HTMLDivElement>(null);
-  const { locale, tabbar } = useAppContext.useContainer();
+  const theme = useTheme()
+  const boxRef = useRef<HTMLDivElement>(null)
+  const { locale, tabbar } = useAppContext.useContainer()
 
   const tabbarData = useMemo(() => {
     const allSlides = Metadata[locale]
-    const currentSide = allSlides.filter((side) => side.name === tabbar)[0];
-    return (currentSide.children || []) as Array<Sides>;
-  }, [locale, tabbar]);
+    const currentSide = allSlides.filter((side) => side.name === tabbar)[0]
+    return (currentSide.children || []) as Array<Sides>
+  }, [locale, tabbar])
 
   useEffect(() => {
-    if (!boxRef.current) return;
-    boxRef.current.scrollTo({ top: 0 });
-  }, [boxRef.current]);
+    if (!boxRef.current) return
+    boxRef.current.scrollTo({ top: 0 })
+  }, [boxRef.current])
 
   return (
     <div ref={boxRef} className="sides box">
@@ -72,7 +72,7 @@ export const Sidebar: React.FC<Props> = React.memo(() => {
         }
       `}</style>
     </div>
-  );
-});
+  )
+})
 
-export default Sidebar;
+export default Sidebar

@@ -1,34 +1,34 @@
-import { useEffect } from "react";
-import { Row, Col, Text, Input, AutoComplete, Tooltip } from "@zeit-ui/react";
-import * as Icon from "@zeit-ui/react-icons";
+import { useEffect } from 'react'
+import { Row, Col, Text, Input, AutoComplete, Tooltip } from '@zeit-ui/react'
+import * as Icon from '@zeit-ui/react-icons'
 
-import { CenterFlexDiv } from "../../common/Divs";
-import GenericLego from "../GenericLego";
-import useLego from "../../../containers/legos/use-legos";
-import { AaveInputOptions } from "./InputOptions";
+import { CenterFlexDiv } from '../../common/Divs'
+import GenericLego from '../GenericLego'
+import useLego from '../../../containers/legos/use-legos'
+import { AaveInputOptions } from './InputOptions'
 
-import { partialSearchHandler } from "../../../utils/search";
+import { partialSearchHandler } from '../../../utils/search'
 
 export default (props) => {
-  const { updateLego, legos } = useLego.useContainer();
+  const { updateLego, legos } = useLego.useContainer()
 
   // Get flashloan start props
-  const legoIdClean = props.lego.id.replace("flashloan-end-", "");
+  const legoIdClean = props.lego.id.replace('flashloan-end-', '')
   const flashloanStartLego = legos.filter((x) =>
     x.id.includes(`flashloan-start-${legoIdClean}`)
-  )[0];
-  const flashloanStartArgs = flashloanStartLego.args[0];
+  )[0]
+  const flashloanStartArgs = flashloanStartLego.args[0]
 
-  let flashloanRefundAmount = "0";
+  let flashloanRefundAmount = '0'
   try {
-    const flashloanStartAmount = parseFloat(flashloanStartArgs.amount);
+    const flashloanStartAmount = parseFloat(flashloanStartArgs.amount)
     flashloanRefundAmount = (
       (isNaN(flashloanStartAmount) ? 0 : flashloanStartAmount) * 1.0009
-    ).toFixed(2);
+    ).toFixed(2)
   } catch (e) {}
 
   useEffect(() => {
-    const curLego = props.lego;
+    const curLego = props.lego
     updateLego({
       ...curLego,
       args: [
@@ -37,18 +37,18 @@ export default (props) => {
           amount: flashloanRefundAmount,
         },
       ],
-    });
-  }, [flashloanStartArgs.assets, flashloanStartArgs.amount]);
+    })
+  }, [flashloanStartArgs.assets, flashloanStartArgs.amount])
 
   const secondaryDisplay = (
     <CenterFlexDiv>
-      <Tooltip text={"Incurs a 0.09% fee"}>
+      <Tooltip text={'Incurs a 0.09% fee'}>
         <Text type="secondary" small>
           -{flashloanRefundAmount} {flashloanStartArgs.asset}
         </Text>
       </Tooltip>
     </CenterFlexDiv>
-  );
+  )
 
   const primaryDisplay = (
     <>
@@ -58,8 +58,8 @@ export default (props) => {
         </Col>
         <Col span={13}>
           <Tooltip
-            text={"Amount to refund (+0.09% fee)"}
-            style={{ width: "100%" }}
+            text={'Amount to refund (+0.09% fee)'}
+            style={{ width: '100%' }}
           >
             <Input
               value={`${flashloanRefundAmount}`}
@@ -78,7 +78,7 @@ export default (props) => {
         </Col>
       </Row>
     </>
-  );
+  )
 
   return (
     <GenericLego
@@ -88,5 +88,5 @@ export default (props) => {
       primaryDisplay={primaryDisplay}
       {...props}
     />
-  );
-};
+  )
+}

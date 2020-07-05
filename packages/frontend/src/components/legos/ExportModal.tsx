@@ -1,13 +1,13 @@
-import { Modal, Textarea, useClipboard, useToasts } from "@zeit-ui/react";
+import { Modal, Textarea, useClipboard, useToasts } from '@zeit-ui/react'
 
-import useLegos from "../../containers/legos/use-legos";
+import useLegos from '../../containers/legos/use-legos'
 
 export default (props) => {
-  const [, setToasts] = useToasts();
-  const { copy } = useClipboard();
-  const { legos } = useLegos.useContainer();
+  const [, setToasts] = useToasts()
+  const { copy } = useClipboard()
+  const { legos } = useLegos.useContainer()
 
-  const legoConfig = JSON.stringify(legos, null, 4);
+  const legoConfig = JSON.stringify(legos, null, 4)
 
   return (
     <Modal width="40rem" {...props}>
@@ -23,14 +23,14 @@ export default (props) => {
       </Modal.Content>
       <Modal.Action
         onClick={() => {
-          copy(legoConfig);
+          copy(legoConfig)
           setToasts({
-            text: "Lego configuration copied!",
-          });
+            text: 'Lego configuration copied!',
+          })
         }}
       >
         Copy
       </Modal.Action>
     </Modal>
-  );
-};
+  )
+}

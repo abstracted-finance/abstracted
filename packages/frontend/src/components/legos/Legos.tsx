@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import React, { useState } from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import {
   useToasts,
   Button,
@@ -9,100 +9,100 @@ import {
   Note,
   useModal,
   Card,
-} from "@zeit-ui/react";
+} from '@zeit-ui/react'
 
-import CompoundSupply from "./compound/Supply";
-import CompoundWithdraw from "./compound/Withdraw";
-import CompoundBorrow from "./compound/Borrow";
-import CompoundRepay from "./compound/Repay";
+import CompoundSupply from './compound/Supply'
+import CompoundWithdraw from './compound/Withdraw'
+import CompoundBorrow from './compound/Borrow'
+import CompoundRepay from './compound/Repay'
 
-import AaveFlashloanStart from "./aave/FlashloanStart";
-import AaveFlashloanEnd from "./aave/FlashloanEnd";
+import AaveFlashloanStart from './aave/FlashloanStart'
+import AaveFlashloanEnd from './aave/FlashloanEnd'
 
-import AddLegoPage from "./AddLegoPage";
-import GenericLego from "./GenericLego";
+import AddLegoPage from './AddLegoPage'
+import GenericLego from './GenericLego'
 
-import ImportModal from "./ImportModal";
-import ExportModal from "./ExportModal";
+import ImportModal from './ImportModal'
+import ExportModal from './ExportModal'
 
 import {
   Lego,
   LegoType,
   default as useLego,
-} from "../../containers/legos/use-legos";
-import useProxy from "../../containers/web3/use-proxy";
+} from '../../containers/legos/use-legos'
+import useProxy from '../../containers/web3/use-proxy'
 
-import { parseLegos } from "../../utils/legos";
+import { parseLegos } from '../../utils/legos'
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+  const result = Array.from(list)
+  const [removed] = result.splice(startIndex, 1)
+  result.splice(endIndex, 0, removed)
 
-  return result;
-};
+  return result
+}
 
 export default () => {
-  const [, setToast] = useToasts();
-  const { legos, setLegos } = useLego.useContainer();
-  const { proxy, proxyAddress } = useProxy.useContainer();
+  const [, setToast] = useToasts()
+  const { legos, setLegos } = useLego.useContainer()
+  const { proxy, proxyAddress } = useProxy.useContainer()
 
   const {
     visible: importModalVisible,
     setVisible: setImportModalVisible,
     bindings: importModalBindings,
-  } = useModal();
+  } = useModal()
   const {
     visible: exportModalVisible,
     setVisible: setExportModalVisible,
     bindings: exportModalBindings,
-  } = useModal();
-  const [addPageVisible, setAddPageVisible] = useState(false);
+  } = useModal()
+  const [addPageVisible, setAddPageVisible] = useState(false)
 
   const onDragEnd = (result) => {
     // Dropped outside the list
     if (!result.destination) {
-      return;
+      return
     }
 
-    const curLego = legos[result.source.index];
+    const curLego = legos[result.source.index]
 
     // Flashloan start cannot be after flashloan end
-    if (curLego.id.startsWith("flashloan-start")) {
+    if (curLego.id.startsWith('flashloan-start')) {
       const flashloanEndId = `flashloan-end-${curLego.id.replace(
-        "flashloan-start-",
-        ""
-      )}`;
+        'flashloan-start-',
+        ''
+      )}`
 
-      const flashloanEndIndex = legos.findIndex((x) => x.id === flashloanEndId);
+      const flashloanEndIndex = legos.findIndex((x) => x.id === flashloanEndId)
 
       if (result.destination.index >= flashloanEndIndex) {
         setToast({
-          text: "Flashloan start cannot be after flashloan end",
-          type: "error",
-        });
-        return;
+          text: 'Flashloan start cannot be after flashloan end',
+          type: 'error',
+        })
+        return
       }
     }
 
     // Flashloan end cannot be before flashloan start
-    if (curLego.id.startsWith("flashloan-end")) {
+    if (curLego.id.startsWith('flashloan-end')) {
       const flashloanStartId = `flashloan-start-${curLego.id.replace(
-        "flashloan-end-",
-        ""
-      )}`;
+        'flashloan-end-',
+        ''
+      )}`
 
       const flashloanStartIndex = legos.findIndex(
         (x) => x.id === flashloanStartId
-      );
+      )
 
       if (result.destination.index <= flashloanStartIndex) {
         setToast({
-          text: "Flashloan end cannot be before flashloan start",
-          type: "error",
-        });
-        return;
+          text: 'Flashloan end cannot be before flashloan start',
+          type: 'error',
+        })
+        return
       }
     }
 
@@ -110,10 +110,10 @@ export default () => {
       legos,
       result.source.index,
       result.destination.index
-    );
+    )
 
-    setLegos(newItems);
-  };
+    setLegos(newItems)
+  }
 
   const LegoComponentMapping = {
     [LegoType.CompoundBorrow]: <CompoundBorrow />,
@@ -122,7 +122,7 @@ export default () => {
     [LegoType.CompoundWithdraw]: <CompoundWithdraw />,
     [LegoType.AaveFlashloanStart]: <AaveFlashloanStart />,
     [LegoType.AaveFlashloanEnd]: <AaveFlashloanEnd />,
-  };
+  }
 
   const getLegoComponent = (lego: Lego) => {
     const lc = LegoComponentMapping[lego.type] || (
@@ -134,21 +134,21 @@ export default () => {
         isLoading={false}
         lego={{}}
       />
-    );
-    return React.cloneElement(lc, { lego });
-  };
+    )
+    return React.cloneElement(lc, { lego })
+  }
 
   return (
     <>
       <Row justify="center">
-        <Col span={24} style={{ maxWidth: "500px" }}>
+        <Col span={24} style={{ maxWidth: '500px' }}>
           <Row gap={0.8}>
             <Col span={12}>
               <Button
                 onClick={() => setImportModalVisible(true)}
                 type="secondary"
                 auto
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
               >
                 Import
               </Button>
@@ -158,7 +158,7 @@ export default () => {
                 onClick={() => setExportModalVisible(true)}
                 type="secondary"
                 auto
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
               >
                 Export
               </Button>
@@ -189,8 +189,8 @@ export default () => {
                             // snapshot.isDragging to get isDragging
                             style={{
                               // some basic styles to make the items look a bit nicer
-                              userSelect: "none",
-                              margin: "0 0 8px 0",
+                              userSelect: 'none',
+                              margin: '0 0 8px 0',
 
                               // styles we need to apply on draggables
                               ...provided.draggableProps.style,
@@ -211,7 +211,7 @@ export default () => {
           <Spacer y={1} />
           <Button
             onClick={() => setAddPageVisible(true)}
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             type="secondary"
           >
             Add
@@ -222,38 +222,38 @@ export default () => {
               const parseResults = parseLegos({
                 legos,
                 userProxy: proxyAddress,
-              });
+              })
 
               if (!parseResults.valid) {
                 setToast({
                   text:
-                    "Invalid lego configuration (likely flashloan overlapping one another)",
-                  type: "error",
-                });
-                return;
+                    'Invalid lego configuration (likely flashloan overlapping one another)',
+                  type: 'error',
+                })
+                return
               }
 
-              const targets = parseResults.serialized.map((x) => x.target);
-              const data = parseResults.serialized.map((x) => x.data);
-              const msgValues = parseResults.serialized.map((x) => x.msgValue);
+              const targets = parseResults.serialized.map((x) => x.target)
+              const data = parseResults.serialized.map((x) => x.data)
+              const msgValues = parseResults.serialized.map((x) => x.msgValue)
 
               try {
                 const tx = await proxy.executes(targets, data, msgValues, {
                   gasLimit: 6000000,
-                });
-                await tx.wait();
+                })
+                await tx.wait()
                 setToast({
-                  text: "Transaction successful",
-                  type: "success",
-                });
+                  text: 'Transaction successful',
+                  type: 'success',
+                })
               } catch (e) {
                 setToast({
-                  text: "Transaction failed",
-                  type: "error",
-                });
+                  text: 'Transaction failed',
+                  type: 'error',
+                })
               }
             }}
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             type="secondary"
           >
             Execute
@@ -268,5 +268,5 @@ export default () => {
       />
       <ExportModal {...exportModalBindings} />
     </>
-  );
-};
+  )
+}

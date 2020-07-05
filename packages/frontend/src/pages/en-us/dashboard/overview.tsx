@@ -1,10 +1,11 @@
-import Layout from "../../../components/layout";
+import Overview from '../../../components/dashboard/overview'
 
-export default (props) => {
-    return (
-        <>
-            <Layout meta={{ title: "Abstracted" }} {...props} />
-        </>
-    );
-};
+import Layout from '../../../components/layout'
 
+export default () => {
+  return (
+    <Layout meta={{ title: 'Overview' }}>
+      <Overview />
+    </Layout>
+  )
+}

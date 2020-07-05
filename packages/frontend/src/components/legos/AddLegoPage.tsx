@@ -9,31 +9,31 @@ import {
   Link,
   Loading,
   Row,
-} from "@zeit-ui/react";
+} from '@zeit-ui/react'
 
-import { randomId } from "../../utils/common";
-import { LegoType, default as useLego } from "../../containers/legos/use-legos";
-import styled from "styled-components";
+import { randomId } from '../../utils/common'
+import { LegoType, default as useLego } from '../../containers/legos/use-legos'
+import styled from 'styled-components'
 
-import { AaveInputOptions } from "./aave/InputOptions";
-import { CompoundInputOptions } from "./compound/InputOptions";
+import { AaveInputOptions } from './aave/InputOptions'
+import { CompoundInputOptions } from './compound/InputOptions'
 
-import useCompoundEntered from "../../containers/compound/use-compound-entered";
+import useCompoundEntered from '../../containers/compound/use-compound-entered'
 
 const MButton = styled(Button)`
   margin: 2.5px;
-`;
+`
 
 export default ({ visible, setVisible }) => {
-  const theme = useTheme();
-  const { appendLego, appendLegos } = useLego.useContainer();
+  const theme = useTheme()
+  const { appendLego, appendLegos } = useLego.useContainer()
 
   const {
     compoundEntered,
     enterCompoundMarkets,
     isCheckingCompoundEntered,
     isEnteringCompoundMarkets,
-  } = useCompoundEntered.useContainer();
+  } = useCompoundEntered.useContainer()
 
   const addToCompoundLego = (l: LegoType) => {
     appendLego({
@@ -42,20 +42,20 @@ export default ({ visible, setVisible }) => {
       args: [
         {
           asset: CompoundInputOptions[0].value,
-          amount: "0",
+          amount: '0',
         },
       ],
-    });
-    setVisible(false);
-  };
+    })
+    setVisible(false)
+  }
 
   return (
-    <section className={visible ? "active" : ""}>
+    <section className={visible ? 'active' : ''}>
       <Page size="large">
-        <div style={{ float: "right", margin: "-25px 10px 0 0" }}>
+        <div style={{ float: 'right', margin: '-25px 10px 0 0' }}>
           <Button
             onClick={() => {
-              setVisible(false);
+              setVisible(false)
             }}
             auto
             type="secondary"
@@ -68,7 +68,7 @@ export default ({ visible, setVisible }) => {
         <Text h2>
           Compound&nbsp;&nbsp;
           {isCheckingCompoundEntered ? (
-            <Spinner style={{ display: "inline-block" }} />
+            <Spinner style={{ display: 'inline-block' }} />
           ) : null}
           {!isCheckingCompoundEntered && !compoundEntered ? (
             <Toggle
@@ -77,7 +77,7 @@ export default ({ visible, setVisible }) => {
               onChange={(e) => {
                 // Enter markets
                 if (e.target.checked) {
-                  enterCompoundMarkets();
+                  enterCompoundMarkets()
                 }
               }}
               size="large"
@@ -89,22 +89,22 @@ export default ({ visible, setVisible }) => {
         !isCheckingCompoundEntered &&
         !compoundEntered ? (
           <Text type="secondary">
-            You need to{" "}
+            You need to{' '}
             <Link
               color
               onClick={(e) => {
-                e.preventDefault();
-                enterCompoundMarkets();
+                e.preventDefault()
+                enterCompoundMarkets()
               }}
               href="#"
             >
               enable
-            </Link>{" "}
+            </Link>{' '}
             Compound before you can use these lego pieces
           </Text>
         ) : null}
         {isEnteringCompoundMarkets ? (
-          <Row style={{ padding: "10px 0", width: "50px" }}>
+          <Row style={{ padding: '10px 0', width: '50px' }}>
             <Loading />
           </Row>
         ) : null}
@@ -147,7 +147,7 @@ export default ({ visible, setVisible }) => {
         <Text h2>Aave</Text>
         <MButton
           onClick={() => {
-            const id = randomId();
+            const id = randomId()
             appendLegos([
               {
                 id: `flashloan-start-${id}`,
@@ -155,7 +155,7 @@ export default ({ visible, setVisible }) => {
                 args: [
                   {
                     asset: AaveInputOptions[0].value,
-                    amount: "0",
+                    amount: '0',
                   },
                 ],
               },
@@ -165,12 +165,12 @@ export default ({ visible, setVisible }) => {
                 args: [
                   {
                     asset: AaveInputOptions[0].value,
-                    amount: "0",
+                    amount: '0',
                   },
                 ],
               },
-            ]);
-            setVisible(false);
+            ])
+            setVisible(false)
           }}
           auto
           type="secondary"
@@ -198,5 +198,5 @@ export default ({ visible, setVisible }) => {
         }
       `}</style>
     </section>
-  );
-};
+  )
+}

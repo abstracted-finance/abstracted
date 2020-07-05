@@ -1,116 +1,188 @@
-import { createContainer } from "unstated-next";
-import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { createContainer } from 'unstated-next'
+import { useEffect, useState } from 'react'
+import { ethers } from 'ethers'
 
-import useWeb3 from "../web3/use-web3";
-import useProxy from "../web3/use-proxy";
-import useContracts from "../web3/use-contracts";
-import useSettings from "../settings/use-settings";
-
-import useLocalStorageState from "use-local-storage-state";
+import useWeb3 from '../web3/use-web3'
+import useProxy from '../web3/use-proxy'
+import useContracts from '../web3/use-contracts'
+import useSettings from '../settings/use-settings'
 
 import {
   CoinGeckoIdMapping,
   AddressMapping,
   DecimalMapping,
   Assets,
-} from "../../utils/constants";
+} from '../../utils/constants'
+import { useToasts } from '@zeit-ui/react'
+
+const sortByName = ((a, b) => {
+  const [aL, bL] = [a.label, b.label].map((x) => x.toLowerCase())
+  if (aL < bL) return -1
+  if (bL < aL) return 1
+  return 0
+})
 
 export interface Balance {
-  label: string;
-  address: string;
-  amount: string;
-  decimals: number;
-  price: number; // in nominated currency
+  label: string
+  address: string
+  balance: string
+  decimals: number
+  price: string // in nominated currency
+  value: string // amount * price
 }
 
 const initialBalances: Balance[] = Object.keys(Assets).map((k) => {
-  const v = Assets[k];
+  const v = Assets[k]
   return {
     label: v,
     address: AddressMapping[v],
-    amount: "0",
+    balance: '0.00',
     decimals: DecimalMapping[v],
-    price: 0,
-  };
-});
+    price: '0.00',
+    value: '0.00',
+  }
+}).sort(sortByName)
 
 function useBalances() {
-  const { signer, provider } = useWeb3.useContainer();
-  const { proxyAddress } = useProxy.useContainer();
-  const { contracts } = useContracts.useContainer();
-  const { settings } = useSettings.useContainer();
-  const { IERC20 } = contracts;
-  const { currency } = settings;
+  const [, setToasts] = useToasts()
+  const { signer, provider } = useWeb3.useContainer()
+  const { proxyAddress } = useProxy.useContainer()
+  const { contracts } = useContracts.useContainer()
+  const { settings } = useSettings.useContainer()
+  const { IERC20 } = contracts
+  const { currency } = settings
 
-  const [isRetrievingBal, setIsRetrievingBal] = useState(false);
-  const [balances, setBalances] = useLocalStorageState('balances', initialBalances);
+  const [isRetrievingBal, setIsRetrievingBal] = useState(false)
+  const [balances, setBalances] = useState(initialBalances)
+
+  const getBalanceOf = async ({ token, address }) => {
+    if (token === AddressMapping[Assets.ETH]) {
+      return provider.getBalance(address)
+    }
+
+    return IERC20.attach(token).balanceOf(address)
+  }
+
+  const getDecimalsOf = async ({ token }) => {
+    if (token === AddressMapping[Assets.ETH]) {
+      return 18
+    }
+
+    return IERC20.attach(token).decimals()
+  }
+
+  const tryGetAddressAndDecimal = async (assetNameOrTokenAddress) => {
+    let tokenAddress = AddressMapping[assetNameOrTokenAddress]
+    let decimals = DecimalMapping[assetNameOrTokenAddress]
+
+    if (!tokenAddress && ethers.utils.isAddress(assetNameOrTokenAddress)) {
+      tokenAddress = assetNameOrTokenAddress
+      decimals = await getDecimalsOf(tokenAddress)
+    }
+
+    if (!tokenAddress || !decimals) {
+      setToasts({
+        text: `Unable to retrieve token information for ${assetNameOrTokenAddress}!`,
+        type: 'error',
+      })
+      return {
+        tokenAddress: null,
+        decimals: null,
+      }
+    }
+
+    return {
+      tokenAddress,
+      decimals,
+    }
+  }
 
   const getBalances = async () => {
-    setIsRetrievingBal(true);
+    if (provider === null) return;
+    if (proxyAddress === ethers.constants.AddressZero) return
+
+    setIsRetrievingBal(true)
 
     // Query blockchain
     const newBalances = await Promise.all(
       initialBalances.map(async (x) => {
-        let balance;
+        let balance
         if (x.label === Assets.ETH) {
-          balance = await provider.getBalance(proxyAddress);
+          balance = await provider.getBalance(proxyAddress)
         } else {
-          balance = await IERC20.attach(x.address).balanceOf(proxyAddress);
+          balance = await IERC20.attach(x.address).balanceOf(proxyAddress)
         }
         return {
           ...x,
-          amount: ethers.utils.formatUnits(balance, x.decimals),
-        };
+          balance: parseFloat(
+            ethers.utils.formatUnits(balance, x.decimals)
+          ).toFixed(2),
+        }
       })
-    );
+    )
+
+    const newBalancesSorted = newBalances.sort(sortByName)
 
     // Query Coingecko
-    const coingeckoAssetIds = newBalances
+    const coingeckoAssetIds = newBalancesSorted
       .map((x) => x.label)
-      .map((x) => CoinGeckoIdMapping[x]);
+      .map((x) => CoinGeckoIdMapping[x])
 
     const coingeckoQueryUrl = encodeURI(
       `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoAssetIds.join(
-        ","
+        ','
       )}&vs_currencies=${currency}`
-    );
+    )
 
-    const coingeckoResp = await fetch(coingeckoQueryUrl);
-    const coingeckoJson = await coingeckoResp.json();
+    const coingeckoResp = await fetch(coingeckoQueryUrl)
+    const coingeckoJson = await coingeckoResp.json()
 
-    const newBalancesWithPrices = newBalances.map((b) => {
-      const coingeckoId = CoinGeckoIdMapping[b.label];
-      const price = coingeckoJson[coingeckoId][currency];
+    const newBalancesWithPrices = newBalancesSorted.map((b) => {
+      const coingeckoId = CoinGeckoIdMapping[b.label]
+      const price = (coingeckoJson[coingeckoId][currency]).toFixed(2)
+      const value = parseFloat(b.balance) * price
 
       return {
         ...b,
         price,
-      };
-    });
+        value: parseFloat(isNaN(value) ? '0' : value.toString()).toFixed(2),
+      }
+    })
 
-    setBalances(newBalancesWithPrices);
-    setIsRetrievingBal(false);
-  };
+    setBalances(newBalancesWithPrices)
+    setIsRetrievingBal(false)
+  }
 
   useEffect(() => {
-    if (signer === null) return;
+    if (signer === null) return
     if (
       proxyAddress === null ||
       proxyAddress === ethers.constants.AddressZero
     ) {
-      setBalances(initialBalances);
-      return;
+      setBalances(initialBalances)
+      return
     }
 
-    getBalances();
-  }, [proxyAddress, currency]);
+    getBalances()
+  }, [proxyAddress, currency])
+
+  const balancesLoading = balances.map((x) => {
+    return {
+      ...x,
+      balance: '...',
+      price: '...',
+      value: '...',
+    }
+  })
 
   return {
-    balances,
+    balances: isRetrievingBal ? balancesLoading : balances,
     isRetrievingBal,
     getBalances,
-  };
+    getDecimalsOf,
+    getBalanceOf,
+    tryGetAddressAndDecimal
+  }
 }
 
-export default createContainer(useBalances);
+export default createContainer(useBalances)

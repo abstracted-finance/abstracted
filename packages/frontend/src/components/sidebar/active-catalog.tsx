@@ -1,20 +1,20 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { useTheme } from "@zeit-ui/react";
+import React from 'react'
+import { useRouter } from 'next/router'
+import { useTheme } from '@zeit-ui/react'
 
 export interface Props {
-  name: string;
-  localeName?: string;
+  name: string
+  localeName?: string
 }
 
 const ActiveCatalog: React.FC<Props> = React.memo(
   ({ name, localeName, ...props }) => {
-    const theme = useTheme();
-    const { pathname } = useRouter();
-    const isActive = pathname.includes(`/${name}/`);
+    const theme = useTheme()
+    const { pathname } = useRouter()
+    const isActive = pathname.includes(`/${name}/`)
 
     return (
-      <span {...props} className={isActive ? "active" : ""}>
+      <span {...props} className={isActive ? 'active' : ''}>
         {localeName || name}
         <style jsx>{`
           span {
@@ -29,8 +29,8 @@ const ActiveCatalog: React.FC<Props> = React.memo(
           }
         `}</style>
       </span>
-    );
+    )
   }
-);
+)
 
-export default ActiveCatalog;
+export default ActiveCatalog

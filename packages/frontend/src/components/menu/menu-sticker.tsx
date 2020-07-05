@@ -1,41 +1,40 @@
-import React, { useEffect } from "react";
-import { useCurrentState, Tabs, useTheme } from "@zeit-ui/react";
-import Router from "next/router";
+import React, { useEffect } from 'react'
+import { useCurrentState, Tabs, useTheme } from '@zeit-ui/react'
+import Router from 'next/router'
 
-import Metadata from "../data";
-import useAppContext from "../../containers/settings/use-app-context";
+import Metadata from '../data'
+import useAppContext from '../../containers/settings/use-app-context'
 
 const MenuSticker = () => {
-  const theme = useTheme();
-  const { tabbar: currentUrlTabValue, locale } = useAppContext.useContainer();
-  const [tabValue, setTabValue, tabValueRef] = useCurrentState<string>("");
-  const [fixed, setFixed, fixedRef] = useCurrentState<boolean>(false);
+  const theme = useTheme()
+  const { tabbar: currentUrlTabValue, locale } = useAppContext.useContainer()
+  const [tabValue, setTabValue, tabValueRef] = useCurrentState<string>('')
+  const [fixed, setFixed, fixedRef] = useCurrentState<boolean>(false)
 
-  const tabbarData = Metadata[locale];
+  const tabbarData = Metadata[locale]
 
-  useEffect(() => setTabValue(currentUrlTabValue), [currentUrlTabValue]);
+  useEffect(() => setTabValue(currentUrlTabValue), [currentUrlTabValue])
   useEffect(() => {
     const scrollHandler = () => {
-      const shouldFixed = document.documentElement.scrollTop > 60;
-      if (shouldFixed === fixedRef.current) return;
-      setFixed(shouldFixed);
-    };
-    document.addEventListener("scroll", scrollHandler);
-    return () => document.removeEventListener("scroll", scrollHandler);
-  }, []);
+      const shouldFixed = document.documentElement.scrollTop > 60
+      if (shouldFixed === fixedRef.current) return
+      setFixed(shouldFixed)
+    }
+    document.addEventListener('scroll', scrollHandler)
+    return () => document.removeEventListener('scroll', scrollHandler)
+  }, [])
 
   useEffect(() => {
-    const shouldRedirectDefaultPage =
-      currentUrlTabValue !== tabValueRef.current;
-    if (!shouldRedirectDefaultPage) return;
-    const defaultPath = `/${locale}/${tabValueRef.current}`;
-    Router.push(defaultPath);
-  }, [tabValue, currentUrlTabValue]);
+    const shouldRedirectDefaultPage = currentUrlTabValue !== tabValueRef.current
+    if (!shouldRedirectDefaultPage) return
+    const defaultPath = `/${locale}/${tabValueRef.current}`
+    Router.push(defaultPath)
+  }, [tabValue, currentUrlTabValue])
 
   return (
     <>
-      <div className={`nav-fill ${fixed ? "active" : ""}`} />
-      <nav className={fixed ? "fixed" : ""}>
+      <div className={`nav-fill ${fixed ? 'active' : ''}`} />
+      <nav className={fixed ? 'fixed' : ''}>
         <div className="sticker">
           <div className="inner">
             <Tabs value={tabValue} onChange={(val) => setTabValue(val)}>
@@ -87,7 +86,7 @@ const MenuSticker = () => {
         }
         .sticker:before {
           position: absolute;
-          content: "";
+          content: '';
           height: 1px;
           left: 0;
           right: 0;
@@ -128,7 +127,7 @@ const MenuSticker = () => {
         }
       `}</style>
     </>
-  );
-};
+  )
+}
 
-export default MenuSticker;
+export default MenuSticker

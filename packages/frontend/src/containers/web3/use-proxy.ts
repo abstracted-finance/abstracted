@@ -1,88 +1,87 @@
-import { createContainer } from "unstated-next";
-import { useState, useEffect } from "react";
-import { useToasts } from "@zeit-ui/react";
+import { createContainer } from 'unstated-next'
+import { useState, useEffect } from 'react'
+import { useToasts } from '@zeit-ui/react'
 
-import useWeb3 from "./use-web3";
-import useContracts from "./use-contracts";
+import useWeb3 from './use-web3'
+import useContracts from './use-contracts'
 
-import { getContract, network } from "../../utils/common";
-import { ethers } from "ethers";
+import { getContract, network } from '../../utils/common'
+import { ethers } from 'ethers'
 
 function useProxy() {
-  const { ethAddress, signer } = useWeb3.useContainer();
-  const { contracts } = useContracts.useContainer();
+  const { ethAddress, signer } = useWeb3.useContainer()
+  const { contracts } = useContracts.useContainer()
 
-  const { ProxyFactory } = contracts;
+  const { ProxyFactory } = contracts
 
-  const [, setToasts] = useToasts();
-  const [isCreatingProxy, setIsCreatingProxy] = useState(false);
-  const [proxy, setProxy] = useState(null);
-  const [proxyAddress, setProxyAddress] = useState(null);
+  const [, setToasts] = useToasts()
+  const [isCreatingProxy, setIsCreatingProxy] = useState(false)
+  const [proxy, setProxy] = useState(null)
+  const [proxyAddress, setProxyAddress] = useState(null)
 
-  const hasProxy =
-    proxyAddress && proxyAddress !== ethers.constants.AddressZero;
+  const hasProxy = proxyAddress && proxyAddress !== ethers.constants.AddressZero
 
   // get proxy address
   const fetchProxyAddress = async () => {
-    let newProxyAddress;
+    let newProxyAddress
     try {
-      newProxyAddress = await ProxyFactory.proxies(ethAddress);
+      newProxyAddress = await ProxyFactory.proxies(ethAddress)
     } catch (e) {
       setToasts({
-        text: "Unable to fetch contracts, are you on mainnet?",
-        type: "error",
-      });
-      return;
+        text: 'Unable to fetch contracts, are you on mainnet?',
+        type: 'error',
+      })
+      return
     }
 
-    if (newProxyAddress === proxyAddress) return;
+    if (newProxyAddress === proxyAddress) return
 
     if (newProxyAddress !== ethers.constants.AddressZero) {
-      setProxyAddress(newProxyAddress);
+      setProxyAddress(newProxyAddress)
       setProxy(
         getContract({
-          name: "Proxy",
+          name: 'Proxy',
           network,
           address: newProxyAddress,
         }).connect(signer)
-      );
+      )
       setToasts({
-        text: "Smart wallet connected!",
-        type: "success",
-      });
+        text: 'Smart wallet found!',
+        type: 'success',
+      })
     }
 
     if (newProxyAddress === ethers.constants.AddressZero) {
-      setProxyAddress(newProxyAddress);
-      setProxy(null);
+      setProxyAddress(newProxyAddress)
+      setProxy(null)
     }
-  };
+  }
 
   // Creates a proxy
   const createProxy = async () => {
-    const tx = await ProxyFactory["build(address)"](ethAddress);
-    await tx.wait();
+    const tx = await ProxyFactory['build(address)'](ethAddress)
+    await tx.wait()
 
-    setIsCreatingProxy(true);
+    setIsCreatingProxy(true)
     try {
-      await fetchProxyAddress();
+      await fetchProxyAddress()
     } catch (e) {
       setToasts({
-        text: "Error fetching smart wallet address",
-        type: "error",
-      });
+        text: 'Error fetching smart wallet address',
+        type: 'error',
+      })
     }
-    setIsCreatingProxy(false);
-  };
+    setIsCreatingProxy(false)
+  }
 
   // fetch proxy address
   useEffect(() => {
-    if (signer === null) return;
-    if (ethAddress === null) return;
-    if (ProxyFactory === null) return;
+    if (signer === null) return
+    if (ethAddress === null) return
+    if (ProxyFactory === null) return
 
-    fetchProxyAddress();
-  }, [signer, ethAddress, ProxyFactory]);
+    fetchProxyAddress()
+  }, [signer, ethAddress, ProxyFactory])
 
   return {
     proxyAddress,
@@ -91,7 +90,7 @@ function useProxy() {
     hasProxy,
     createProxy,
     isCreatingProxy,
-  };
+  }
 }
 
-export default createContainer(useProxy);
+export default createContainer(useProxy)

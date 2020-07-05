@@ -1,87 +1,87 @@
-import { createContainer } from "unstated-next";
-import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { createContainer } from 'unstated-next'
+import { useEffect, useState } from 'react'
+import { ethers } from 'ethers'
 
-import { useToasts } from "@zeit-ui/react";
+import { useToasts } from '@zeit-ui/react'
 
-import useProxy from "../web3/use-proxy";
-import useContract from "../web3/use-contracts";
+import useProxy from '../web3/use-proxy'
+import useContract from '../web3/use-contracts'
 
 import {
   CompoundAssets,
   CompoundAddresses,
   AddressMapping,
-} from "../../utils/constants";
+} from '../../utils/constants'
 
 function useCompoundEntered() {
-  const [, setToast] = useToasts();
-  const { proxy, proxyAddress } = useProxy.useContainer();
-  const { contracts } = useContract.useContainer();
-  const { IComptroller, CompoundActions } = contracts;
+  const [, setToast] = useToasts()
+  const { proxy, proxyAddress } = useProxy.useContainer()
+  const { contracts } = useContract.useContainer()
+  const { IComptroller, CompoundActions } = contracts
 
   const [isCheckingCompoundEntered, setCheckingCompoundEntered] = useState(
     false
-  );
+  )
   const [isEnteringCompoundMarkets, setIsEnteringCompoundMarkets] = useState(
     false
-  );
-  const [compoundEntered, setCompoundEntered] = useState(false);
+  )
+  const [compoundEntered, setCompoundEntered] = useState(false)
 
   const checkCompoundMarketsEntered = async () => {
-    setCheckingCompoundEntered(true);
-    const marketsEntered = await IComptroller.getAssetsIn(proxyAddress);
+    setCheckingCompoundEntered(true)
+    const marketsEntered = await IComptroller.getAssetsIn(proxyAddress)
 
     if (marketsEntered.length !== Object.keys(CompoundAssets).length) {
-      setCompoundEntered(false);
+      setCompoundEntered(false)
     } else {
-      setCompoundEntered(true);
+      setCompoundEntered(true)
     }
-    setCheckingCompoundEntered(false);
-  };
+    setCheckingCompoundEntered(false)
+  }
 
   const enterCompoundMarkets = async () => {
-    setIsEnteringCompoundMarkets(true);
+    setIsEnteringCompoundMarkets(true)
 
     const cTokenAddresses = Object.keys(CompoundAssets).map(
       (k) => AddressMapping[k]
-    );
+    )
     const calldata = CompoundActions.interface.encodeFunctionData(
-      "enterMarkets",
+      'enterMarkets',
       [CompoundAddresses.Comptroller, cTokenAddresses]
-    );
+    )
 
     try {
       const tx = await proxy.execute(CompoundActions.address, calldata, {
         gasLimit: 400000,
-      });
-      await tx.wait();
+      })
+      await tx.wait()
       setToast({
-        text: "Compound markets entered!",
-        type: "success",
-      });
-      setCompoundEntered(true);
+        text: 'Compound markets entered!',
+        type: 'success',
+      })
+      setCompoundEntered(true)
     } catch (e) {
       setToast({
-        text: "Failed to enter compound markets!",
-        type: "error",
-      });
+        text: 'Failed to enter compound markets!',
+        type: 'error',
+      })
     }
-    setIsEnteringCompoundMarkets(false);
-  };
+    setIsEnteringCompoundMarkets(false)
+  }
 
   useEffect(() => {
-    if (proxyAddress === null) return;
-    if (proxyAddress === ethers.constants.AddressZero) return;
+    if (proxyAddress === null) return
+    if (proxyAddress === ethers.constants.AddressZero) return
 
-    checkCompoundMarketsEntered();
-  }, [proxyAddress]);
+    checkCompoundMarketsEntered()
+  }, [proxyAddress])
 
   return {
     compoundEntered,
     isCheckingCompoundEntered,
     enterCompoundMarkets,
     isEnteringCompoundMarkets,
-  };
+  }
 }
 
-export default createContainer(useCompoundEntered);
+export default createContainer(useCompoundEntered)

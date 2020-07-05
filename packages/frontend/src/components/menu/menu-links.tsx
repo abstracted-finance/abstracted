@@ -1,8 +1,7 @@
-import React from "react";
-import { useTheme, Text, Spacer } from "@zeit-ui/react";
-import styled from 'styled-components'
+import React from 'react'
+import { useTheme, Spacer } from '@zeit-ui/react'
 import LogoIcon from '../icons/logo'
-import Controls from "../controls";
+import Controls from './controls'
 
 const MenuLinks = () => {
   const theme = useTheme()
@@ -10,11 +9,13 @@ const MenuLinks = () => {
   return (
     <nav>
       <div className="site-name">
-        <span title={"Go Home"} onClick={() => { }}>
+        <span title={'Go Home'} onClick={() => {}}>
           <LogoIcon />
         </span>
-        <Spacer x={0.25}/>
-        <a href='/'><span title={"Go Home"}>ABSTRACTED</span></a>
+        <Spacer x={0.25} />
+        <a href="/">
+          <span title={'Go Home'}>ABSTRACTED</span>
+        </a>
       </div>
       <div className="links">
         <Controls />
@@ -43,7 +44,7 @@ const MenuLinks = () => {
         }
       `}</style>
     </nav>
-  );
-};
+  )
+}
 
-export default MenuLinks;
+export default MenuLinks

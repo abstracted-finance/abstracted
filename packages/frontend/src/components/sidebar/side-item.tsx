@@ -1,27 +1,27 @@
-import React, { ReactElement } from "react";
-import ActiveLink from "./active-link";
-import ActiveCatalog from "./active-catalog";
-import { useTheme } from "@zeit-ui/react";
+import React, { ReactElement } from 'react'
+import ActiveLink from './active-link'
+import ActiveCatalog from './active-catalog'
+import { useTheme } from '@zeit-ui/react'
 
 export type Sides = {
-  name: string;
-  url?: string;
-  localeName?: string;
-  children?: Sides | Array<Sides>;
-};
+  name: string
+  url?: string
+  localeName?: string
+  children?: Sides | Array<Sides>
+}
 
 export interface SideItemProps {
-  sides: Array<Sides>;
+  sides: Array<Sides>
 }
 
 const SideItem: React.FC<React.PropsWithChildren<SideItemProps>> = React.memo(
   ({ children, sides }) => {
-    const theme = useTheme();
+    const theme = useTheme()
 
     return (
       <>
         {sides.map((side, index) => {
-          const showChildren = side.children && children;
+          const showChildren = side.children && children
           return (
             <div
               key={`${side.localeName || side.name}-${index}`}
@@ -40,7 +40,7 @@ const SideItem: React.FC<React.PropsWithChildren<SideItemProps>> = React.memo(
                 </div>
               )}
             </div>
-          );
+          )
         })}
         <style jsx>{`
           .item {
@@ -66,8 +66,8 @@ const SideItem: React.FC<React.PropsWithChildren<SideItemProps>> = React.memo(
           }
         `}</style>
       </>
-    );
+    )
   }
-);
+)
 
-export default SideItem;
+export default SideItem

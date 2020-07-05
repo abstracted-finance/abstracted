@@ -1,31 +1,31 @@
-import React, { useMemo } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useTheme } from "@zeit-ui/react";
+import React, { useMemo } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useTheme } from '@zeit-ui/react'
 
 export interface Props {
-  onAcitve?: Function;
-  href: string;
-  text: string;
+  onAcitve?: Function
+  href: string
+  text: string
 }
 
 const ActiveLink: React.FC<Props> = React.memo(({ href, text }) => {
-  const theme = useTheme();
-  const { pathname } = useRouter();
+  const theme = useTheme()
+  const { pathname } = useRouter()
   const [title, subtitle] = useMemo(() => {
-    if (!/[\u4E00-\u9FA5]/.test(text)) return [text, null];
-    if (/zeit|ui|ZEIT|UI/.test(text)) return [text, null];
+    if (!/[\u4E00-\u9FA5]/.test(text)) return [text, null]
+    if (/zeit|ui|ZEIT|UI/.test(text)) return [text, null]
     return [
-      text.replace(/[^\u4E00-\u9FA5]/g, ""),
-      text.replace(/[^a-zA-Z]/g, ""),
-    ];
-  }, [text]);
-  const isActive = pathname === href;
+      text.replace(/[^\u4E00-\u9FA5]/g, ''),
+      text.replace(/[^a-zA-Z]/g, ''),
+    ]
+  }, [text])
+  const isActive = pathname === href
 
   return (
     <div className="link">
       <Link href={href}>
-        <a className={isActive ? "active" : ""}>
+        <a className={isActive ? 'active' : ''}>
           {title}
           {subtitle && <span>&nbsp;{subtitle}</span>}
         </a>
@@ -63,7 +63,7 @@ const ActiveLink: React.FC<Props> = React.memo(({ href, text }) => {
         }
       `}</style>
     </div>
-  );
-});
+  )
+})
 
-export default ActiveLink;
+export default ActiveLink

@@ -1,26 +1,26 @@
-import { createContainer } from "unstated-next";
+import { createContainer } from 'unstated-next'
 
-import { CoinGeckoSupportedCurrencies } from "../../utils/constants";
-import useLocalStorageState from "use-local-storage-state";
+import { CoinGeckoSupportedCurrencies } from '../../utils/constants'
+import useLocalStorageState from 'use-local-storage-state'
 
 interface Settings {
-  currency: CoinGeckoSupportedCurrencies;
+  currency: CoinGeckoSupportedCurrencies
 }
 
 const initialSettings: Settings = {
   currency: CoinGeckoSupportedCurrencies.USD,
-};
+}
 
 const useSettings = function () {
   const [settings, setSettings] = useLocalStorageState(
-    "settings",
+    'settings',
     initialSettings
-  );
+  )
 
   return {
     settings,
     setSettings,
-  };
-};
+  }
+}
 
-export default createContainer(useSettings);
+export default createContainer(useSettings)

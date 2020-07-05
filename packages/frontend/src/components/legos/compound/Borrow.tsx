@@ -1,30 +1,30 @@
-import { useState, useEffect } from "react";
-import { Row, Col, Text, Input, AutoComplete, Tooltip } from "@zeit-ui/react";
-import * as Icon from "@zeit-ui/react-icons";
+import { useState, useEffect } from 'react'
+import { Row, Col, Text, Input, AutoComplete, Tooltip } from '@zeit-ui/react'
+import * as Icon from '@zeit-ui/react-icons'
 
-import useLego from "../../../containers/legos/use-legos";
+import useLego from '../../../containers/legos/use-legos'
 
-import { CenterFlexDiv } from "../../common/Divs";
-import GenericLego from "../GenericLego";
-import { CompoundInputOptions } from "./InputOptions";
+import { CenterFlexDiv } from '../../common/Divs'
+import GenericLego from '../GenericLego'
+import { CompoundInputOptions } from './InputOptions'
 
-import { partialSearchHandler } from "../../../utils/search";
+import { partialSearchHandler } from '../../../utils/search'
 
 export default (props) => {
-  const legoArgs = props.lego.args[0];
+  const legoArgs = props.lego.args[0]
 
-  const { updateLego } = useLego.useContainer();
+  const { updateLego } = useLego.useContainer()
 
-  const [inputAmount, setInputAmount] = useState(legoArgs.amount);
-  const [selectedOption, setSelectedOption] = useState(legoArgs.asset);
-  const [inputOptions, setInputOptions] = useState(CompoundInputOptions);
+  const [inputAmount, setInputAmount] = useState(legoArgs.amount)
+  const [selectedOption, setSelectedOption] = useState(legoArgs.asset)
+  const [inputOptions, setInputOptions] = useState(CompoundInputOptions)
   const searchHandler = partialSearchHandler(
     CompoundInputOptions,
     setInputOptions
-  );
+  )
 
   useEffect(() => {
-    const curLego = props.lego;
+    const curLego = props.lego
     updateLego({
       ...curLego,
       args: [
@@ -33,8 +33,8 @@ export default (props) => {
           amount: inputAmount,
         },
       ],
-    });
-  }, [inputAmount, selectedOption]);
+    })
+  }, [inputAmount, selectedOption])
 
   const secondaryDisplay = (
     <CenterFlexDiv>
@@ -42,7 +42,7 @@ export default (props) => {
         +{inputAmount} {selectedOption}
       </Text>
     </CenterFlexDiv>
-  );
+  )
 
   const primaryDisplay = (
     <>
@@ -69,7 +69,7 @@ export default (props) => {
         </Col>
       </Row>
     </>
-  );
+  )
 
   return (
     <GenericLego
@@ -79,5 +79,5 @@ export default (props) => {
       primaryDisplay={primaryDisplay}
       {...props}
     />
-  );
-};
+  )
+}

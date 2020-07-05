@@ -9,16 +9,20 @@ const Menu: React.FC<{}> = () => {
   useEffect(() => setShowAfterRender(true), [])
   useEffect(() => {
     const prefetch = async () => {
-      const urls = ['/en-us/guide/introduction', '/en-us/components/text', '/en-us/customization']
+      const urls = [
+        '/en-us/dashboard/overview',
+        '/en-us/tools/introduction',
+        '/en-us/settings/general',
+      ]
       await Promise.all(
-        urls.map(async url => {
+        urls.map(async (url) => {
           await router.prefetch(url)
-        }),
+        })
       )
     }
     prefetch()
       .then()
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err))
   }, [])
 
   if (!showAfterRender) return null
