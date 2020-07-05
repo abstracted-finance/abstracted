@@ -1,20 +1,18 @@
 import React, { useEffect } from "react";
 import { useCurrentState, Tabs, useTheme } from "@zeit-ui/react";
 import Router from "next/router";
-import { allPages } from "../data";
-import useLocale from "../../containers/settings/useLocale";
-import useConfigs from "../../containers/settings/useConfigs";
+
+import Metadata from "../data";
+import useAppContext from "../../containers/settings/use-app-context";
 
 const MenuSticker = () => {
   const theme = useTheme();
-  const { updateTabbarFixed } = useConfigs.useContainer();
-  const { tabbar: currentUrlTabValue, locale } = useLocale.useContainer();
+  const { tabbar: currentUrlTabValue, locale } = useAppContext.useContainer();
   const [tabValue, setTabValue, tabValueRef] = useCurrentState<string>("");
   const [fixed, setFixed, fixedRef] = useCurrentState<boolean>(false);
 
-  const tabbarData = allPages;
+  const tabbarData = Metadata[locale];
 
-  useEffect(() => updateTabbarFixed(fixed), [fixed]);
   useEffect(() => setTabValue(currentUrlTabValue), [currentUrlTabValue]);
   useEffect(() => {
     const scrollHandler = () => {

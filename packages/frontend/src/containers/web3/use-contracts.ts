@@ -2,7 +2,7 @@ import { createContainer } from "unstated-next";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import useWeb3 from "./useWeb3";
+import useWeb3 from "./use-web3";
 import { getContract, network } from "../../utils/common";
 import { CompoundAddresses } from "../../utils/constants";
 

@@ -1,7 +1,7 @@
 import { Text, Select } from "@zeit-ui/react";
 import { CoinGeckoSupportedCurrencies } from "../../utils/constants";
 
-import useSettings from "../../containers/settings/useSettings";
+import useSettings from "../../containers/settings/use-settings";
 
 export default () => {
   const { settings, setSettings } = useSettings.useContainer();

@@ -4,8 +4,8 @@ import { ethers } from "ethers";
 
 import { useToasts } from "@zeit-ui/react";
 
-import useProxy from "../web3/useProxy";
-import useContract from "../../containers/web3/useContracts";
+import useProxy from "../web3/use-proxy";
+import useContract from "../web3/use-contracts";
 
 import {
   CompoundAssets,

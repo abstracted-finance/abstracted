@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { Lego, LegoType } from "../containers/legos/useLegos";
+import { Lego, LegoType } from "../containers/legos/use-legos";
 import { getContractInterface, getContract, network } from "../utils/common";
 import {
   AaveAddresses,

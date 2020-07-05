@@ -12,13 +12,13 @@ import {
 } from "@zeit-ui/react";
 
 import { randomId } from "../../utils/common";
-import { LegoType, default as useLego } from "../../containers/legos/useLegos";
+import { LegoType, default as useLego } from "../../containers/legos/use-legos";
 import styled from "styled-components";
 
 import { AaveInputOptions } from "./aave/InputOptions";
 import { CompoundInputOptions } from "./compound/InputOptions";
 
-import useCompoundEntered from "../../containers/compound/useCompoundEntered";
+import useCompoundEntered from "../../containers/compound/use-compound-entered";
 
 const MButton = styled(Button)`
   margin: 2.5px;

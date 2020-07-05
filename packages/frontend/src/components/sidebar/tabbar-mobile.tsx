@@ -1,12 +1,14 @@
 import React from "react";
 import { Button, useTheme } from "@zeit-ui/react";
-import SlidersIcon from "@zeit-ui/react-icons/sliders";
+
+import ConnectWeb3 from '../buttons/connect-web3'
+import MenuIcon from '@zeit-ui/react-icons/menu'
 
 interface Props {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const TabbarMobile: React.FC<Props> = ({ onClick }) => {
+export default ({ onClick }: Props) => {
   const theme = useTheme();
   const handler = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick && onClick(event);
@@ -15,9 +17,11 @@ const TabbarMobile: React.FC<Props> = ({ onClick }) => {
   return (
     <div className="tabbar">
       <Button className="toggle" auto type="abort" onClick={handler}>
-        <SlidersIcon size={16} />
+        <MenuIcon size={16} />
       </Button>
-      <span>ZEIT-UI React</span>
+      <div className="connect">
+        <ConnectWeb3 />
+      </div>
       <style jsx>{`
         .tabbar {
           position: fixed;
@@ -43,11 +47,8 @@ const TabbarMobile: React.FC<Props> = ({ onClick }) => {
           align-items: center;
           color: ${theme.palette.accents_6};
         }
-        span {
-          color: ${theme.palette.accents_7};
-          font-size: 0.75rem;
+        .connect {
           display: inline-flex;
-          text-transform: capitalize;
         }
         @media only screen and (min-width: ${theme.layout.breakpointMobile}) {
           .tabbar {
@@ -60,5 +61,3 @@ const TabbarMobile: React.FC<Props> = ({ onClick }) => {
     </div>
   );
 };
-
-export default TabbarMobile;

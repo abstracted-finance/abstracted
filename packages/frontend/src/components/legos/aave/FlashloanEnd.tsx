@@ -4,7 +4,7 @@ import * as Icon from "@zeit-ui/react-icons";
 
 import { CenterFlexDiv } from "../../common/Divs";
 import GenericLego from "../GenericLego";
-import useLego from "../../../containers/legos/useLegos";
+import useLego from "../../../containers/legos/use-legos";
 import { AaveInputOptions } from "./InputOptions";
 
 import { partialSearchHandler } from "../../../utils/search";

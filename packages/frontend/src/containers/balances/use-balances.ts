@@ -2,10 +2,10 @@ import { createContainer } from "unstated-next";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import useWeb3 from "../web3/useWeb3";
-import useProxy from "../web3/useProxy";
-import useContracts from "../web3/useContracts";
-import useSettings from "../settings/useSettings";
+import useWeb3 from "../web3/use-web3";
+import useProxy from "../web3/use-proxy";
+import useContracts from "../web3/use-contracts";
+import useSettings from "../settings/use-settings";
 
 import useLocalStorageState from "use-local-storage-state";
 

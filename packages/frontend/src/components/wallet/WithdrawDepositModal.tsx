@@ -1,9 +1,9 @@
 import { Modal, Link, Text, Input, Spinner } from "@zeit-ui/react";
 import QRCode from "qrcode.react";
 
-import useBalances, { Balance } from "../../containers/balances/useBalances";
-import useProxy from "../../containers/web3/useProxy";
-import useWithdraw from "../../containers/balances/useWithdraw";
+import useBalances, { Balance } from "../../containers/balances/use-balances";
+import useProxy from "../../containers/web3/use-proxy";
+import useWithdraw from "../../containers/balances/use-withdraw";
 import { OperationType, Assets } from "../../utils/constants";
 import { useState } from "react";
 

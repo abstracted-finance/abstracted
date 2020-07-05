@@ -5,9 +5,9 @@ import { ethers } from "ethers";
 
 import { AddressMapping, DecimalMapping } from "../../utils/constants";
 
-import useWeb3 from "../web3/useWeb3";
-import useProxy from "../web3/useProxy";
-import useContracts from "../web3/useContracts";
+import useWeb3 from "../web3/use-web3";
+import useProxy from "../web3/use-proxy";
+import useContracts from "../web3/use-contracts";
 
 function useWithdraw() {
   const [, setToast] = useToasts();

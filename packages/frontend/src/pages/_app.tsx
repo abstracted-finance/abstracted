@@ -1,54 +1,67 @@
+import Head from 'next/head'
 import { AppProps } from "next/app";
-import { CssBaseline, ZeitProvider } from "@zeit-ui/react";
-import useLocalStorageState from "use-local-storage-state";
+import { useState, useEffect } from 'react'
+import { CssBaseline, ZeitProvider, useTheme } from "@zeit-ui/react";
 
-import LocaleContainer from "../containers/settings/useLocale";
-import ConfigContainer from "../containers/settings/useConfigs";
-import WithdrawContainer from "../containers/balances/useWithdraw";
-import CompoundEnteredContainer from "../containers/compound/useCompoundEntered";
-import SettingsContainer from "../containers/settings/useSettings";
-import BalancesContainer from "../containers/balances/useBalances";
-import ContractsContainer from "../containers/web3/useContracts";
-import ProxyContainer from "../containers/web3/useProxy";
-import Web3Container from "../containers/web3/useWeb3";
-import LegoContainer from "../containers/legos/useLegos";
+import AppContextContainer from "../containers/settings/use-app-context";
+import WithdrawContainer from "../containers/balances/use-withdraw";
+import CompoundEnteredContainer from "../containers/compound/use-compound-entered";
+import SettingsContainer from "../containers/settings/use-settings";
+import BalancesContainer from "../containers/balances/use-balances";
+import ContractsContainer from "../containers/web3/use-contracts";
+import ProxyContainer from "../containers/web3/use-proxy";
+import Web3Container from "../containers/web3/use-web3";
+import LegoContainer from "../containers/legos/use-legos";
+
+import Menu from '../components/menu'
 
 function App({ Component, pageProps }: AppProps) {
-  const [themeType, setThemeType] = useLocalStorageState("theme", "dark");
-  const switchThemes = () => {
-    setThemeType((lastThemeType) =>
-      lastThemeType === "dark" ? "light" : "dark"
-    );
-  };
+  const theme = useTheme()
+  const [customTheme, setCustomTheme] = useState(theme)
+  const themeChangeHandler = (theme) => {
+    setCustomTheme(theme)
+  }
+
+  useEffect(() => {
+    const theme = window.localStorage.getItem('theme')
+    if (theme !== 'dark') return
+    themeChangeHandler({ type: 'dark' })
+  }, [])
+
+  // Cleans DOM
+  useEffect(() => {
+    document.documentElement.removeAttribute('style')
+    document.body.removeAttribute('style')
+  }, [])
 
   return (
-    <ZeitProvider theme={{ type: themeType }}>
+    <ZeitProvider theme={customTheme}>
       <CssBaseline>
-        <LocaleContainer.Provider>
-          <ConfigContainer.Provider>
-            <SettingsContainer.Provider>
-              <Web3Container.Provider>
-                <ContractsContainer.Provider>
-                  <ProxyContainer.Provider>
-                    <CompoundEnteredContainer.Provider>
-                      <BalancesContainer.Provider>
-                        <WithdrawContainer.Provider>
-                          <LegoContainer.Provider>
-                            <Component
-                              {...pageProps}
-                              themeType={themeType}
-                              switchThemes={switchThemes}
-                            />
-                          </LegoContainer.Provider>
-                        </WithdrawContainer.Provider>
-                      </BalancesContainer.Provider>
-                    </CompoundEnteredContainer.Provider>
-                  </ProxyContainer.Provider>
-                </ContractsContainer.Provider>
-              </Web3Container.Provider>
-            </SettingsContainer.Provider>
-          </ConfigContainer.Provider>
-        </LocaleContainer.Provider>
+        <AppContextContainer.Provider initialState={{ themeChangeHandler }}>
+          <SettingsContainer.Provider>
+            <Web3Container.Provider>
+              <ContractsContainer.Provider>
+                <ProxyContainer.Provider>
+                  <CompoundEnteredContainer.Provider>
+                    <BalancesContainer.Provider>
+                      <WithdrawContainer.Provider>
+                        <LegoContainer.Provider>
+                          <Head>
+                            <title>Abstracted</title>
+                          </Head>
+                          <Menu />
+                          <Component
+                            {...pageProps}
+                          />
+                        </LegoContainer.Provider>
+                      </WithdrawContainer.Provider>
+                    </BalancesContainer.Provider>
+                  </CompoundEnteredContainer.Provider>
+                </ProxyContainer.Provider>
+              </ContractsContainer.Provider>
+            </Web3Container.Provider>
+          </SettingsContainer.Provider>
+        </AppContextContainer.Provider>
       </CssBaseline>
     </ZeitProvider>
   );

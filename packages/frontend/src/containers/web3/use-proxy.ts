@@ -2,8 +2,8 @@ import { createContainer } from "unstated-next";
 import { useState, useEffect } from "react";
 import { useToasts } from "@zeit-ui/react";
 
-import useWeb3 from "./useWeb3";
-import useContracts from "./useContracts";
+import useWeb3 from "./use-web3";
+import useContracts from "./use-contracts";
 
 import { getContract, network } from "../../utils/common";
 import { ethers } from "ethers";

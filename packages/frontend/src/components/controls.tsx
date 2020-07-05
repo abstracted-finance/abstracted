@@ -1,64 +1,38 @@
 import React, { useMemo } from "react";
-import { Button, useTheme, Select, Spacer } from "@zeit-ui/react";
-import useLocale from "../containers/settings/useLocale";
-import { useRouter } from "next/router";
+import { Button, Spacer, useTheme } from "@zeit-ui/react";
 import MoonIcon from "@zeit-ui/react-icons/moon";
 import SunIcon from "@zeit-ui/react-icons/sun";
 
-const Controls: React.FC<{}> = React.memo(({}) => {
-  const theme = useTheme();
-  const { pathname } = useRouter();
-  const { locale } = useLocale.useContainer();
-  const isChinese = useMemo(() => locale === "zh-cn", [locale]);
-  const isDark = useMemo(() => theme.type === "dark", [theme.type]);
-  const nextLocalePath = useMemo(() => {
-    const nextLocale = isChinese ? "en-us" : "zh-cn";
-    return pathname.replace(locale, nextLocale);
-  }, [locale, pathname]);
+import ConnectWeb3 from './buttons/connect-web3'
+import useAppContext from "../containers/settings/use-app-context";
 
-  const redirectGithub = () => {
-    if (typeof window !== "undefined") {
-      window.open("https://github.com/zeit-ui/react");
-    }
-  };
+export default () => {
+  const theme = useTheme();
+  const { themeChangeHandler } = useAppContext.useContainer();
+  const isDark = useMemo(() => theme.type === "dark", [theme.type]);
+  const switchThemes = (type: 'dark' | 'light') => {
+    themeChangeHandler({ type })
+    if (typeof window === 'undefined' || !window.localStorage) return
+    window.localStorage.setItem('theme', type)
+  }
 
   return (
     <div className="controls">
       <div className="tools">
-        <Button auto type="abort" size="small" onClick={() => {}}>
-          {isChinese ? "English" : "中文文档"}
-        </Button>
-        <Spacer x={0.25} />
-        <Button
-          auto
-          type="abort"
-          size="small"
-          onClick={redirectGithub}
-          title={isChinese ? "代码仓库" : "GitHub Repository"}
-        >
-          {isChinese ? "代码仓库" : "GitHub"}
-        </Button>
-        <Spacer x={0.75} />
-        <Select
-          size="small"
-          pure
-          onChange={() => {}}
-          value={isDark ? "dark" : "light"}
-          title={isChinese ? "切换主题" : "Switch Themes"}
-        >
-          <Select.Option value="light">
-            <span className="select-content">
-              <SunIcon size={14} /> {isChinese ? "明亮" : "Light"}
-            </span>
-          </Select.Option>
-          <Select.Option value="dark">
-            <span className="select-content">
-              <MoonIcon size={14} /> {isChinese ? "暗黑" : "Dark"}
-            </span>
-          </Select.Option>
-        </Select>
+        <ConnectWeb3 />
+        <Spacer x={1} />
+        <span className="theme-toggler" onClick={() => switchThemes(isDark ? 'light' : 'dark')}>
+          {
+            isDark ?
+              <MoonIcon size={14} /> :
+              <SunIcon size={14} />
+          }
+        </span>
       </div>
       <style jsx>{`
+        .theme-toggler {
+          cursor: pointer;
+        }
         .controls {
           height: 100%;
           display: flex;
@@ -95,6 +69,4 @@ const Controls: React.FC<{}> = React.memo(({}) => {
       `}</style>
     </div>
   );
-});
-
-export default Controls;
+}

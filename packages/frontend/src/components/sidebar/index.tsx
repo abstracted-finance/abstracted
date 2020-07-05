@@ -2,9 +2,8 @@ import React, { useEffect, useMemo, useRef } from "react";
 import Router from "next/router";
 import { useTheme, Spacer } from "@zeit-ui/react";
 import SideItem, { Sides } from "./side-item";
-import { allPages } from "../data";
-import useLocale from "../../containers/settings/useLocale";
-import useConfigs from "../../containers/settings/useConfigs";
+import Metadata from "../data";
+import useAppContext from "../../containers/settings/use-app-context";
 
 export interface Props {}
 
@@ -25,27 +24,17 @@ export const SideGroup: React.FC<{ sides?: SideChildren }> = React.memo(
 export const Sidebar: React.FC<Props> = React.memo(() => {
   const theme = useTheme();
   const boxRef = useRef<HTMLDivElement>(null);
-  const {
-    sidebarScrollHeight,
-    updateSidebarScrollHeight,
-  } = useConfigs.useContainer();
-  const { locale, tabbar } = useLocale.useContainer();
+  const { locale, tabbar } = useAppContext.useContainer();
 
   const tabbarData = useMemo(() => {
-    const currentSide = allPages.filter((side) => side.name === tabbar)[0];
+    const allSlides = Metadata[locale]
+    const currentSide = allSlides.filter((side) => side.name === tabbar)[0];
     return (currentSide.children || []) as Array<Sides>;
   }, [locale, tabbar]);
 
   useEffect(() => {
-    Router.events.on("routeChangeStart", () => {
-      if (!boxRef.current) return;
-      updateSidebarScrollHeight(boxRef.current.scrollTop || 0);
-    });
-  }, []);
-
-  useEffect(() => {
     if (!boxRef.current) return;
-    boxRef.current.scrollTo({ top: sidebarScrollHeight });
+    boxRef.current.scrollTo({ top: 0 });
   }, [boxRef.current]);
 
   return (

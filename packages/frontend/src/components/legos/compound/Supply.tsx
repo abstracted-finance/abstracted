@@ -10,7 +10,7 @@ import {
 } from "@zeit-ui/react";
 import * as Icon from "@zeit-ui/react-icons";
 
-import useLego from "../../../containers/legos/useLegos";
+import useLego from "../../../containers/legos/use-legos";
 import { CenterFlexDiv } from "../../common/Divs";
 import GenericLego from "../GenericLego";
 import { CompoundInputOptions } from "./InputOptions";

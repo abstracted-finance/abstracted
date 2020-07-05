@@ -14,10 +14,10 @@ import {
 import { useState } from "react";
 import { ethers } from "ethers";
 
-import useSettings from "../../containers/settings/useSettings";
-import useWeb3 from "../../containers/web3/useWeb3";
-import useProxy from "../../containers/web3/useProxy";
-import useBalances from "../../containers/balances/useBalances";
+import useSettings from "../../containers/settings/use-settings";
+import useWeb3 from "../../containers/web3/use-web3";
+import useProxy from "../../containers/web3/use-proxy";
+import useBalances from "../../containers/balances/use-balances";
 
 import { RefreshIcon } from "../common/Icons";
 import { OperationType } from "../../utils/constants";

@@ -3,8 +3,8 @@ import * as Icon from "@zeit-ui/react-icons";
 import styled from "styled-components";
 import Dashboard from "../dashboard/Dashboard";
 
-import useWeb3 from "../../containers/web3/useWeb3";
-import useProxy from "../../containers/web3/useProxy";
+import useWeb3 from "../../containers/web3/use-web3";
+import useProxy from "../../containers/web3/use-proxy";
 
 const MoonIcon = styled(Icon.Moon)`
   cursor: pointer;

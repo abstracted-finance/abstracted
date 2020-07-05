@@ -1,16 +1,21 @@
 import { createContainer } from "unstated-next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ethers } from "ethers";
+import { useToasts } from "@zeit-ui/react";
 
 type Provider = ethers.providers.Provider;
 type Signer = ethers.Signer;
 
 function useWeb3() {
+  const [, setToasts] = useToasts()
   const [provider, setProvider] = useState<Provider | null>(null);
   const [signer, setSigner] = useState<Signer | null>(null);
   const [network, setNetwork] = useState<any>(null);
   const [ethAddress, setEthAddress] = useState<string | null>(null);
   const [error, setError] = useState<Error | null>(null);
+  const [isConnecting, setIsConnecting] = useState<boolean>(false)
+
+  const connected = provider !== null
 
   const attemptConnection = async () => {
     if (window.ethereum === undefined) {
@@ -33,18 +38,26 @@ function useWeb3() {
   };
 
   const connect = async () => {
+    setIsConnecting(true);
     try {
       setError(null);
       await attemptConnection();
+
+      // Update on accounts change
       window.ethereum.on("accountsChanged", () => {
         attemptConnection();
       });
     } catch (error) {
       setError(error);
+      setToasts({
+        text: 'Unable to connect to web3',
+        type: 'error'
+      })
     }
+    setIsConnecting(false);
   };
 
-  return { provider, signer, network, ethAddress, connect, error };
+  return { connected, provider, signer, network, ethAddress, connect, isConnecting, error };
 }
 
 export default createContainer(useWeb3);

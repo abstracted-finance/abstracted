@@ -1,6 +1,6 @@
 import { Modal, Textarea, useClipboard, useToasts } from "@zeit-ui/react";
 
-import useLegos from "../../containers/legos/useLegos";
+import useLegos from "../../containers/legos/use-legos";
 
 export default (props) => {
   const [, setToasts] = useToasts();

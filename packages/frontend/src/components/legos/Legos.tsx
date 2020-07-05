@@ -29,8 +29,8 @@ import {
   Lego,
   LegoType,
   default as useLego,
-} from "../../containers/legos/useLegos";
-import useProxy from "../../containers/web3/useProxy";
+} from "../../containers/legos/use-legos";
+import useProxy from "../../containers/web3/use-proxy";
 
 import { parseLegos } from "../../utils/legos";
 

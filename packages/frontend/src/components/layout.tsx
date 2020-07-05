@@ -43,19 +43,18 @@ export default ({ children, meta }) => {
   }
 
   return (
-    <>
-      <Menu />
-      <div className="layout">
-        <PageHeader meta={meta} />
-        <TabbarMobile onClick={mobileTabbarClickHandler} />
-        <aside className="sidebar">
-          <Sidebar />
-        </aside>
-        <div className="side-shadow" />
-        <main className="main">
-          <div>{children}</div>
-        </main>
-        <style jsx>{`
+
+    <div className="layout">
+      <PageHeader meta={meta} />
+      <TabbarMobile onClick={mobileTabbarClickHandler} />
+      <aside className="sidebar">
+        <Sidebar />
+      </aside>
+      <div className="side-shadow" />
+      <main className="main">
+        <div>{children}</div>
+      </main>
+      <style jsx>{`
           .layout {
             min-height: calc(100vh - 108px);
             max-width: ${theme.layout.pageWidthWithMargin};
@@ -121,7 +120,6 @@ export default ({ children, meta }) => {
             }
           }
         `}</style>
-      </div>
-    </>
+    </div>
   );
 };

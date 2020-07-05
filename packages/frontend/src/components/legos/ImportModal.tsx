@@ -1,6 +1,6 @@
 import { useToasts, Modal, Textarea } from "@zeit-ui/react";
 
-import useLegos from "../../containers/legos/useLegos";
+import useLegos from "../../containers/legos/use-legos";
 import { useState } from "react";
 
 export default (props) => {
