@@ -2,12 +2,8 @@ import { useEffect } from 'react'
 import { Row, Col, Text, Input, AutoComplete, Tooltip } from '@zeit-ui/react'
 import * as Icon from '@zeit-ui/react-icons'
 
-import { CenterFlexDiv } from '../../common/Divs'
-import GenericLego from '../GenericLego'
+import GenericLego from '../no-code/generic-lego'
 import useLego from '../../../containers/legos/use-legos'
-import { AaveInputOptions } from './InputOptions'
-
-import { partialSearchHandler } from '../../../utils/search'
 
 export default (props) => {
   const { updateLego, legos } = useLego.useContainer()
@@ -41,13 +37,13 @@ export default (props) => {
   }, [flashloanStartArgs.assets, flashloanStartArgs.amount])
 
   const secondaryDisplay = (
-    <CenterFlexDiv>
+    <div>
       <Tooltip text={'Incurs a 0.09% fee'}>
         <Text type="secondary" small>
           -{flashloanRefundAmount} {flashloanStartArgs.asset}
         </Text>
       </Tooltip>
-    </CenterFlexDiv>
+    </div>
   )
 
   const primaryDisplay = (

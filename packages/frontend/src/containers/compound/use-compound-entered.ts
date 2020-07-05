@@ -8,7 +8,7 @@ import useProxy from '../web3/use-proxy'
 import useContract from '../web3/use-contracts'
 
 import {
-  CompoundAssets,
+  CompoundCAssets,
   CompoundAddresses,
   AddressMapping,
 } from '../../utils/constants'
@@ -31,7 +31,7 @@ function useCompoundEntered() {
     setCheckingCompoundEntered(true)
     const marketsEntered = await IComptroller.getAssetsIn(proxyAddress)
 
-    if (marketsEntered.length !== Object.keys(CompoundAssets).length) {
+    if (marketsEntered.length !== Object.keys(CompoundCAssets).length) {
       setCompoundEntered(false)
     } else {
       setCompoundEntered(true)
@@ -42,7 +42,7 @@ function useCompoundEntered() {
   const enterCompoundMarkets = async () => {
     setIsEnteringCompoundMarkets(true)
 
-    const cTokenAddresses = Object.keys(CompoundAssets).map(
+    const cTokenAddresses = Object.keys(CompoundCAssets).map(
       (k) => AddressMapping[k]
     )
     const calldata = CompoundActions.interface.encodeFunctionData(

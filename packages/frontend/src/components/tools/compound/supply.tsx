@@ -11,9 +11,8 @@ import {
 import * as Icon from '@zeit-ui/react-icons'
 
 import useLego from '../../../containers/legos/use-legos'
-import { CenterFlexDiv } from '../../common/Divs'
-import GenericLego from '../GenericLego'
-import { CompoundInputOptions } from './InputOptions'
+import GenericLego from '../no-code/generic-lego'
+import { CompoundAssetsOptionsAutoComplete } from '../../../utils/constants'
 
 import { partialSearchHandler } from '../../../utils/search'
 
@@ -27,9 +26,11 @@ export default (props) => {
 
   // Asset type
   const [selectedOption, setSelectedOption] = useState(legoArgs.asset)
-  const [inputOptions, setInputOptions] = useState(CompoundInputOptions)
+  const [inputOptions, setInputOptions] = useState(
+    CompoundAssetsOptionsAutoComplete
+  )
   const searchHandler = partialSearchHandler(
-    CompoundInputOptions,
+    CompoundAssetsOptionsAutoComplete,
     setInputOptions
   )
 
@@ -47,12 +48,12 @@ export default (props) => {
   }, [inputAmount, selectedOption])
 
   const secondaryDisplay = (
-    <CenterFlexDiv>
+    <div>
       <Text type="secondary" small>
         -{inputAmount} {selectedOption}
       </Text>
       <Spacer x={1} />
-    </CenterFlexDiv>
+    </div>
   )
 
   const primaryDisplay = (

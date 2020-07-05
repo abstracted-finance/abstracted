@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Card, Tag, Text, Spacer, Row, Col, Spinner } from '@zeit-ui/react'
-import { XIcon, ChevronUpIcon, ChevronDownIcon } from '../common/Icons'
-import useLego from '../../containers/legos/use-legos'
+import { XIcon, ChevronUpIcon, ChevronDownIcon } from '../../icons'
+import useLego from '../../../containers/legos/use-legos'
 
 export default ({
   tagText,

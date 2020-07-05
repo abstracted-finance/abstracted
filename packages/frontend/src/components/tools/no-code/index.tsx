@@ -8,31 +8,30 @@ import {
   Spacer,
   Note,
   useModal,
-  Card,
 } from '@zeit-ui/react'
 
-import CompoundSupply from './compound/Supply'
-import CompoundWithdraw from './compound/Withdraw'
-import CompoundBorrow from './compound/Borrow'
-import CompoundRepay from './compound/Repay'
+import CompoundSupply from './compound/supply'
+import CompoundWithdraw from './compound/withdraw'
+import CompoundBorrow from './compound/borrow'
+import CompoundRepay from './compound/repay'
 
-import AaveFlashloanStart from './aave/FlashloanStart'
-import AaveFlashloanEnd from './aave/FlashloanEnd'
+import AaveFlashloanStart from './aave/flashloan-start'
+import AaveFlashloanEnd from './aave/flashloan-end'
 
-import AddLegoPage from './AddLegoPage'
-import GenericLego from './GenericLego'
+import AddLegoPage from './add-lego'
+import GenericLego from './generic-lego'
 
-import ImportModal from './ImportModal'
-import ExportModal from './ExportModal'
+import ImportModal from './modal-import'
+import ExportModal from './modal-export'
 
 import {
   Lego,
   LegoType,
   default as useLego,
-} from '../../containers/legos/use-legos'
-import useProxy from '../../containers/web3/use-proxy'
+} from '../../../containers/legos/use-legos'
+import useProxy from '../../../containers/web3/use-proxy'
 
-import { parseLegos } from '../../utils/legos'
+import { parseLegos } from '../../../utils/legos'
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {

@@ -18,14 +18,17 @@ export enum Assets {
   DAI = 'DAI',
 }
 
-export const AssetOptionsAutoComplete = Object.keys(Assets).map(k => {
+// Helper function to map over stuff
+const toAutoCompleteOptions = k => {
   return {
     value: Assets[k],
     label: Assets[k]
   }
-})
+}
 
-export enum CompoundAssets {
+export const AssetOptionsAutoComplete = Object.keys(Assets).map(toAutoCompleteOptions)
+
+export enum CompoundCAssets {
   cETH = 'cETH',
   cBAT = 'cBAT',
   cUSDC = 'cUSDC',
@@ -35,6 +38,42 @@ export enum CompoundAssets {
   cREP = 'cREP',
   cZRX = 'cZRX',
 }
+
+export const CompoundAssets = [
+  Assets.ETH,
+  Assets.BAT,
+  Assets.USDC,
+  Assets.USDT,
+  Assets.DAI,
+  Assets.WBTC,
+  Assets.REP,
+  Assets.ZRX,
+]
+
+export const CompoundAssetsOptionsAutoComplete = CompoundAssets.map(toAutoCompleteOptions)
+
+
+export const AaveAssets = [
+  Assets.ETH,
+  Assets.USDC,
+  Assets.TUSD,
+  Assets.USDT,
+  Assets.sUSD,
+  Assets.BUSD,
+  Assets.LEND,
+  Assets.BAT,
+  Assets.KNC,
+  Assets.LINK,
+  Assets.MANA,
+  Assets.MKR,
+  Assets.REP,
+  Assets.SNX,
+  Assets.WBTC,
+  Assets.ZRX,
+  Assets.DAI,
+]
+
+export const AaveAssetsOptionsAutoComplete = AaveAssets.map(toAutoCompleteOptions)
 
 export const AddressMapping = {
   [Assets.ETH]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -54,25 +93,25 @@ export const AddressMapping = {
   [Assets.WBTC]: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
   [Assets.ZRX]: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
   [Assets.DAI]: '0x6b175474e89094c44da98b954eedeac495271d0f',
-  [CompoundAssets.cETH]: '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
-  [CompoundAssets.cBAT]: '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
-  [CompoundAssets.cUSDC]: '0x39aa39c021dfbae8fac545936693ac917d5e7563',
-  [CompoundAssets.cUSDT]: '0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9',
-  [CompoundAssets.cDAI]: '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
-  [CompoundAssets.cWBTC]: '0xc11b1268c1a384e55c48c2391d8d480264a3a7f4',
-  [CompoundAssets.cREP]: '0x158079ee67fce2f58472a96584a73c7ab9ac95c1',
-  [CompoundAssets.cZRX]: '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
+  [CompoundCAssets.cETH]: '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
+  [CompoundCAssets.cBAT]: '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
+  [CompoundCAssets.cUSDC]: '0x39aa39c021dfbae8fac545936693ac917d5e7563',
+  [CompoundCAssets.cUSDT]: '0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9',
+  [CompoundCAssets.cDAI]: '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
+  [CompoundCAssets.cWBTC]: '0xc11b1268c1a384e55c48c2391d8d480264a3a7f4',
+  [CompoundCAssets.cREP]: '0x158079ee67fce2f58472a96584a73c7ab9ac95c1',
+  [CompoundCAssets.cZRX]: '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
 }
 
 export const CTokenMapping = {
-  [Assets.ETH]: [CompoundAssets.cETH],
-  [Assets.USDC]: [CompoundAssets.cUSDC],
-  [Assets.USDT]: [CompoundAssets.cUSDT],
-  [Assets.DAI]: [CompoundAssets.cDAI],
-  [Assets.WBTC]: [CompoundAssets.cWBTC],
-  [Assets.BAT]: [CompoundAssets.cBAT],
-  [Assets.REP]: [CompoundAssets.cREP],
-  [Assets.ZRX]: [CompoundAssets.cZRX],
+  [Assets.ETH]: [CompoundCAssets.cETH],
+  [Assets.USDC]: [CompoundCAssets.cUSDC],
+  [Assets.USDT]: [CompoundCAssets.cUSDT],
+  [Assets.DAI]: [CompoundCAssets.cDAI],
+  [Assets.WBTC]: [CompoundCAssets.cWBTC],
+  [Assets.BAT]: [CompoundCAssets.cBAT],
+  [Assets.REP]: [CompoundCAssets.cREP],
+  [Assets.ZRX]: [CompoundCAssets.cZRX],
 }
 
 export const DecimalMapping = {
@@ -93,14 +132,14 @@ export const DecimalMapping = {
   [Assets.WBTC]: 8,
   [Assets.ZRX]: 18,
   [Assets.DAI]: 18,
-  [CompoundAssets.cETH]: 8,
-  [CompoundAssets.cBAT]: 8,
-  [CompoundAssets.cUSDC]: 8,
-  [CompoundAssets.cUSDT]: 8,
-  [CompoundAssets.cDAI]: 8,
-  [CompoundAssets.cWBTC]: 8,
-  [CompoundAssets.cREP]: 8,
-  [CompoundAssets.cZRX]: 8,
+  [CompoundCAssets.cETH]: 8,
+  [CompoundCAssets.cBAT]: 8,
+  [CompoundCAssets.cUSDC]: 8,
+  [CompoundCAssets.cUSDT]: 8,
+  [CompoundCAssets.cDAI]: 8,
+  [CompoundCAssets.cWBTC]: 8,
+  [CompoundCAssets.cREP]: 8,
+  [CompoundCAssets.cZRX]: 8,
 }
 
 export const AaveAddresses = {

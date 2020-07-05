@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react'
 import { Row, Col, Text, Input, AutoComplete, Tooltip } from '@zeit-ui/react'
 import * as Icon from '@zeit-ui/react-icons'
 
-import useLego from '../../../containers/legos/use-legos'
-import { CenterFlexDiv } from '../../common/Divs'
-import GenericLego from '../GenericLego'
-import { CompoundInputOptions } from './InputOptions'
+import useLego from '../../../../containers/legos/use-legos'
+import GenericLego from '../generic-lego'
+import { CompoundAssetsOptionsAutoComplete } from '../../../../utils/constants'
 
-import { partialSearchHandler } from '../../../utils/search'
+import { partialSearchHandler } from '../../../../utils/search'
 
 export default (props) => {
   const legoArgs = props.lego.args[0]
@@ -16,11 +15,13 @@ export default (props) => {
 
   const [inputAmount, setInputAmount] = useState(legoArgs.amount)
   const [selectedOption, setSelectedOption] = useState(
-    CompoundInputOptions[0].value
+    CompoundAssetsOptionsAutoComplete[0].value
   )
-  const [inputOptions, setInputOptions] = useState(CompoundInputOptions)
+  const [inputOptions, setInputOptions] = useState(
+    CompoundAssetsOptionsAutoComplete
+  )
   const searchHandler = partialSearchHandler(
-    CompoundInputOptions,
+    CompoundAssetsOptionsAutoComplete,
     setInputOptions
   )
 
@@ -38,11 +39,11 @@ export default (props) => {
   }, [inputAmount, selectedOption])
 
   const secondaryDisplay = (
-    <CenterFlexDiv>
+    <div>
       <Text type="secondary" small>
         -{inputAmount} {selectedOption}
       </Text>
-    </CenterFlexDiv>
+    </div>
   )
 
   const primaryDisplay = (

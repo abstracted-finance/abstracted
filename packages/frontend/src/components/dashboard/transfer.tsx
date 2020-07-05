@@ -111,7 +111,7 @@ export default () => {
       <Spacer y={1} />
 
       <Card>
-        <Text h5>Receive</Text>
+        <Text h5>Supply</Text>
         {hasProxy ? (
           <>
             <Text size={14} type="secondary">

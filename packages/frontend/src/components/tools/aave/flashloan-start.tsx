@@ -3,9 +3,8 @@ import { Row, Col, Text, Input, AutoComplete, Tooltip } from '@zeit-ui/react'
 import * as Icon from '@zeit-ui/react-icons'
 
 import useLego from '../../../containers/legos/use-legos'
-import { CenterFlexDiv } from '../../common/Divs'
-import GenericLego from '../GenericLego'
-import { AaveInputOptions } from './InputOptions'
+import GenericLego from '../no-code/generic-lego'
+import { AaveAssetsOptionsAutoComplete } from '../../../utils/constants'
 
 import { partialSearchHandler } from '../../../utils/search'
 
@@ -15,8 +14,13 @@ export default (props) => {
 
   const [inputAmount, setInputAmount] = useState(legoArgs.amount)
   const [selectedOption, setSelectedOption] = useState(legoArgs.asset)
-  const [inputOptions, setInputOptions] = useState(AaveInputOptions)
-  const searchHandler = partialSearchHandler(AaveInputOptions, setInputOptions)
+  const [inputOptions, setInputOptions] = useState(
+    AaveAssetsOptionsAutoComplete
+  )
+  const searchHandler = partialSearchHandler(
+    AaveAssetsOptionsAutoComplete,
+    setInputOptions
+  )
 
   useEffect(() => {
     const curLego = props.lego
@@ -32,11 +36,11 @@ export default (props) => {
   }, [inputAmount, selectedOption])
 
   const secondaryDisplay = (
-    <CenterFlexDiv>
+    <div>
       <Text type="secondary" small>
         +{inputAmount} {selectedOption}
       </Text>
-    </CenterFlexDiv>
+    </div>
   )
 
   const primaryDisplay = (
