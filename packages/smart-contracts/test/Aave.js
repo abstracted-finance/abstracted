@@ -7,6 +7,7 @@ const {
   getProxyContract,
   getContractEthersInterface,
   assertBNGreaterThan,
+  assertBNLessThan,
 } = require('./common')
 
 describe('Aave', function () {
@@ -15,6 +16,7 @@ describe('Aave', function () {
   let user
   let userProxy
   let token
+  let aaveLendingPool
   let aaveActions
   let aaveFlashloanActions
   let tokenActions
@@ -37,6 +39,12 @@ describe('Aave', function () {
     aaveLendingPoolCoreAddress = await aaveLendingPoolAddressProvider.getLendingPoolCore()
     aaveLendingPoolAddress = await aaveLendingPoolAddressProvider.getLendingPool()
     ;({ user1: user } = await getNamedAccounts())
+
+    aaveLendingPool = await getContract({
+      name: 'ILendingPool',
+      address: aaveLendingPoolAddress,
+      signer: user,
+    })
 
     userProxy = await getProxyContract({ signer: user })
 
@@ -129,6 +137,60 @@ describe('Aave', function () {
     assertBNGreaterThan(finalBal, initialBal)
   }
 
+  const repayAave = async ({ reserve, amountWei }) => {
+    // https://docs.aave.com/developers/developing-on-aave/the-protocol/lendingpool#getreservedata
+    let reserveData = await aaveLendingPool.getUserReserveData(
+      reserve,
+      userProxy.address
+    )
+    const initialBorrowBalance = reserveData[1]
+
+    const calldata = IAaveActions.encodeFunctionData('repay', [
+      aaveLendingPoolAddress,
+      aaveLendingPoolCoreAddress,
+      reserve,
+      amountWei,
+      userProxy.address, // variable rate
+    ])
+
+    const tx = await userProxy.execute(aaveActions.address, calldata, {
+      value: reserve === ADDRESSES.ETH ? amountWei : 0,
+      gasLimit: 1200000,
+    })
+    await tx.wait()
+
+    reserveData = await aaveLendingPool.getUserReserveData(
+      reserve,
+      userProxy.address
+    )
+    const finalBorrowBalance = reserveData[1]
+
+    assertBNLessThan(finalBorrowBalance, initialBorrowBalance)
+  }
+
+  const redeemAave = async ({ amountWei, aTokenAddress, tokenAddress }) => {
+    const initialBal = await getTokenBalanceOf({
+      tokenAddress,
+      userAddress: userProxy.address,
+    })
+
+    const calldata = IAaveActions.encodeFunctionData('redeem', [
+      aTokenAddress,
+      amountWei,
+    ])
+    const tx = await userProxy.execute(aaveActions.address, calldata, {
+      gasLimit: 1200000,
+    })
+    await tx.wait()
+
+    const finalBal = await getTokenBalanceOf({
+      tokenAddress,
+      userAddress: userProxy.address,
+    })
+
+    assertBNGreaterThan(finalBal, initialBal)
+  }
+
   const flashloanAave = async ({ reserve, amountWei, autoFund }) => {
     const refundAmount = amountWei
       .mul(ethers.BigNumber.from('10009'))
@@ -200,12 +262,34 @@ describe('Aave', function () {
     })
 
     it('Borrow (DAI)', async function () {
-      const borrowAmountWei = ethers.utils.parseEther('100')
+      const borrowAmountWei = ethers.utils.parseEther('500')
       const tokenAddress = ADDRESSES.DAI
 
       await borrowAave({
         borrowAmountWei,
         tokenAddress,
+      })
+    })
+
+    it('Repay (DAI)', async function () {
+      const amountWei = ethers.utils.parseEther('25')
+      const tokenAddress = ADDRESSES.DAI
+
+      await repayAave({
+        amountWei: amountWei,
+        reserve: tokenAddress,
+      })
+    })
+
+    it('Redeem (ETH)', async function () {
+      const amountWei = ethers.utils.parseEther('0.1')
+      const tokenAddress = ADDRESSES.ETH
+      const aTokenAddress = ADDRESSES.AETH
+
+      await redeemAave({
+        amountWei,
+        tokenAddress,
+        aTokenAddress,
       })
     })
 
@@ -228,6 +312,28 @@ describe('Aave', function () {
       await borrowAave({
         borrowAmountWei,
         tokenAddress,
+      })
+    })
+
+    it('Repay (ETH)', async function () {
+      const amountWei = ethers.utils.parseEther('0.01')
+      const tokenAddress = ADDRESSES.ETH
+
+      await repayAave({
+        amountWei: amountWei,
+        reserve: tokenAddress,
+      })
+    })
+
+    it('Redeem (DAI)', async function () {
+      const amountWei = ethers.utils.parseEther('1')
+      const tokenAddress = ADDRESSES.DAI
+      const aTokenAddress = ADDRESSES.ADAI
+
+      await redeemAave({
+        amountWei,
+        tokenAddress,
+        aTokenAddress,
       })
     })
   })
