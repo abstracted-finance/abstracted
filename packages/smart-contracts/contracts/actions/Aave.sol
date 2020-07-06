@@ -27,6 +27,7 @@ contract AaveActions {
   function deposit(
     address _lendingPool,
     address _lendingPoolCore,
+    address _user,
     address _reserve,
     uint256 _amount
   ) external payable {
@@ -39,7 +40,13 @@ contract AaveActions {
       lendingPool.deposit(_reserve, _amount, uint16(0));
     }
 
-    lendingPool.setUserUseReserveAsCollateral(_reserve, true);
+    // https://docs.aave.com/developers/developing-on-aave/the-protocol/lendingpool#getreservedata
+    (, , , , , , , , , bool usageAsCollateralEnabled) = lendingPool
+      .getUserReserveData(_reserve, _user);
+
+    if (!usageAsCollateralEnabled) {
+      lendingPool.setUserUseReserveAsCollateral(_reserve, true);
+    }
   }
 
   function borrow(

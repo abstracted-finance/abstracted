@@ -85,6 +85,7 @@ describe('Aave', function () {
     const calldata = IAaveActions.encodeFunctionData('deposit', [
       aaveLendingPoolAddress,
       aaveLendingPoolCoreAddress,
+      userProxy.address,
       tokenAddress,
       depositAmountWei,
     ])
@@ -112,7 +113,7 @@ describe('Aave', function () {
       aaveLendingPoolAddress,
       tokenAddress,
       borrowAmountWei,
-      1, // stable
+      2, // variable rate
     ])
 
     const tx = await userProxy.execute(aaveActions.address, calldata, {
@@ -144,6 +145,28 @@ describe('Aave', function () {
     it('Borrow (DAI)', async function () {
       const borrowAmountWei = ethers.utils.parseEther('10')
       const tokenAddress = ADDRESSES.DAI
+
+      await borrowAave({
+        borrowAmountWei,
+        tokenAddress,
+      })
+    })
+
+    it('Deposit (DAI)', async function () {
+      const depositAmountWei = ethers.utils.parseEther('10')
+      const aTokenAddress = ADDRESSES.ADAI
+      const tokenAddress = ADDRESSES.DAI
+
+      await depositAave({
+        depositAmountWei,
+        aTokenAddress,
+        tokenAddress,
+      })
+    })
+
+    it('Borrow (ETH)', async function () {
+      const borrowAmountWei = ethers.utils.parseEther('0.05')
+      const tokenAddress = ADDRESSES.ETH
 
       await borrowAave({
         borrowAmountWei,
