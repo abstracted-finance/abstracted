@@ -94,7 +94,7 @@ function useProxy() {
     hasProxy,
     createProxy,
     isCreatingProxy,
-    hasProxyFactory
+    hasProxyFactory,
   }
 }
 

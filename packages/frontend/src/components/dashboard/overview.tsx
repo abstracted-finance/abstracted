@@ -24,7 +24,7 @@ export default () => {
 
   const [showZeroBal, setShowZeroBal] = useLocalStorageState<boolean>(
     'showZeroBal',
-    false
+    true
   )
 
   const filteredBal = showZeroBal
@@ -43,7 +43,9 @@ export default () => {
     <>
       <Text h3>Overview</Text>
       <div className="overview-summary">
-        <span>Smart Wallet Address: {hasProxy ? proxyAddress : 'Not found'}</span>
+        <span>
+          Smart Wallet Address: {hasProxy ? proxyAddress : 'Not found'}
+        </span>
         <Spacer y={0.33} />
         <span>
           Total Value: {totalValue} {currency}

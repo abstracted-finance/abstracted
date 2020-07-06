@@ -16,24 +16,30 @@ export default [
             url: '/en-us/dashboard/transfer',
             index: 5,
             group: 'smart-wallet',
-          }
+          },
         ],
       },
       {
-        name: 'protocol-apps',
+        name: 'apps',
         children: [
           {
             name: 'aave',
             url: '/en-us/dashboard/aave',
             index: 5,
-            group: 'protocol-apps',
+            group: 'apps',
           },
           {
             name: 'compound',
             url: '/en-us/dashboard/compound',
             index: 5,
-            group: 'protocol-apps',
-          }
+            group: 'apps',
+          },
+          {
+            name: 'uniswap-v2',
+            url: '/en-us/dashboard/uniswap-v2',
+            index: 5,
+            group: 'apps',
+          },
         ],
       },
     ],

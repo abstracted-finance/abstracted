@@ -7,7 +7,7 @@ import { getContract, network } from '../../utils/common'
 import { CompoundAddresses } from '../../utils/constants'
 
 // Contracts that has dynamic address
-const initialNoAddressContractNames = ['IERC20', 'Proxy']
+const initialNoAddressContractNames = ['IERC20', 'Proxy', 'ICToken']
 const initialNoAddressContracts = initialNoAddressContractNames
   .map((x) => {
     return [
@@ -41,7 +41,7 @@ const initialAddressedContractNames = [
   'CompoundActions',
   'TokenActions',
   'AaveFlashloanActions',
-  'UniswapV2Actions'
+  'UniswapV2Actions',
 ]
 const initialAddressedContracts = initialAddressedContractNames
   .map((x) => {

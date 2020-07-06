@@ -19,14 +19,16 @@ export enum Assets {
 }
 
 // Helper function to map over stuff
-const toAutoCompleteOptions = m => k => {
+const toAutoCompleteOptions = (m) => (k) => {
   return {
     value: m[k],
-    label: m[k]
+    label: m[k],
   }
 }
 
-export const AssetOptionsAutoComplete = Object.keys(Assets).map(toAutoCompleteOptions(Assets))
+export const AssetOptionsAutoComplete = Object.keys(Assets).map(
+  toAutoCompleteOptions(Assets)
+)
 
 // ---- Aave ----
 
@@ -37,23 +39,23 @@ export const AaveAddresses = {
 }
 
 export enum AaveAAssets {
-  aETH = "aETH",
-  aDAI = "aDAI",
-  aUSDC = "aUSDC",
-  aSUSD = "aSUSD",
-  aTUSD = "aTUSD",
-  aUSDT = "aUSDT",
-  aBUSD = "aBUSD",
-  aBAT = "aBAT",
-  aKNC = "aKNC",
-  aLEND = "aLEND",
-  aLINK = "aLINK",
-  aMANA = "aMANA",
-  aMKR = "aMKR",
-  aREP = "aREP",
-  aSNX = "aSNX",
-  aWBTC = "aWBTC",
-  aZRX = "aZRX",
+  aETH = 'aETH',
+  aDAI = 'aDAI',
+  aUSDC = 'aUSDC',
+  aSUSD = 'aSUSD',
+  aTUSD = 'aTUSD',
+  aUSDT = 'aUSDT',
+  aBUSD = 'aBUSD',
+  aBAT = 'aBAT',
+  aKNC = 'aKNC',
+  aLEND = 'aLEND',
+  aLINK = 'aLINK',
+  aMANA = 'aMANA',
+  aMKR = 'aMKR',
+  aREP = 'aREP',
+  aSNX = 'aSNX',
+  aWBTC = 'aWBTC',
+  aZRX = 'aZRX',
 }
 
 export const AaveAssets = [
@@ -76,7 +78,9 @@ export const AaveAssets = [
   Assets.DAI,
 ]
 
-export const AaveAssetsOptionsAutoComplete = AaveAssets.map(toAutoCompleteOptions(Assets))
+export const AaveAssetsOptionsAutoComplete = AaveAssets.map(
+  toAutoCompleteOptions(Assets)
+)
 
 // ---- Compound ----
 
@@ -106,8 +110,9 @@ export const CompoundAssets = [
   Assets.ZRX,
 ]
 
-
-export const CompoundAssetsOptionsAutoComplete = CompoundAssets.map(toAutoCompleteOptions)
+export const CompoundAssetsOptionsAutoComplete = CompoundAssets.map(
+  toAutoCompleteOptions(Assets)
+)
 
 // ---- Mappings ---- //
 
@@ -167,6 +172,16 @@ export const CTokenMapping = {
   [Assets.ZRX]: [CompoundCAssets.cZRX],
 }
 
+export const CTokenReverseMapping = Object.keys(CTokenMapping)
+  .map((k) => {
+    return {
+      [CTokenMapping[k]]: k,
+    }
+  })
+  .reduce((acc, x) => {
+    return { ...acc, ...x }
+  }, {})
+
 export const DecimalMapping = {
   [Assets.ETH]: 18,
   [Assets.USDC]: 6,
@@ -218,10 +233,10 @@ export const UniswapV2Addresses = {
   RouterV2: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
 }
 
-export const AllAssets = Object.keys(AddressMapping).map(x => {
+export const AllAssets = Object.keys(AddressMapping).map((x) => {
   return {
     label: x,
-    value: x
+    value: x,
   }
 })
 
@@ -246,6 +261,31 @@ export const CoinGeckoIdMapping = {
   [Assets.WBTC]: 'wrapped-bitcoin',
   [Assets.ZRX]: '0x',
   [Assets.DAI]: 'dai',
+  [CompoundCAssets.cETH]: 'compound-ether',
+  [CompoundCAssets.cBAT]: 'compound-basic-attention-token',
+  [CompoundCAssets.cUSDC]: 'compound-usd-coin',
+  [CompoundCAssets.cUSDT]: 'compound-usdt',
+  [CompoundCAssets.cDAI]: 'cdai',
+  [CompoundCAssets.cWBTC]: 'compound-wrapped-btc',
+  [CompoundCAssets.cREP]: 'compound-augur',
+  [CompoundCAssets.cZRX]: 'compound-0x',
+  [AaveAAssets.aETH]: 'aave-eth',
+  [AaveAAssets.aDAI]: 'aave-dai',
+  [AaveAAssets.aUSDC]: 'aave-usdc',
+  [AaveAAssets.aSUSD]: 'aave-susd',
+  [AaveAAssets.aTUSD]: 'aave-tusd',
+  [AaveAAssets.aUSDT]: 'aave-usdt',
+  [AaveAAssets.aBUSD]: 'aave-busd',
+  [AaveAAssets.aBAT]: 'aave-bat',
+  [AaveAAssets.aKNC]: 'aave-knc',
+  [AaveAAssets.aLEND]: 'aave-lend',
+  [AaveAAssets.aLINK]: 'aave-link',
+  [AaveAAssets.aMANA]: 'aave-mana',
+  [AaveAAssets.aMKR]: 'aave-mkr',
+  [AaveAAssets.aREP]: 'aave-rep',
+  [AaveAAssets.aSNX]: 'aave-snx',
+  [AaveAAssets.aWBTC]: 'aave-wbtc',
+  [AaveAAssets.aZRX]: 'aave-zrx',
 }
 
 export const CoinGeckoIdReverseMapping = Object.keys(CoinGeckoIdMapping)

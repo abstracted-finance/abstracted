@@ -15,7 +15,9 @@ function useWeb3() {
   const [ethAddress, setEthAddress] = useState<string | null>(null)
   const [error, setError] = useState<Error | null>(null)
   const [isConnecting, setIsConnecting] = useState<boolean>(false)
-  const [connectedBefore, setHasConnectedBefore] = useLocalStorageState<boolean>('connected-web3-prior', false)
+  const [connectedBefore, setHasConnectedBefore] = useLocalStorageState<
+    boolean
+  >('connected-web3-prior', false)
 
   const connected = provider !== null
 

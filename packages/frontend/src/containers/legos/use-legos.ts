@@ -8,7 +8,7 @@ export enum LegoType {
   CompoundWithdraw,
   AaveFlashloanStart,
   AaveFlashloanEnd,
-  UniswapV2SwapExactInToOut
+  UniswapV2SwapExactInToOut,
 }
 
 export interface Lego {

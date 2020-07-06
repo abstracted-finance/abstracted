@@ -1,9 +1,6 @@
 import { createContainer } from 'unstated-next'
 import { useState } from 'react'
 import { useToasts } from '@zeit-ui/react'
-import { ethers } from 'ethers'
-
-import { AddressMapping, DecimalMapping } from '../../utils/constants'
 
 import useWeb3 from '../web3/use-web3'
 import useProxy from '../web3/use-proxy'

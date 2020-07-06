@@ -7,6 +7,7 @@ import AppContextContainer from '../containers/settings/use-app-context'
 import WithdrawContainer from '../containers/balances/use-withdraw'
 import CompoundEnteredContainer from '../containers/compound/use-compound-entered'
 import SettingsContainer from '../containers/settings/use-settings'
+import CompoundBalancesContainer from '../containers/balances/use-compound-bals'
 import BalancesContainer from '../containers/balances/use-balances'
 import ContractsContainer from '../containers/web3/use-contracts'
 import ProxyContainer from '../containers/web3/use-proxy'
@@ -44,15 +45,17 @@ function App({ Component, pageProps }: AppProps) {
                 <ProxyContainer.Provider>
                   <CompoundEnteredContainer.Provider>
                     <BalancesContainer.Provider>
-                      <WithdrawContainer.Provider>
-                        <LegoContainer.Provider>
-                          <Head>
-                            <title>Abstracted</title>
-                          </Head>
-                          <Menu />
-                          <Component {...pageProps} />
-                        </LegoContainer.Provider>
-                      </WithdrawContainer.Provider>
+                      <CompoundBalancesContainer.Provider>
+                        <WithdrawContainer.Provider>
+                          <LegoContainer.Provider>
+                            <Head>
+                              <title>Abstracted</title>
+                            </Head>
+                            <Menu />
+                            <Component {...pageProps} />
+                          </LegoContainer.Provider>
+                        </WithdrawContainer.Provider>
+                      </CompoundBalancesContainer.Provider>
                     </BalancesContainer.Provider>
                   </CompoundEnteredContainer.Provider>
                 </ProxyContainer.Provider>

@@ -63,16 +63,16 @@ const serializeCompoundLego = ({ lego }: { lego: Lego }): SerializedLego => {
     [LegoType.CompoundBorrow]: 'borrow',
     [LegoType.CompoundSupply]: 'supply',
     [LegoType.CompoundRepay]: 'repayBorrow',
-    [LegoType.CompoundWithdraw]: 'redeemUnderlying'
+    [LegoType.CompoundWithdraw]: 'redeemUnderlying',
   }
 
   return {
     target: CompoundActions.address,
     msgValue,
-    data: ICompoundActions.encodeFunctionData(LegoTypeFunctionNameMapping[lego.type], [
-      cTokenAddress,
-      amountWei,
-    ]),
+    data: ICompoundActions.encodeFunctionData(
+      LegoTypeFunctionNameMapping[lego.type],
+      [cTokenAddress, amountWei]
+    ),
   }
 }
 
@@ -102,8 +102,8 @@ const serializeUniswapV2Lego = ({
         amountMinOutWei,
         fromAddress,
         toAddress,
-        userProxy
-      ])
+        userProxy,
+      ]),
     }
   }
 }
@@ -119,12 +119,10 @@ export const serializeLego = ({
     LegoType.CompoundBorrow,
     LegoType.CompoundRepay,
     LegoType.CompoundSupply,
-    LegoType.CompoundWithdraw
+    LegoType.CompoundWithdraw,
   ]
 
-  const UniswapV2LegoTypes = [
-    LegoType.UniswapV2SwapExactInToOut
-  ]
+  const UniswapV2LegoTypes = [LegoType.UniswapV2SwapExactInToOut]
 
   if (CompoundLegoTypes.includes(lego.type)) {
     return serializeCompoundLego({ lego })

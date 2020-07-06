@@ -15,12 +15,12 @@ import {
 } from '../../utils/constants'
 import { useToasts } from '@zeit-ui/react'
 
-const sortByName = ((a, b) => {
+const sortByName = (a, b) => {
   const [aL, bL] = [a.label, b.label].map((x) => x.toLowerCase())
   if (aL < bL) return -1
   if (bL < aL) return 1
   return 0
-})
+}
 
 export interface Balance {
   label: string
@@ -31,17 +31,19 @@ export interface Balance {
   value: string // amount * price
 }
 
-const initialBalances: Balance[] = Object.keys(Assets).map((k) => {
-  const v = Assets[k]
-  return {
-    label: v,
-    address: AddressMapping[v],
-    balance: '0.00',
-    decimals: DecimalMapping[v],
-    price: '0.00',
-    value: '0.00',
-  }
-}).sort(sortByName)
+const initialBalances: Balance[] = Object.keys(Assets)
+  .map((k) => {
+    const v = Assets[k]
+    return {
+      label: v,
+      address: AddressMapping[v],
+      balance: '0.00',
+      decimals: DecimalMapping[v],
+      price: '0.00',
+      value: '0.00',
+    }
+  })
+  .sort(sortByName)
 
 function useBalances() {
   const [, setToasts] = useToasts()
@@ -98,7 +100,7 @@ function useBalances() {
   }
 
   const getBalances = async () => {
-    if (provider === null) return;
+    if (provider === null) return
     if (proxyAddress === ethers.constants.AddressZero) return
 
     setIsRetrievingBal(true)
@@ -139,7 +141,7 @@ function useBalances() {
 
     const newBalancesWithPrices = newBalancesSorted.map((b) => {
       const coingeckoId = CoinGeckoIdMapping[b.label]
-      const price = (coingeckoJson[coingeckoId][currency]).toFixed(2)
+      const price = coingeckoJson[coingeckoId][currency].toFixed(2)
       const value = parseFloat(b.balance) * price
 
       return {
@@ -181,7 +183,7 @@ function useBalances() {
     getBalances,
     getDecimalsOf,
     getBalanceOf,
-    tryGetAddressAndDecimal
+    tryGetAddressAndDecimal,
   }
 }
 
