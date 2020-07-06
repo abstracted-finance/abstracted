@@ -4,6 +4,12 @@ import { ethers } from 'ethers'
 import { useToasts } from '@zeit-ui/react'
 import useLocalStorageState from 'use-local-storage-state'
 
+declare global {
+  interface Window {
+    ethereum: Provider | undefined
+  }
+}
+
 type Provider = ethers.providers.Provider
 type Signer = ethers.Signer
 

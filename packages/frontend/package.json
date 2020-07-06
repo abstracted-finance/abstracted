@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "ETH_NETWORK=development next dev",
+    "build": "ETH_NETWORK=development next build",
     "start": "next start",
     "lint": "prettier --write src/"
   },

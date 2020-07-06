@@ -49,4 +49,4 @@ export const getContractInterface = ({ name, network = 'mainnet' }) => {
 }
 
 export const network =
-  process.env.NODE_ENV === 'development' ? 'localhost' : 'mainnet'
+  process.env.ETH_NETWORK === 'development' ? 'localhost' : 'mainnet'
