@@ -48,7 +48,7 @@ export default () => {
         </span>
         <Spacer y={0.33} />
         <span>
-          Total Value: {totalValue} {currency}
+          Total Value: {totalValue.toFixed(2)} {currency}
         </span>
       </div>
       <Spacer y={1} />

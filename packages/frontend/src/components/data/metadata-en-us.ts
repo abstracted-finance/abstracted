@@ -22,24 +22,24 @@ export default [
       {
         name: 'apps',
         children: [
-          {
-            name: 'aave',
-            url: '/en-us/dashboard/aave',
-            index: 5,
-            group: 'apps',
-          },
+          // {
+          //   name: 'aave',
+          //   url: '/en-us/dashboard/aave',
+          //   index: 5,
+          //   group: 'apps',
+          // },
           {
             name: 'compound',
             url: '/en-us/dashboard/compound',
             index: 5,
             group: 'apps',
           },
-          {
-            name: 'uniswap-v2',
-            url: '/en-us/dashboard/uniswap-v2',
-            index: 5,
-            group: 'apps',
-          },
+          // {
+          //   name: 'uniswap-v2',
+          //   url: '/en-us/dashboard/uniswap-v2',
+          //   index: 5,
+          //   group: 'apps',
+          // },
         ],
       },
     ],
@@ -81,51 +81,51 @@ export default [
       //     },
       //   ],
       // },
-      {
-        name: 'bridges',
-        children: [
-          {
-            name: 'protocol',
-            url: '/en-us/tools/bridges',
-            index: 100,
-            group: 'bridges',
-          },
-        ],
-      },
-      {
-        name: 'swaps',
-        children: [
-          {
-            name: 'collateral',
-            url: '/en-us/tools/collateral',
-            index: 100,
-            group: 'swaps',
-          },
-          {
-            name: 'debt',
-            url: '/en-us/tools/debt',
-            index: 100,
-            group: 'swaps',
-          },
-        ],
-      },
-      {
-        name: 'position',
-        children: [
-          {
-            name: 'leverage',
-            url: '/en-us/tools/leverage',
-            index: 100,
-            group: 'position',
-          },
-          {
-            name: 'de-leverage',
-            url: '/en-us/tools/leverage',
-            index: 100,
-            group: 'position',
-          },
-        ],
-      },
+      // {
+      //   name: 'bridges',
+      //   children: [
+      //     {
+      //       name: 'protocol',
+      //       url: '/en-us/tools/bridges',
+      //       index: 100,
+      //       group: 'bridges',
+      //     },
+      //   ],
+      // },
+      // {
+      //   name: 'swaps',
+      //   children: [
+      //     {
+      //       name: 'collateral',
+      //       url: '/en-us/tools/collateral',
+      //       index: 100,
+      //       group: 'swaps',
+      //     },
+      //     {
+      //       name: 'debt',
+      //       url: '/en-us/tools/debt',
+      //       index: 100,
+      //       group: 'swaps',
+      //     },
+      //   ],
+      // },
+      // {
+      //   name: 'position',
+      //   children: [
+      //     {
+      //       name: 'leverage',
+      //       url: '/en-us/tools/leverage',
+      //       index: 100,
+      //       group: 'position',
+      //     },
+      //     {
+      //       name: 'de-leverage',
+      //       url: '/en-us/tools/leverage',
+      //       index: 100,
+      //       group: 'position',
+      //     },
+      //   ],
+      // },
       {
         name: 'custom-diy',
         children: [

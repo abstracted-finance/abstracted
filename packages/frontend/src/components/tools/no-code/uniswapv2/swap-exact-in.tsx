@@ -49,7 +49,7 @@ export default (props) => {
     })
   }, [amountIn, from, amountMinOut, to])
 
-  const getAmountMintOut = async () => {
+  const getAmountMinOut = async () => {
     // Fetchs amount out for input
     const fromAddress = AddressMapping[from]
     const toAddress = AddressMapping[to]
@@ -77,7 +77,7 @@ export default (props) => {
 
     clearTimeout(getAmountMintOutId)
     setIsGettingAmountMinOut(true)
-    setGetAmountMintOutId(setTimeout(() => getAmountMintOut(), 1000))
+    setGetAmountMintOutId(setTimeout(() => getAmountMinOut(), 1000))
   }, [amountIn, from])
 
   const secondaryDisplay = (
