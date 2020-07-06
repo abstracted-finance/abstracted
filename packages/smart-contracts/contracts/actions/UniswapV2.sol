@@ -52,7 +52,7 @@ contract UniswapV2Actions {
     uint256[] memory amounts = IUniswapV2Router02(_uniswapv2Routerv2)
       .getAmountsOut(_amountIn, paths);
 
-    return amounts[0];
+    return amounts[amounts.length - 1];
   }
 
   function getPath(
