@@ -129,6 +129,63 @@ describe('Aave', function () {
     assertBNGreaterThan(finalBal, initialBal)
   }
 
+  const flashloanAave = async ({ reserve, amountWei, autoFund }) => {
+    const refundAmount = amountWei
+      .mul(ethers.BigNumber.from('10009'))
+      .div(ethers.BigNumber.from('10000'))
+
+    // Give account enough fees to refund
+    if (autoFund) {
+      const fee = refundAmount.sub(amountWei)
+
+      if (reserve === ADDRESSES.ETH) {
+        await user.sendTransaction({
+          to: userProxy.address,
+          value: fee,
+        })
+      } else {
+        await token.attach(reserve).transfer(userProxy.address, fee)
+      }
+    }
+
+    // Postloan we need to refund
+    const postloanAddress = tokenActions.address
+    const postloanActionData = ITokenActions.encodeFunctionData('transfer', [
+      aaveLendingPoolCoreAddress,
+      reserve,
+      refundAmount, // Aave has 0.09% fee
+    ])
+
+    const targets = [postloanAddress]
+    const data = [postloanActionData]
+    const msgValues = [reserve === ADDRESSES.ETH ? refundAmount : 0]
+
+    const proxyTargetData = ethers.utils.defaultAbiCoder.encode(
+      ['tuple(address,address[],bytes[],uint256[])'],
+      [[userProxy.address, targets, data, msgValues]]
+    )
+
+    // Call "flashLoan" via proxy
+    const flashloanCalldata = IAaveFlashloanActions.encodeFunctionData(
+      'flashLoan',
+      [
+        aaveLendingPoolAddress,
+        aaveFlashloanActions.address,
+        reserve,
+        amountWei,
+        proxyTargetData,
+      ]
+    )
+
+    const flashLoanTx = await userProxy.executes(
+      [aaveFlashloanActions.address],
+      [flashloanCalldata],
+      [ethers.constants.Zero],
+      { value: 0, gasLimit: 6000000 }
+    )
+    await flashLoanTx.wait()
+  }
+
   describe('AaveActions', function () {
     it('Deposit (ETH)', async function () {
       const depositAmountWei = ethers.utils.parseEther('5')
@@ -143,7 +200,7 @@ describe('Aave', function () {
     })
 
     it('Borrow (DAI)', async function () {
-      const borrowAmountWei = ethers.utils.parseEther('10')
+      const borrowAmountWei = ethers.utils.parseEther('100')
       const tokenAddress = ADDRESSES.DAI
 
       await borrowAave({
@@ -177,49 +234,20 @@ describe('Aave', function () {
 
   describe('AaveFlashloanActions', function () {
     it('Flashloan (ETH)', async function () {
-      const reserve = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
-      const amount = ethers.utils.parseEther('10.0')
-      const refundAmount = amount
-        .mul(ethers.BigNumber.from('10009'))
-        .div(ethers.BigNumber.from('10000'))
-      const fee = refundAmount.sub(amount)
+      await flashloanAave({
+        reserve: ADDRESSES.ETH,
+        amountWei: ethers.utils.parseEther('10'),
+        autoFund: true,
+      })
+    })
 
-      // Postloan we need to refund
-      const postloanAddress = tokenActions.address
-      const postloanActionData = ITokenActions.encodeFunctionData('transfer', [
-        aaveLendingPoolCoreAddress,
-        reserve,
-        refundAmount, // Aave has 0.09% fee
-      ])
-
-      const targets = [postloanAddress]
-      const data = [postloanActionData]
-      const msgValues = [refundAmount]
-
-      const proxyTargetData = ethers.utils.defaultAbiCoder.encode(
-        ['tuple(address,address[],bytes[],uint256[])'],
-        [[userProxy.address, targets, data, msgValues]]
-      )
-
-      // Call "flashLoan" via proxy
-      const flashloanCalldata = IAaveFlashloanActions.encodeFunctionData(
-        'flashLoan',
-        [
-          aaveLendingPoolAddress,
-          aaveFlashloanActions.address,
-          reserve,
-          amount,
-          proxyTargetData,
-        ]
-      )
-
-      const flashLoanTx = await userProxy.executes(
-        [aaveFlashloanActions.address],
-        [flashloanCalldata],
-        [ethers.constants.Zero],
-        { value: fee, gasLimit: 6000000 }
-      )
-      await flashLoanTx.wait()
+    it('Flashloan (DAI)', async function () {
+      // Should have enough from borrow to refund
+      await flashloanAave({
+        reserve: ADDRESSES.DAI,
+        amountWei: ethers.utils.parseEther('10'),
+        autoFund: false,
+      })
     })
   })
 })
