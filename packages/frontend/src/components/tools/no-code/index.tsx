@@ -46,7 +46,7 @@ const reorder = (list, startIndex, endIndex) => {
 export default () => {
   const [, setToast] = useToasts()
   const { legos, setLegos } = useLego.useContainer()
-  const { proxy, proxyAddress } = useProxy.useContainer()
+  const { hasProxy, proxy, proxyAddress } = useProxy.useContainer()
 
   const {
     visible: importModalVisible,
@@ -149,6 +149,7 @@ export default () => {
       <Row gap={0.8}>
         <Col span={12}>
           <Button
+            disabled={!hasProxy}
             onClick={() => setImportModalVisible(true)}
             type="secondary"
             auto
@@ -159,6 +160,7 @@ export default () => {
         </Col>
         <Col span={12}>
           <Button
+            disabled={!hasProxy}
             onClick={() => setExportModalVisible(true)}
             type="secondary"
             auto
@@ -209,6 +211,7 @@ export default () => {
       <Spacer y={1} />
       <Button
         onClick={() => setAddPageVisible(true)}
+        disabled={!hasProxy}
         style={{ width: '100%' }}
         type="secondary"
       >
@@ -216,6 +219,7 @@ export default () => {
       </Button>
       <Spacer y={1} />
       <Button
+        disabled={!hasProxy}
         onClick={async () => {
           const parseResults = parseLegos({
             legos,
@@ -259,10 +263,15 @@ export default () => {
 
       <AddLegoPage visible={addPageVisible} setVisible={setAddPageVisible} />
       <ImportModal
+        disabled={!hasProxy}
         setVisible={setImportModalVisible}
         {...importModalBindings}
       />
-      <ExportModal {...exportModalBindings} />
+      <ExportModal
+        disabled={!hasProxy}
+        setVisible={setExportModalVisible}
+        {...exportModalBindings}
+      />
     </>
   )
 }

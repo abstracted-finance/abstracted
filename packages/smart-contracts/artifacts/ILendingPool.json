@@ -3,6 +3,32 @@
   "abi": [
     {
       "inputs": [],
+      "name": "LENDINGPOOL_REVISION",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "UINT_MAX_VALUE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "addressesProvider",
       "outputs": [
         {
@@ -40,6 +66,32 @@
       "name": "borrow",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "core",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dataProvider",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -115,7 +167,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "liquidationDiscount",
+          "name": "liquidationBonus",
           "type": "uint256"
         },
         {
@@ -135,7 +187,7 @@
         },
         {
           "internalType": "bool",
-          "name": "fixedBorrowRateEnabled",
+          "name": "stableBorrowRateEnabled",
           "type": "bool"
         },
         {
@@ -169,7 +221,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "totalBorrowsFixed",
+          "name": "totalBorrowsStable",
           "type": "uint256"
         },
         {
@@ -189,12 +241,12 @@
         },
         {
           "internalType": "uint256",
-          "name": "fixedBorrowRate",
+          "name": "stableBorrowRate",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "averageFixedBorrowRate",
+          "name": "averageStableBorrowRate",
           "type": "uint256"
         },
         {
@@ -229,7 +281,13 @@
     {
       "inputs": [],
       "name": "getReserves",
-      "outputs": [],
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
@@ -256,6 +314,11 @@
         {
           "internalType": "uint256",
           "name": "totalBorrowsETH",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalFeesETH",
           "type": "uint256"
         },
         {
@@ -300,11 +363,6 @@
         {
           "internalType": "uint256",
           "name": "currentATokenBalance",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "currentUnderlyingBalance",
           "type": "uint256"
         },
         {
@@ -360,6 +418,19 @@
       "inputs": [
         {
           "internalType": "address",
+          "name": "_addressesProvider",
+          "type": "address"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "_collateral",
           "type": "address"
         },
@@ -390,6 +461,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "parametersProvider",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "address",
@@ -402,7 +486,7 @@
           "type": "address"
         }
       ],
-      "name": "rebalanceFixedBorrowRate",
+      "name": "rebalanceStableBorrowRate",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -422,6 +506,11 @@
         {
           "internalType": "uint256",
           "name": "_amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_aTokenBalanceAfterRedeem",
           "type": "uint256"
         }
       ],

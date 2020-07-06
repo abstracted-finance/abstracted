@@ -28,30 +28,33 @@ const toAutoCompleteOptions = k => {
 
 export const AssetOptionsAutoComplete = Object.keys(Assets).map(toAutoCompleteOptions)
 
-export enum CompoundCAssets {
-  cETH = 'cETH',
-  cBAT = 'cBAT',
-  cUSDC = 'cUSDC',
-  cUSDT = 'cUSDT',
-  cDAI = 'cDAI',
-  cWBTC = 'cWBTC',
-  cREP = 'cREP',
-  cZRX = 'cZRX',
+// ---- Aave ----
+
+export const AaveAddresses = {
+  LendingPoolAddressProvider: '0x24a42fD28C976A61Df5D00D0599C34c4f90748c8',
+  LendingPool: '0x398ec7346dcd622edc5ae82352f02be94c62d119',
+  LendingPoolCore: '0x3dfd23a6c5e8bbcfc9581d2e864a68feb6a076d3',
 }
 
-export const CompoundAssets = [
-  Assets.ETH,
-  Assets.BAT,
-  Assets.USDC,
-  Assets.USDT,
-  Assets.DAI,
-  Assets.WBTC,
-  Assets.REP,
-  Assets.ZRX,
-]
-
-export const CompoundAssetsOptionsAutoComplete = CompoundAssets.map(toAutoCompleteOptions)
-
+export enum AaveAAssets {
+  aETH = "aETH",
+  aDAI = "aDAI",
+  aUSDC = "aUSDC",
+  aSUSD = "aSUSD",
+  aTUSD = "aTUSD",
+  aUSDT = "aUSDT",
+  aBUSD = "aBUSD",
+  aBAT = "aBAT",
+  aKNC = "aKNC",
+  aLEND = "aLEND",
+  aLINK = "aLINK",
+  aMANA = "aMANA",
+  aMKR = "aMKR",
+  aREP = "aREP",
+  aSNX = "aSNX",
+  aWBTC = "aWBTC",
+  aZRX = "aZRX",
+}
 
 export const AaveAssets = [
   Assets.ETH,
@@ -74,6 +77,39 @@ export const AaveAssets = [
 ]
 
 export const AaveAssetsOptionsAutoComplete = AaveAssets.map(toAutoCompleteOptions)
+
+// ---- Compound ----
+
+export const CompoundAddresses = {
+  Comptroller: '0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b',
+}
+
+export enum CompoundCAssets {
+  cETH = 'cETH',
+  cBAT = 'cBAT',
+  cUSDC = 'cUSDC',
+  cUSDT = 'cUSDT',
+  cDAI = 'cDAI',
+  cWBTC = 'cWBTC',
+  cREP = 'cREP',
+  cZRX = 'cZRX',
+}
+
+export const CompoundAssets = [
+  Assets.ETH,
+  Assets.BAT,
+  Assets.USDC,
+  Assets.USDT,
+  Assets.DAI,
+  Assets.WBTC,
+  Assets.REP,
+  Assets.ZRX,
+]
+
+
+export const CompoundAssetsOptionsAutoComplete = CompoundAssets.map(toAutoCompleteOptions)
+
+// ---- Mappings ---- //
 
 export const AddressMapping = {
   [Assets.ETH]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -101,6 +137,24 @@ export const AddressMapping = {
   [CompoundCAssets.cWBTC]: '0xc11b1268c1a384e55c48c2391d8d480264a3a7f4',
   [CompoundCAssets.cREP]: '0x158079ee67fce2f58472a96584a73c7ab9ac95c1',
   [CompoundCAssets.cZRX]: '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
+  [AaveAAssets.aETH]: '0x3a3A65aAb0dd2A17E3F1947bA16138cd37d08c04',
+  [AaveAAssets.aDAI]: '0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d',
+  [AaveAAssets.aUSDC]: '0x9bA00D6856a4eDF4665BcA2C2309936572473B7E',
+  [AaveAAssets.aSUSD]: '0x625aE63000f46200499120B906716420bd059240',
+  [AaveAAssets.aTUSD]: '0x4DA9b813057D04BAef4e5800E36083717b4a0341',
+  [AaveAAssets.aUSDT]: '0x71fc860F7D3A592A4a98740e39dB31d25db65ae8',
+  [AaveAAssets.aBUSD]: '0x6Ee0f7BB50a54AB5253dA0667B0Dc2ee526C30a8',
+  [AaveAAssets.aBAT]: '0xE1BA0FB44CCb0D11b80F92f4f8Ed94CA3fF51D00',
+  [AaveAAssets.aKNC]: '0x9D91BE44C06d373a8a226E1f3b146956083803eB',
+  [AaveAAssets.aLEND]: '0x7D2D3688Df45Ce7C552E19c27e007673da9204B8',
+  [AaveAAssets.aLINK]: '0xA64BD6C70Cb9051F6A9ba1F163Fdc07E0DfB5F84',
+  [AaveAAssets.aMANA]: '0x6FCE4A401B6B80ACe52baAefE4421Bd188e76F6f',
+  [AaveAAssets.aMKR]: '0x7deB5e830be29F91E298ba5FF1356BB7f8146998',
+  [AaveAAssets.aREP]: '0x71010A9D003445aC60C4e6A7017c1E89A477B438',
+  [AaveAAssets.aSNX]: '0x328C4c80BC7aCa0834Db37e6600A6c49E12Da4DE',
+  [AaveAAssets.aWBTC]: '0xFC4B8ED459e00e5400be803A9BB3954234FD50e3',
+  [AaveAAssets.aZRX]: '0x6Fb0855c404E09c47C3fBCA25f08d4E41f9F062f',
+
 }
 
 export const CTokenMapping = {
@@ -140,17 +194,26 @@ export const DecimalMapping = {
   [CompoundCAssets.cWBTC]: 8,
   [CompoundCAssets.cREP]: 8,
   [CompoundCAssets.cZRX]: 8,
+  [AaveAAssets.aETH]: 18,
+  [AaveAAssets.aDAI]: 18,
+  [AaveAAssets.aUSDC]: 18,
+  [AaveAAssets.aSUSD]: 18,
+  [AaveAAssets.aTUSD]: 18,
+  [AaveAAssets.aUSDT]: 18,
+  [AaveAAssets.aBUSD]: 18,
+  [AaveAAssets.aBAT]: 18,
+  [AaveAAssets.aKNC]: 18,
+  [AaveAAssets.aLEND]: 18,
+  [AaveAAssets.aLINK]: 18,
+  [AaveAAssets.aMANA]: 18,
+  [AaveAAssets.aMKR]: 18,
+  [AaveAAssets.aREP]: 18,
+  [AaveAAssets.aSNX]: 18,
+  [AaveAAssets.aWBTC]: 18,
+  [AaveAAssets.aZRX]: 18,
 }
 
-export const AaveAddresses = {
-  LendingPoolAddressProvider: '0x24a42fD28C976A61Df5D00D0599C34c4f90748c8',
-  LendingPool: '0x398ec7346dcd622edc5ae82352f02be94c62d119',
-  LendingPoolCore: '0x3dfd23a6c5e8bbcfc9581d2e864a68feb6a076d3',
-}
-
-export const CompoundAddresses = {
-  Comptroller: '0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b',
-}
+// ---- Coin Gecko ----
 
 // https://api.coingecko.com/api/v3/coins/list
 export const CoinGeckoIdMapping = {
@@ -239,9 +302,4 @@ export enum CoinGeckoSupportedCurrencies {
   XDR = 'xdr',
   XAG = 'xag',
   XAU = 'xau',
-}
-
-export enum OperationType {
-  Deposit = 'Deposit',
-  Withdraw = 'Withdraw',
 }

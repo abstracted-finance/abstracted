@@ -18,6 +18,7 @@ function useProxy() {
   const [isCreatingProxy, setIsCreatingProxy] = useState(false)
   const [proxy, setProxy] = useState(null)
   const [proxyAddress, setProxyAddress] = useState(null)
+  const [hasProxyFactory, setHasProxyFactory] = useState(false)
 
   const hasProxy = proxyAddress && proxyAddress !== ethers.constants.AddressZero
 
@@ -27,12 +28,15 @@ function useProxy() {
     try {
       newProxyAddress = await ProxyFactory.proxies(ethAddress)
     } catch (e) {
+      setHasProxyFactory(false)
       setToasts({
         text: 'Unable to fetch contracts, are you on mainnet?',
         type: 'error',
       })
       return
     }
+
+    setHasProxyFactory(true)
 
     if (newProxyAddress === proxyAddress) return
 
@@ -90,6 +94,7 @@ function useProxy() {
     hasProxy,
     createProxy,
     isCreatingProxy,
+    hasProxyFactory
   }
 }
 

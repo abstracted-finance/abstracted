@@ -25,16 +25,16 @@ function useCompoundEntered() {
   const [isEnteringCompoundMarkets, setIsEnteringCompoundMarkets] = useState(
     false
   )
-  const [compoundEntered, setCompoundEntered] = useState(false)
+  const [isCompoundEntered, setIsCompoundEntered] = useState(false)
 
   const checkCompoundMarketsEntered = async () => {
     setCheckingCompoundEntered(true)
     const marketsEntered = await IComptroller.getAssetsIn(proxyAddress)
 
     if (marketsEntered.length !== Object.keys(CompoundCAssets).length) {
-      setCompoundEntered(false)
+      setIsCompoundEntered(false)
     } else {
-      setCompoundEntered(true)
+      setIsCompoundEntered(true)
     }
     setCheckingCompoundEntered(false)
   }
@@ -59,7 +59,7 @@ function useCompoundEntered() {
         text: 'Compound markets entered!',
         type: 'success',
       })
-      setCompoundEntered(true)
+      setIsCompoundEntered(true)
     } catch (e) {
       setToast({
         text: 'Failed to enter compound markets!',
@@ -77,7 +77,7 @@ function useCompoundEntered() {
   }, [proxyAddress])
 
   return {
-    compoundEntered,
+    isCompoundEntered,
     isCheckingCompoundEntered,
     enterCompoundMarkets,
     isEnteringCompoundMarkets,

@@ -2,6 +2,9 @@
   "ProxyFactory": {
     "deploy": true
   },
+  "AaveActions": {
+    "deploy": true
+  },
   "AaveFlashloanActions": {
     "deploy": true
   },

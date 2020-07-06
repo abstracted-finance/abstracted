@@ -1,92 +1,202 @@
-const { expect } = require("chai");
-const { ethers } = require("@nomiclabs/buidler");
+const { ethers } = require('@nomiclabs/buidler')
 const {
+  ADDRESSES,
+  getProvider,
   getContract,
   getNamedAccounts,
   getProxyContract,
   getContractEthersInterface,
-} = require("./common");
+  assertBNGreaterThan,
+} = require('./common')
 
-describe("Aave", function () {
-  let user;
-  let userProxy;
-  let aaveFlashloanActions;
-  let tokenActions;
+describe('Aave', function () {
+  const provider = getProvider()
 
-  let IAave;
-  let ITokens;
+  let user
+  let userProxy
+  let token
+  let aaveActions
+  let aaveFlashloanActions
+  let tokenActions
+  let aToken
 
-  let aaveLendingPoolAddressProvider;
-  const aaveLendingPoolAddressProviderAddress =
-    "0x24a42fD28C976A61Df5D00D0599C34c4f90748c8";
+  let IAaveActions
+  let IAaveFlashloanActions
+  let ITokenActions
 
-  let aaveLendingPoolCoreAddress;
-  let aaveLendingPoolAddress;
+  let aaveLendingPoolAddressProvider
+  let aaveLendingPoolCoreAddress
+  let aaveLendingPoolAddress
 
   before(async () => {
     aaveLendingPoolAddressProvider = await getContract({
-      name: "ILendingPoolAddressesProvider",
-      address: aaveLendingPoolAddressProviderAddress,
-    });
+      name: 'ILendingPoolAddressesProvider',
+      address: ADDRESSES.AAVE_LENDING_POOL_ADDRESS_PROVIDER,
+    })
 
-    aaveLendingPoolCoreAddress = await aaveLendingPoolAddressProvider.getLendingPoolCore();
-    aaveLendingPoolAddress = await aaveLendingPoolAddressProvider.getLendingPool();
+    aaveLendingPoolCoreAddress = await aaveLendingPoolAddressProvider.getLendingPoolCore()
+    aaveLendingPoolAddress = await aaveLendingPoolAddressProvider.getLendingPool()
+    ;({ user1: user } = await getNamedAccounts())
 
-    const { user1: user } = await getNamedAccounts();
-    userProxy = await getProxyContract({ signer: user });
+    userProxy = await getProxyContract({ signer: user })
 
-    aaveFlashloanActions = await getContract({ name: "AaveFlashloanActions" });
-    tokenActions = await getContract({ name: "TokenActions" });
+    aToken = await getContract({
+      name: 'IAToken',
+      address: ethers.constants.AddressZero,
+      signer: user,
+    })
+    token = await getContract({
+      name: 'IERC20',
+      address: ethers.constants.AddressZero,
+      signer: user,
+    })
 
-    IAave = await getContractEthersInterface({
-      name: "AaveFlashloanActions",
-    });
+    aaveActions = await getContract({ name: 'AaveActions' })
+    aaveFlashloanActions = await getContract({ name: 'AaveFlashloanActions' })
+    tokenActions = await getContract({ name: 'TokenActions' })
 
-    ITokens = await getContractEthersInterface({
-      name: "TokenActions",
-    });
-  });
+    IAaveActions = await getContractEthersInterface({
+      name: 'AaveActions',
+    })
+    IAaveFlashloanActions = await getContractEthersInterface({
+      name: 'AaveFlashloanActions',
+    })
+    ITokenActions = await getContractEthersInterface({
+      name: 'TokenActions',
+    })
+  })
 
-  it("Flashloan (ETH)", async function () {
-    const reserve = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-    const amount = ethers.utils.parseEther("10.0");
-    const refundAmount = amount
-      .mul(ethers.BigNumber.from("10009"))
-      .div(ethers.BigNumber.from("10000"));
-    const fee = refundAmount.sub(amount);
+  const getTokenBalanceOf = async ({ tokenAddress, userAddress }) => {
+    if (tokenAddress === ADDRESSES.ETH) {
+      return provider.getBalance(userAddress)
+    }
+    return token.attach(tokenAddress).balanceOf(userAddress)
+  }
 
-    // Postloan we need to refund
-    const postloanAddress = tokenActions.address;
-    const postloanActionData = ITokens.encodeFunctionData("transfer", [
-      aaveLendingPoolCoreAddress,
-      reserve,
-      refundAmount, // Aave has 0.09% fee
-    ]);
+  const depositAave = async ({
+    depositAmountWei,
+    tokenAddress,
+    aTokenAddress,
+  }) => {
+    const initialBal = await aToken
+      .attach(aTokenAddress)
+      .balanceOf(userProxy.address)
 
-    const targets = [postloanAddress];
-    const data = [postloanActionData];
-    const msgValues = [refundAmount];
-
-    const proxyTargetData = ethers.utils.defaultAbiCoder.encode(
-      ["tuple(address,address[],bytes[],uint256[])"],
-      [[userProxy.address, targets, data, msgValues]]
-    );
-
-    // Call "flashLoan" via proxy
-    const flashloanCalldata = IAave.encodeFunctionData("flashLoan", [
+    const calldata = IAaveActions.encodeFunctionData('deposit', [
       aaveLendingPoolAddress,
-      aaveFlashloanActions.address,
-      reserve,
-      amount,
-      proxyTargetData,
-    ]);
+      aaveLendingPoolCoreAddress,
+      tokenAddress,
+      depositAmountWei,
+    ])
 
-    const flashLoanTx = await userProxy.executes(
-      [aaveFlashloanActions.address],
-      [flashloanCalldata],
-      [ethers.constants.Zero],
-      { value: fee, gasLimit: 6000000 }
-    );
-    await flashLoanTx.wait();
-  });
-});
+    const tx = await userProxy.execute(aaveActions.address, calldata, {
+      value: tokenAddress === ADDRESSES.ETH ? depositAmountWei : '0',
+      gasLimit: 1200000,
+    })
+    await tx.wait()
+
+    const finalBal = await aToken
+      .attach(aTokenAddress)
+      .balanceOf(userProxy.address)
+
+    assertBNGreaterThan(finalBal, initialBal)
+  }
+
+  const borrowAave = async ({ borrowAmountWei, tokenAddress }) => {
+    const initialBal = await getTokenBalanceOf({
+      tokenAddress,
+      userAddress: userProxy.address,
+    })
+
+    const calldata = IAaveActions.encodeFunctionData('borrow', [
+      aaveLendingPoolAddress,
+      tokenAddress,
+      borrowAmountWei,
+      1, // stable
+    ])
+
+    const tx = await userProxy.execute(aaveActions.address, calldata, {
+      gasLimit: 1200000,
+    })
+    await tx.wait()
+
+    const finalBal = await getTokenBalanceOf({
+      tokenAddress,
+      userAddress: userProxy.address,
+    })
+
+    assertBNGreaterThan(finalBal, initialBal)
+  }
+
+  describe('AaveActions', function () {
+    it('Deposit (ETH)', async function () {
+      const depositAmountWei = ethers.utils.parseEther('5')
+      const aTokenAddress = ADDRESSES.AETH
+      const tokenAddress = ADDRESSES.ETH
+
+      await depositAave({
+        depositAmountWei,
+        aTokenAddress,
+        tokenAddress,
+      })
+    })
+
+    it('Borrow (DAI)', async function () {
+      const borrowAmountWei = ethers.utils.parseEther('10')
+      const tokenAddress = ADDRESSES.DAI
+
+      await borrowAave({
+        borrowAmountWei,
+        tokenAddress,
+      })
+    })
+  })
+
+  describe('AaveFlashloanActions', function () {
+    it('Flashloan (ETH)', async function () {
+      const reserve = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
+      const amount = ethers.utils.parseEther('10.0')
+      const refundAmount = amount
+        .mul(ethers.BigNumber.from('10009'))
+        .div(ethers.BigNumber.from('10000'))
+      const fee = refundAmount.sub(amount)
+
+      // Postloan we need to refund
+      const postloanAddress = tokenActions.address
+      const postloanActionData = ITokenActions.encodeFunctionData('transfer', [
+        aaveLendingPoolCoreAddress,
+        reserve,
+        refundAmount, // Aave has 0.09% fee
+      ])
+
+      const targets = [postloanAddress]
+      const data = [postloanActionData]
+      const msgValues = [refundAmount]
+
+      const proxyTargetData = ethers.utils.defaultAbiCoder.encode(
+        ['tuple(address,address[],bytes[],uint256[])'],
+        [[userProxy.address, targets, data, msgValues]]
+      )
+
+      // Call "flashLoan" via proxy
+      const flashloanCalldata = IAaveFlashloanActions.encodeFunctionData(
+        'flashLoan',
+        [
+          aaveLendingPoolAddress,
+          aaveFlashloanActions.address,
+          reserve,
+          amount,
+          proxyTargetData,
+        ]
+      )
+
+      const flashLoanTx = await userProxy.executes(
+        [aaveFlashloanActions.address],
+        [flashloanCalldata],
+        [ethers.constants.Zero],
+        { value: fee, gasLimit: 6000000 }
+      )
+      await flashLoanTx.wait()
+    })
+  })
+})

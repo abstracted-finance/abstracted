@@ -5,9 +5,14 @@ import useProxy from '../../containers/web3/use-proxy'
 
 export default () => {
   const { connect, signer, ethAddress } = useWeb3.useContainer()
-  const { isCreatingProxy, createProxy, hasProxy } = useProxy.useContainer()
+  const {
+    isCreatingProxy,
+    createProxy,
+    hasProxy,
+    hasProxyFactory,
+  } = useProxy.useContainer()
 
-  if (signer === null || ethAddress === null) {
+  if (!signer || !ethAddress) {
     return (
       <Text blockquote>
         Please{' '}
@@ -27,15 +32,23 @@ export default () => {
     )
   }
 
-  if (signer !== null && ethAddress !== null && !hasProxy) {
-    if (isCreatingProxy) {
-      return (
-        <Text blockquote>
-          <Loading />
-        </Text>
-      )
-    }
+  if (!hasProxyFactory) {
+    return (
+      <Text blockquote>
+        Unable to find deployed contracts. Are you on mainnet?
+      </Text>
+    )
+  }
 
+  if (isCreatingProxy) {
+    return (
+      <Text blockquote>
+        <Loading />
+      </Text>
+    )
+  }
+
+  if (!hasProxy) {
     return (
       <Text blockquote>
         Please{' '}

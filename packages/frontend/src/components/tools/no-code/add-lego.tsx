@@ -31,7 +31,7 @@ export default ({ visible, setVisible }) => {
   const { appendLego, appendLegos } = useLego.useContainer()
 
   const {
-    compoundEntered,
+    isCompoundEntered,
     enterCompoundMarkets,
     isCheckingCompoundEntered,
     isEnteringCompoundMarkets,
@@ -72,9 +72,9 @@ export default ({ visible, setVisible }) => {
           {isCheckingCompoundEntered ? (
             <Spinner style={{ display: 'inline-block' }} />
           ) : null}
-          {!isCheckingCompoundEntered && !compoundEntered ? (
+          {!isCheckingCompoundEntered && !isCompoundEntered ? (
             <Toggle
-              checked={compoundEntered}
+              checked={isCompoundEntered}
               disabled={isEnteringCompoundMarkets}
               onChange={(e) => {
                 // Enter markets
@@ -89,7 +89,7 @@ export default ({ visible, setVisible }) => {
 
         {!isEnteringCompoundMarkets &&
         !isCheckingCompoundEntered &&
-        !compoundEntered ? (
+        !isCompoundEntered ? (
           <Text type="secondary">
             You need to{' '}
             <Link
@@ -115,7 +115,7 @@ export default ({ visible, setVisible }) => {
           onClick={() => addToCompoundLego(LegoType.CompoundSupply)}
           auto
           type="secondary"
-          disabled={!compoundEntered}
+          disabled={!isCompoundEntered}
         >
           Supply
         </MButton>
@@ -123,7 +123,7 @@ export default ({ visible, setVisible }) => {
           onClick={() => addToCompoundLego(LegoType.CompoundWithdraw)}
           auto
           type="secondary"
-          disabled={!compoundEntered}
+          disabled={!isCompoundEntered}
         >
           Withdraw
         </MButton>
@@ -131,7 +131,7 @@ export default ({ visible, setVisible }) => {
           onClick={() => addToCompoundLego(LegoType.CompoundBorrow)}
           auto
           type="secondary"
-          disabled={!compoundEntered}
+          disabled={!isCompoundEntered}
         >
           Borrow
         </MButton>
@@ -139,7 +139,7 @@ export default ({ visible, setVisible }) => {
           onClick={() => addToCompoundLego(LegoType.CompoundRepay)}
           auto
           type="secondary"
-          disabled={!compoundEntered}
+          disabled={!isCompoundEntered}
         >
           Repay
         </MButton>

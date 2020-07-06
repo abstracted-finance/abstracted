@@ -19,6 +19,23 @@ export default [
           }
         ],
       },
+      {
+        name: 'protocol-apps',
+        children: [
+          {
+            name: 'aave',
+            url: '/en-us/dashboard/aave',
+            index: 5,
+            group: 'protocol-apps',
+          },
+          {
+            name: 'compound',
+            url: '/en-us/dashboard/compound',
+            index: 5,
+            group: 'protocol-apps',
+          }
+        ],
+      },
     ],
   },
   {
@@ -35,29 +52,29 @@ export default [
           },
         ],
       },
-      {
-        name: 'black-swan',
-        children: [
-          {
-            name: 'only-stablecoins',
-            url: '/en-us/tools/only-stablecoins',
-            index: 100,
-            group: 'black-swan',
-          },
-          {
-            name: 'ethereum-bad',
-            url: '/en-us/tools/grid',
-            index: 100,
-            group: 'black-swan',
-          },
-          {
-            name: 'exit-borrowing',
-            url: '/en-us/tools/exit-borrowing',
-            index: 100,
-            group: 'black-swan',
-          },
-        ],
-      },
+      // {
+      //   name: 'black-swan',
+      //   children: [
+      //     {
+      //       name: 'only-stablecoins',
+      //       url: '/en-us/tools/only-stablecoins',
+      //       index: 100,
+      //       group: 'black-swan',
+      //     },
+      //     {
+      //       name: 'ethereum-bad',
+      //       url: '/en-us/tools/grid',
+      //       index: 100,
+      //       group: 'black-swan',
+      //     },
+      //     {
+      //       name: 'exit-borrowing',
+      //       url: '/en-us/tools/exit-borrowing',
+      //       index: 100,
+      //       group: 'black-swan',
+      //     },
+      //   ],
+      // },
       {
         name: 'bridges',
         children: [
@@ -87,30 +104,30 @@ export default [
         ],
       },
       {
-        name: 'risk',
+        name: 'position',
         children: [
           {
             name: 'leverage',
             url: '/en-us/tools/leverage',
             index: 100,
-            group: 'risk',
+            group: 'position',
           },
           {
             name: 'de-leverage',
             url: '/en-us/tools/leverage',
             index: 100,
-            group: 'risk',
+            group: 'position',
           },
         ],
       },
       {
-        name: 'custom',
+        name: 'custom-diy',
         children: [
           {
             name: 'no-code',
             url: '/en-us/tools/no-code',
             index: 100,
-            group: 'custom',
+            group: 'custom-diy',
           },
         ],
       },
