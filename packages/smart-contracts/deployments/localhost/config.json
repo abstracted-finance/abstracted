@@ -8,6 +8,9 @@
   "AaveFlashloanActions": {
     "deploy": true
   },
+  "UniswapV2Actions": {
+    "deploy": true
+  },
   "CompoundActions": {
     "deploy": true
   },
