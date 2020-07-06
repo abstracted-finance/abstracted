@@ -41,6 +41,7 @@ const initialAddressedContractNames = [
   'CompoundActions',
   'TokenActions',
   'AaveFlashloanActions',
+  'UniswapV2Actions'
 ]
 const initialAddressedContracts = initialAddressedContractNames
   .map((x) => {

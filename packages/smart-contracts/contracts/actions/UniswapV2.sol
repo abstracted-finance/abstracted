@@ -32,10 +32,25 @@ contract UniswapV2Actions {
     address _from,
     address _to,
     uint256 _amountOut
-  ) public pure returns (uint256) {
+  ) public view returns (uint256) {
     address[] memory paths = getPath(_uniswapv2Routerv2, _from, _to);
     uint256[] memory amounts = IUniswapV2Router02(_uniswapv2Routerv2)
       .getAmountsIn(_amountOut, paths);
+
+    return amounts[0];
+  }
+
+  // Given an exact amount of input, calculate the
+  // output tokens given
+  function getExactInForOut(
+    address _uniswapv2Routerv2,
+    address _from,
+    address _to,
+    uint256 _amountIn
+  ) public view returns (uint256) {
+    address[] memory paths = getPath(_uniswapv2Routerv2, _from, _to);
+    uint256[] memory amounts = IUniswapV2Router02(_uniswapv2Routerv2)
+      .getAmountsOut(_amountIn, paths);
 
     return amounts[0];
   }
@@ -44,7 +59,7 @@ contract UniswapV2Actions {
     address _uniswapv2Routerv2,
     address _from,
     address _to
-  ) public view returns (address[] memory path) {
+  ) public pure returns (address[] memory path) {
     address weth = IUniswapV2Router02(_uniswapv2Routerv2).WETH();
     // Judging from https://uniswap.info/home the major pairs are
     // ETH <-> ERC20 (apart from stablecoins, which are in curve.fi)

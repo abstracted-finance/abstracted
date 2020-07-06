@@ -3,6 +3,7 @@ import { Lego, LegoType } from '../containers/legos/use-legos'
 import { getContractInterface, getContract, network } from '../utils/common'
 import {
   AaveAddresses,
+  UniswapV2Addresses,
   AddressMapping,
   DecimalMapping,
   CTokenMapping,
@@ -40,7 +41,16 @@ const IAaveFlashloanActions = getContractInterface({
   network,
 })
 
-export const serializeLego = (lego: Lego): SerializedLego => {
+const UniswapV2Actions = getContract({
+  name: 'UniswapV2Actions',
+  network,
+})
+const IUniswapV2Actions = getContractInterface({
+  name: 'UniswapV2Actions',
+  network,
+})
+
+const serializeCompoundLego = ({ lego }: { lego: Lego }): SerializedLego => {
   const { asset, amount } = lego.args[0]
   const decimals = DecimalMapping[asset]
   const amountWei = ethers.utils.parseUnits(amount, decimals)
@@ -48,46 +58,80 @@ export const serializeLego = (lego: Lego): SerializedLego => {
   const cTokenAddress = cTokenAsset ? AddressMapping[cTokenAsset] : null
   const msgValue = asset === Assets.ETH ? amountWei : ethers.constants.Zero
 
-  // Just for convinience
-  const partialSerializedCompoundActions = {
+  // Mapping of lego type and function name
+  const LegoTypeFunctionNameMapping = {
+    [LegoType.CompoundBorrow]: 'borrow',
+    [LegoType.CompoundSupply]: 'supply',
+    [LegoType.CompoundRepay]: 'repayBorrow',
+    [LegoType.CompoundWithdraw]: 'redeemUnderlying'
+  }
+
+  return {
     target: CompoundActions.address,
     msgValue,
+    data: ICompoundActions.encodeFunctionData(LegoTypeFunctionNameMapping[lego.type], [
+      cTokenAddress,
+      amountWei,
+    ]),
+  }
+}
+
+const serializeUniswapV2Lego = ({
+  lego,
+  userProxy,
+}: {
+  lego: Lego
+  userProxy: Address
+}): SerializedLego => {
+  const { from, to, amountIn, amountMinOut } = lego.args[0]
+  const fromDecimals = DecimalMapping[from]
+  const toDecimals = DecimalMapping[to]
+  const fromAddress = AddressMapping[from]
+  const toAddress = AddressMapping[to]
+  const amountInWei = ethers.utils.parseUnits(amountIn, fromDecimals)
+  const amountMinOutWei = ethers.utils.parseUnits(amountMinOut, toDecimals)
+  const msgValue = from === Assets.ETH ? amountInWei : ethers.constants.Zero
+
+  if (lego.type === LegoType.UniswapV2SwapExactInToOut) {
+    return {
+      target: UniswapV2Actions.address,
+      msgValue,
+      data: IUniswapV2Actions.encodeFunctionData('swapExactInForOut', [
+        UniswapV2Addresses.RouterV2,
+        amountInWei,
+        amountMinOutWei,
+        fromAddress,
+        toAddress,
+        userProxy
+      ])
+    }
+  }
+}
+
+export const serializeLego = ({
+  lego,
+  userProxy,
+}: {
+  lego: Lego
+  userProxy: Address
+}): SerializedLego => {
+  const CompoundLegoTypes = [
+    LegoType.CompoundBorrow,
+    LegoType.CompoundRepay,
+    LegoType.CompoundSupply,
+    LegoType.CompoundWithdraw
+  ]
+
+  const UniswapV2LegoTypes = [
+    LegoType.UniswapV2SwapExactInToOut
+  ]
+
+  if (CompoundLegoTypes.includes(lego.type)) {
+    return serializeCompoundLego({ lego })
   }
 
-  if (lego.type === LegoType.CompoundBorrow) {
-    return Object.assign({}, partialSerializedCompoundActions, {
-      data: ICompoundActions.encodeFunctionData('borrow', [
-        cTokenAddress,
-        amountWei,
-      ]),
-    })
-  }
-
-  if (lego.type === LegoType.CompoundSupply) {
-    return Object.assign({}, partialSerializedCompoundActions, {
-      data: ICompoundActions.encodeFunctionData('supply', [
-        cTokenAddress,
-        amountWei,
-      ]),
-    })
-  }
-
-  if (lego.type === LegoType.CompoundRepay) {
-    return Object.assign({}, partialSerializedCompoundActions, {
-      data: ICompoundActions.encodeFunctionData('repayBorrow', [
-        cTokenAddress,
-        amountWei,
-      ]),
-    })
-  }
-
-  if (lego.type === LegoType.CompoundWithdraw) {
-    return Object.assign({}, partialSerializedCompoundActions, {
-      data: ICompoundActions.encodeFunctionData('redeemUnderlying', [
-        cTokenAddress,
-        amountWei,
-      ]),
-    })
+  if (UniswapV2LegoTypes.includes(lego.type)) {
+    return serializeUniswapV2Lego({ lego, userProxy })
   }
 
   throw new Error(`Unrecognized type: ${lego.type}`)
@@ -181,7 +225,7 @@ export const serializeLegos = ({
       // Jump until end of nested flashloan block
       jumpUntil = endingIndex
     } else {
-      serialized.push(serializeLego(lego))
+      serialized.push(serializeLego({ lego, userProxy }))
     }
   }
 

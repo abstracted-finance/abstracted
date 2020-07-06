@@ -6,3 +6,9 @@ export const FullWidthButton = (props) =>
     style: { width: '100%' },
     ...props,
   })
+
+export const MButton = (props) =>
+  React.cloneElement(<Button />, {
+    style: { margin: '2.5px' },
+    ...props,
+  })

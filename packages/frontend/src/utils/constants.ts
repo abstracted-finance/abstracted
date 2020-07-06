@@ -19,14 +19,14 @@ export enum Assets {
 }
 
 // Helper function to map over stuff
-const toAutoCompleteOptions = k => {
+const toAutoCompleteOptions = m => k => {
   return {
-    value: Assets[k],
-    label: Assets[k]
+    value: m[k],
+    label: m[k]
   }
 }
 
-export const AssetOptionsAutoComplete = Object.keys(Assets).map(toAutoCompleteOptions)
+export const AssetOptionsAutoComplete = Object.keys(Assets).map(toAutoCompleteOptions(Assets))
 
 // ---- Aave ----
 
@@ -76,7 +76,7 @@ export const AaveAssets = [
   Assets.DAI,
 ]
 
-export const AaveAssetsOptionsAutoComplete = AaveAssets.map(toAutoCompleteOptions)
+export const AaveAssetsOptionsAutoComplete = AaveAssets.map(toAutoCompleteOptions(Assets))
 
 // ---- Compound ----
 
@@ -154,7 +154,6 @@ export const AddressMapping = {
   [AaveAAssets.aSNX]: '0x328C4c80BC7aCa0834Db37e6600A6c49E12Da4DE',
   [AaveAAssets.aWBTC]: '0xFC4B8ED459e00e5400be803A9BB3954234FD50e3',
   [AaveAAssets.aZRX]: '0x6Fb0855c404E09c47C3fBCA25f08d4E41f9F062f',
-
 }
 
 export const CTokenMapping = {
@@ -212,6 +211,19 @@ export const DecimalMapping = {
   [AaveAAssets.aWBTC]: 18,
   [AaveAAssets.aZRX]: 18,
 }
+
+// ---- Uniswap V2 ----
+
+export const UniswapV2Addresses = {
+  RouterV2: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+}
+
+export const AllAssets = Object.keys(AddressMapping).map(x => {
+  return {
+    label: x,
+    value: x
+  }
+})
 
 // ---- Coin Gecko ----
 

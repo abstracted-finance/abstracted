@@ -19,9 +19,11 @@ import CompoundRepay from './compound/repay'
 import AaveFlashloanStart from './aave/flashloan-start'
 import AaveFlashloanEnd from './aave/flashloan-end'
 
-import AddLegoPage from './add-lego'
+import UniswapV2SwapExactIn from './uniswapv2/swap-exact-in'
+
 import GenericLego from './generic-lego'
 
+import AddLegoModal from './modal-add-lego'
 import ImportModal from './modal-import'
 import ExportModal from './modal-export'
 
@@ -49,16 +51,18 @@ export default () => {
   const { hasProxy, proxy, proxyAddress } = useProxy.useContainer()
 
   const {
-    visible: importModalVisible,
     setVisible: setImportModalVisible,
     bindings: importModalBindings,
   } = useModal()
   const {
-    visible: exportModalVisible,
     setVisible: setExportModalVisible,
     bindings: exportModalBindings,
   } = useModal()
-  const [addPageVisible, setAddPageVisible] = useState(false)
+  const {
+    visible: addLegoModalVisible,
+    setVisible: setAddLegoModalVisible,
+    bindings: addLegoModalBindings,
+  } = useModal()
 
   const onDragEnd = (result) => {
     // Dropped outside the list
@@ -122,6 +126,7 @@ export default () => {
     [LegoType.CompoundWithdraw]: <CompoundWithdraw />,
     [LegoType.AaveFlashloanStart]: <AaveFlashloanStart />,
     [LegoType.AaveFlashloanEnd]: <AaveFlashloanEnd />,
+    [LegoType.UniswapV2SwapExactInToOut]: <UniswapV2SwapExactIn />,
   }
 
   const getLegoComponent = (lego: Lego) => {
@@ -210,7 +215,7 @@ export default () => {
 
       <Spacer y={1} />
       <Button
-        onClick={() => setAddPageVisible(true)}
+        onClick={() => setAddLegoModalVisible(true)}
         disabled={!hasProxy}
         style={{ width: '100%' }}
         type="secondary"
@@ -261,7 +266,11 @@ export default () => {
         Execute
       </Button>
 
-      <AddLegoPage visible={addPageVisible} setVisible={setAddPageVisible} />
+      <AddLegoModal
+        visible={addLegoModalVisible}
+        setVisible={setAddLegoModalVisible}
+        {...addLegoModalBindings}
+      />
       <ImportModal
         disabled={!hasProxy}
         setVisible={setImportModalVisible}
