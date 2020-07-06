@@ -25,29 +25,32 @@ contract UniswapV2Actions {
     );
   }
 
-  // Swaps an exact input for as many output
-  function swapExactInForOut(
+  // Given an amount of output, calculate the
+  // input tokens needed
+  function getInForExactOut(
     address _uniswapv2Routerv2,
-    uint256 _amountIn,
-    uint256 _amountMinOut,
     address _from,
     address _to,
-    address _recipient
-  ) external payable {
-    require(_from != _to, 'uniswapv2-from-to-same');
+    uint256 _amountOut
+  ) public pure returns (uint256) {
+    address[] memory paths = getPath(_uniswapv2Routerv2, _from, _to);
+    uint256[] memory amounts = IUniswapV2Router02(_uniswapv2Routerv2)
+      .getAmountsIn(_amountOut, paths);
 
-    uint256 deadline = now + 60;
+    return amounts[0];
+  }
 
-    IUniswapV2Router02 uniswapRouter = IUniswapV2Router02(_uniswapv2Routerv2);
-
-    // Get conversion PATH
-    address[] memory path;
-    address weth = uniswapRouter.WETH();
-
+  function getPath(
+    address _uniswapv2Routerv2,
+    address _from,
+    address _to
+  ) public view returns (address[] memory path) {
+    address weth = IUniswapV2Router02(_uniswapv2Routerv2).WETH();
     // Judging from https://uniswap.info/home the major pairs are
     // ETH <-> ERC20 (apart from stablecoins, which are in curve.fi)
     // So, if ETH is in the equation, we'll just use that as the path
     // otherwise we'll use ETH as an intermediatery to get the output token
+
     if (_from == Constants.ETH_ADDRESS) {
       path = new address[](2);
       path[0] = weth;
@@ -62,6 +65,24 @@ contract UniswapV2Actions {
       path[1] = weth;
       path[2] = _to;
     }
+  }
+
+  // Swaps an exact input for as many output
+  function swapExactInForOut(
+    address _uniswapv2Routerv2,
+    uint256 _amountIn,
+    uint256 _amountMinOut,
+    address _from,
+    address _to,
+    address _recipient
+  ) external payable {
+    require(_from != _to, 'uniswapv2-from-to-same');
+
+    IUniswapV2Router02 uniswapRouter = IUniswapV2Router02(_uniswapv2Routerv2);
+
+    // Get conversion PATH
+    address[] memory path = getPath(_uniswapv2Routerv2, _from, _to);
+    uint256 deadline = now + 60;
 
     // Approve token
     _approveToken(_uniswapv2Routerv2, _from, _amountIn);
