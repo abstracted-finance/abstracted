@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "ETH_NETWORK=development next dev",
-    "build": "ETH_NETWORK=development next build",
+    "build": "ETH_NETWORK=development next build && next export",
     "start": "next start",
     "lint": "prettier --write src/"
   },
