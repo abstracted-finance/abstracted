@@ -10,11 +10,6 @@ const redirect = (destination: string) => {
   const Home: NextPage<Props> = ({ metaRedirect }) => {
     if (!metaRedirect) return <></>
 
-    if (typeof window !== 'undefined') {
-      const router = useRouter()
-      router.push(destination)
-    }
-
     return (
       <Head>
         <meta httpEquiv="refresh" content={`0; url=${destination}`} />
@@ -28,6 +23,11 @@ const redirect = (destination: string) => {
       res.writeHead(302, { Location: destination })
       res.end()
       return {}
+    }
+
+    if (typeof window !== 'undefined') {
+      const router = useRouter()
+      await router.push(destination)
     }
 
     return { metaRedirect: true }
