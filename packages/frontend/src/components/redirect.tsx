@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 
 export interface Props {
   metaRedirect?: boolean
@@ -9,6 +9,10 @@ export interface Props {
 const redirect = (destination: string) => {
   const Home: NextPage<Props> = ({ metaRedirect }) => {
     if (!metaRedirect) return null
+
+    const router = useRouter()
+    router.push(destination)
+
     return (
       <Head>
         <meta httpEquiv="refresh" content={`0; url=${destination}`} />
@@ -17,14 +21,11 @@ const redirect = (destination: string) => {
   }
 
   Home.getInitialProps = async ({ res }): Promise<Props> => {
-    if (res) {
+    if (res && res.writeHead) {
       res.writeHead(302, { Location: destination })
       res.end()
       return {}
-    } else {
-      await Router.push(destination)
     }
-
     return { metaRedirect: true }
   }
 
