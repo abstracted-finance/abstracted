@@ -8,12 +8,11 @@ export interface Props {
 
 const redirect = (destination: string) => {
   const Home: NextPage<Props> = ({ metaRedirect }) => {
-    if (!metaRedirect) return <></>
+    if (!metaRedirect) return null
 
     return (
       <Head>
         <meta httpEquiv="refresh" content={`0; url=${destination}`} />
-        <script></script>
       </Head>
     )
   }

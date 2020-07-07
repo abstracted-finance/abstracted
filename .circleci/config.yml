@@ -1,13 +1,10 @@
-version: 2.1
-orbs:
-  node: node:12.18.2-stretch
+version: 2
 jobs:
   build-and-test:
-    executor:
-      name: node/default
+    docker:
+      - image: node:12.18.2
     steps:
       - checkout
-
       - run:
           name: "Test Smart Contracts"
           no_output_timeout: 30m
@@ -15,9 +12,10 @@ jobs:
             npx lerna bootstrap
             npx ganache-cli -f https://mainnet.infura.io/v3/84842078b09946638c03157f83405213 -d -e 10000 --networkId 1 &
             cd packages/smart-contracts
-            yarn test
-          
+            npx truffle migrate --reset --network development
+            npm run test
 workflows:
-    build-and-test:
-      jobs:
-        - build-and-test
+  version: 2
+  build_and_test:
+    jobs:
+      - build-and-test
