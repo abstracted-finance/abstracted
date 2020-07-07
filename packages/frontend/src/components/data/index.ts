@@ -1,5 +1,5 @@
-import enUS from './metadata-en-us'
+import enUS from './metadata-en'
 
 export default {
-  'en-us': enUS,
+  'en': enUS,
 }

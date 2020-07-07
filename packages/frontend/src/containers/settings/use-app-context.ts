@@ -3,7 +3,7 @@ import { createContainer } from 'unstated-next'
 import { useEffect } from 'react'
 import { useCurrentState } from '@zeit-ui/react'
 
-const DEFAULT_LOCALE = 'en-us'
+const DEFAULT_LOCALE = 'en'
 const DEFAULT_TAB = 'dashboard'
 
 const useAppContext = ({ themeChangeHandler }) => {

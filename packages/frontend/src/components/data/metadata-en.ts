@@ -7,13 +7,13 @@ export default [
         children: [
           {
             name: 'overview',
-            url: '/en-us/dashboard/overview',
+            url: '/en/dashboard/overview/',
             index: 5,
             group: 'smart-wallet',
           },
           {
             name: 'transfer',
-            url: '/en-us/dashboard/transfer',
+            url: '/en/dashboard/transfer/',
             index: 5,
             group: 'smart-wallet',
           },
@@ -24,19 +24,19 @@ export default [
         children: [
           // {
           //   name: 'aave',
-          //   url: '/en-us/dashboard/aave',
+          //   url: '/en/dashboard/aave/',
           //   index: 5,
           //   group: 'apps',
           // },
           {
             name: 'compound',
-            url: '/en-us/dashboard/compound',
+            url: '/en/dashboard/compound/',
             index: 5,
             group: 'apps',
           },
           // {
           //   name: 'uniswap-v2',
-          //   url: '/en-us/dashboard/uniswap-v2',
+          //   url: '/en/dashboard/uniswap-v2/',
           //   index: 5,
           //   group: 'apps',
           // },
@@ -52,7 +52,7 @@ export default [
         children: [
           {
             name: 'introduction',
-            url: '/en-us/tools/introduction',
+            url: '/en/tools/introduction/',
             index: 100,
             group: 'general',
           },
@@ -63,19 +63,19 @@ export default [
       //   children: [
       //     {
       //       name: 'only-stablecoins',
-      //       url: '/en-us/tools/only-stablecoins',
+      //       url: '/en/tools/only-stablecoins/',
       //       index: 100,
       //       group: 'black-swan',
       //     },
       //     {
       //       name: 'ethereum-bad',
-      //       url: '/en-us/tools/grid',
+      //       url: '/en/tools/grid',
       //       index: 100,
       //       group: 'black-swan',
       //     },
       //     {
       //       name: 'exit-borrowing',
-      //       url: '/en-us/tools/exit-borrowing',
+      //       url: '/en/tools/exit-borrowing/',
       //       index: 100,
       //       group: 'black-swan',
       //     },
@@ -86,7 +86,7 @@ export default [
       //   children: [
       //     {
       //       name: 'protocol',
-      //       url: '/en-us/tools/bridges',
+      //       url: '/en/tools/bridges',
       //       index: 100,
       //       group: 'bridges',
       //     },
@@ -97,13 +97,13 @@ export default [
       //   children: [
       //     {
       //       name: 'collateral',
-      //       url: '/en-us/tools/collateral',
+      //       url: '/en/tools/collateral/',
       //       index: 100,
       //       group: 'swaps',
       //     },
       //     {
       //       name: 'debt',
-      //       url: '/en-us/tools/debt',
+      //       url: '/en/tools/debt/',
       //       index: 100,
       //       group: 'swaps',
       //     },
@@ -114,13 +114,13 @@ export default [
       //   children: [
       //     {
       //       name: 'leverage',
-      //       url: '/en-us/tools/leverage',
+      //       url: '/en/tools/leverage/',
       //       index: 100,
       //       group: 'position',
       //     },
       //     {
       //       name: 'de-leverage',
-      //       url: '/en-us/tools/leverage',
+      //       url: '/en/tools/leverage/',
       //       index: 100,
       //       group: 'position',
       //     },
@@ -131,7 +131,7 @@ export default [
         children: [
           {
             name: 'no-code',
-            url: '/en-us/tools/no-code',
+            url: '/en/tools/no-code/',
             index: 100,
             group: 'custom-diy',
           },
@@ -147,7 +147,7 @@ export default [
         children: [
           {
             name: 'general',
-            url: '/en-us/settings/general',
+            url: '/en/settings/general/',
             index: 100,
             group: 'preferences',
           },
