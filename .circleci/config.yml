@@ -9,6 +9,11 @@ jobs:
           name: "Test Smart Contracts"
           no_output_timeout: 30m
           command: |
+            mkdir ~/.npm-global
+            npm config set prefix '~/.npm-global'
+            export PATH=~/.npm-global/bin:$PATH
+            source ~/.profile
+
             npx lerna bootstrap
             npx ganache-cli -f https://mainnet.infura.io/v3/84842078b09946638c03157f83405213 -d -e 10000 --networkId 1 &
             cd packages/smart-contracts
