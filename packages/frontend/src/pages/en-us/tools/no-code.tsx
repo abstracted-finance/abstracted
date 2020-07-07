@@ -1,5 +1,5 @@
-import Layout from '../../../../components/layout'
-import NoCode from '../../../../components/tools/no-code'
+import Layout from '../../../components/layout'
+import NoCode from '../../../components/tools/no-code'
 
 export default () => {
   return (

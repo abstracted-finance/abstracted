@@ -15,10 +15,9 @@ jobs:
             source ~/.profile
 
             npx lerna bootstrap
-            npx ganache-cli -f https://mainnet.infura.io/v3/84842078b09946638c03157f83405213 -d -e 10000 --networkId 1 &
             cd packages/smart-contracts
-            npx truffle migrate --reset --network development
-            npm run test
+            yarn run:ganache &
+            yarn test
 workflows:
   version: 2
   build_and_test:

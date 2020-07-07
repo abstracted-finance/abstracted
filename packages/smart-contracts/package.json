@@ -6,7 +6,8 @@
     "clean": "buidler clean",
     "compile": "buidler compile",
     "test": "buidler compile && buidler deploy-for-testing && buidler test",
-    "cli": "node cli/index.js"
+    "cli": "node cli/index.js",
+    "run:ganache": "ganache-cli -f https://mainnet.infura.io/v3/84842078b09946638c03157f83405213 -d -e 10000 --networkId 1"
   },
   "license": "MIT",
   "dependencies": {
@@ -25,6 +26,7 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "ganache-cli": "^6.9.1",
     "prettier": "^2.0.5"
   }
 }

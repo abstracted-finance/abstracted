@@ -1,5 +1,5 @@
-import Layout from '../../../../components/layout'
-import GeneralSettings from '../../../../components/settings/general-settings'
+import Layout from '../../../components/layout'
+import GeneralSettings from '../../../components/settings/general-settings'
 
 export default () => {
   return (

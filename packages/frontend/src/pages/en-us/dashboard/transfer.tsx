@@ -1,6 +1,6 @@
-import Transfer from '../../../../components/dashboard/transfer'
+import Transfer from '../../../components/dashboard/transfer'
 
-import Layout from '../../../../components/layout'
+import Layout from '../../../components/layout'
 
 export default () => {
   return (
