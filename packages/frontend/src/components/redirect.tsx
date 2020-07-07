@@ -8,14 +8,17 @@ export interface Props {
 
 const redirect = (destination: string) => {
   const Home: NextPage<Props> = ({ metaRedirect }) => {
-    if (!metaRedirect) return null
+    if (!metaRedirect) return <></>
 
-    const router = useRouter()
-    router.push(destination)
+    if (typeof window !== 'undefined') {
+      const router = useRouter()
+      router.push(destination)
+    }
 
     return (
       <Head>
         <meta httpEquiv="refresh" content={`0; url=${destination}`} />
+        <script></script>
       </Head>
     )
   }
@@ -26,6 +29,7 @@ const redirect = (destination: string) => {
       res.end()
       return {}
     }
+
     return { metaRedirect: true }
   }
 

@@ -13,7 +13,7 @@ jobs:
           no_output_timeout: 30m
           command: |
             npx lerna bootstrap
-            npx ganache-cli -f https://mainnet.infura.io/v3/84842078b09946638c03157f83405213 -i 5777 -d &> ganache-output.log &
+            npx ganache-cli -f https://mainnet.infura.io/v3/84842078b09946638c03157f83405213 -d -e 10000 --networkId 1 &
             cd packages/smart-contracts
             yarn test
           
