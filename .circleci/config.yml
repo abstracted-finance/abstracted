@@ -16,7 +16,7 @@ jobs:
 
             npx lerna bootstrap
             cd packages/smart-contracts
-            yarn run:ganache &
+            yarn run:ganache &> ganache-output.log &
             yarn test
 workflows:
   version: 2
